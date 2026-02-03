@@ -1,5 +1,6 @@
 import { Button } from '@/components/ui/Button';
 import { HeaderThemeObserver } from '@/components/layout/HeaderThemeObserver';
+import { HeroBackground } from './HeroBackground';
 
 export function Hero() {
 	return (
@@ -8,27 +9,7 @@ export function Hero() {
 
 			{/* Background Videos */}
 			<div className="absolute inset-0 -z-10">
-				{/* Mobile & Portrait Video */}
-				<video
-					autoPlay
-					muted
-					loop
-					playsInline
-					poster="/video/hero-poster.webp"
-					className="absolute inset-0 h-full w-full object-cover md:hidden portrait:block">
-					<source src="/video/hero-mobile-2.mp4" type="video/mp4" />
-				</video>
-
-				{/* Desktop Landscape Video */}
-				<video
-					autoPlay
-					muted
-					loop
-					playsInline
-					poster="/video/hero-poster.webp"
-					className="absolute inset-0 hidden h-full w-full object-cover md:block portrait:hidden">
-					<source src="/video/hero-desktop.mp4" type="video/mp4" />
-				</video>
+				<HeroBackground />
 			</div>
 
 			<div className="container flex h-full flex-col justify-end pb-10 xl:justify-center xl:pb-0 xl:pt-[96px]">

@@ -1,26 +1,57 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
+@theme {
+	/* Colors from style.scss */
+	--color-main: #1e1e1e;
+	--color-beige: #e1b286;
+	--color-brown: #614137;
+	--color-light-beige: #f1ece7;
+	--color-dark-gray: #767676;
+	--color-white: #ffffff;
+
+	/* Fonts */
+	--font-sans: var(--font-manrope);
+
+	/* Container configuration */
+	--breakpoint-container: 1726px;
+	--spacing-container-padding: 2.5rem; /* 40px */
+
+	/* Animations */
+	--default-transition-duration: 300ms;
+}
+
+/* Base styles matching style.scss */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+	--background: var(--color-white);
+	--foreground: var(--color-main);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+	background: var(--background);
+	color: var(--foreground);
+	font-family: var(--font-sans);
+	line-height: 1.5; /* default line-height */
+}
+
+/* 
+  Custom Container Utility matching the SCSS logic:
+  $maxWidthContainer: 1726;
+  $containerPadding: 80; (40px per side)
+*/
+@utility container {
+	margin-inline: auto;
+	padding-inline: var(--spacing-container-padding);
+	max-width: calc(var(--breakpoint-container) + var(--spacing-container-padding) * 2);
+	width: 100%;
+
+	@media (width < 768px) {
+		padding-inline: 1.25rem; /* 20px on mobile */
+	}
+}
+
+/* Layer utilities if needed for specific SCSS ports */
+@layer utilities {
+	.text-balance {
+		text-wrap: balance;
+	}
 }

@@ -31,6 +31,12 @@ body {
 	color: var(--foreground);
 	font-family: var(--font-sans);
 	line-height: 1.5; /* default line-height */
+	--color-selection: var(--color-beige);
+}
+
+::selection {
+	background: var(--color-selection);
+	color: var(--color-main);
 }
 
 /* 

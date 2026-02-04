@@ -2,6 +2,8 @@
 import { cn } from '@/lib/utils';
 import React from 'react';
 import { HeaderThemeObserver } from '@/components/layout/HeaderThemeObserver';
+import { Badge } from '@/components/ui/Badge';
+import { Title } from '@/components/ui/Title';
 
 export function Advantages() {
 	return (
@@ -10,23 +12,22 @@ export function Advantages() {
 			<div className="container">
 				{/* Heading */}
 				<div className="mb-8 md:mb-10">
-					<div className="inline-block bg-light-beige text-brown rounded-lg px-3 py-1 mb-2.5 md:mb-3 text-sm leading-[1.4]">
+					<Badge variant="beige" className="mb-2.5 md:mb-3 leading-[1.4] font-normal">
 						О компании
-					</div>
-					<h2 className="text-main font-bold text-[28px] md:text-[40px] leading-[1.4]">
+					</Badge>
+					<Title as="h2" variant="h2">
 						Преимущества работы с нами
-					</h2>
+					</Title>
 				</div>
 
 				{/* Content */}
 				<div className="flex flex-col md:flex-row gap-[30px] md:gap-10 lg:gap-5">
 					{/* Left Column */}
 					<div className="flex-1 md:basis-1/2 lg:pr-[25px]">
-						<p className="text-main font-semibold text-base leading-[1.4] mb-[30px] md:mb-10 lg:mb-[30px]">
-							Мечтаете о собственном доме, который будет уютным уголком для вашей семьи и местом,
-							где каждый день начинается с вдохновения? Мы, команда компании «КРОНА», готовы помочь
-							вам воплотить эту мечту в жизнь.
-						</p>
+						<h1 className="text-main font-semibold text-base leading-[1.4] mb-[30px] md:mb-10 lg:mb-[30px]">
+							КРОНА Групп специализируется на проектировании и строительстве домов из клееного
+							бруса, предлагая комплексное решение для требовательных заказчиков
+						</h1>
 
 						{/* Bullets: Numbers */}
 						<div className="flex flex-col md:flex-row border-y border-[#61413762] mb-5">

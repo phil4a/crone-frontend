@@ -6,7 +6,7 @@ interface AdvantagesItemProps extends PropsWithChildren {
 
 export function AdvantagesItem({ icon, children }: AdvantagesItemProps) {
 	return (
-		<div className="flex gap-4 md:gap-3 items-start">
+		<div className="flex gap-4 md:gap-3 items-start py-2.5">
 			<div className="shrink-0 w-[68px] h-[68px] bg-beige rounded flex items-center justify-center text-white">
 				{icon}
 			</div>

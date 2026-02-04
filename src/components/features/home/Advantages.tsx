@@ -32,7 +32,7 @@ export function Advantages() {
 						</h1>
 
 						{/* Bullets: Numbers */}
-						<div className="flex flex-col gap-5 md:flex-row border-y border-[#61413762] mb-5">
+						<div className="flex flex-col md:gap-5 md:flex-row border-y border-[#61413762] mb-5">
 							{SITE_CONFIG.advantages.map((advantage) => (
 								<AdvantagesNumber key={advantage.number} {...advantage} />
 							))}

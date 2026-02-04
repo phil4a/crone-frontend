@@ -64,9 +64,6 @@ export function Header() {
 	// Logo Color
 	const logoColorClass = isDarkText ? 'text-brown' : 'text-white';
 
-	// Hamburger Color
-	const hamburgerColorClass = isDarkText ? 'bg-brown' : 'bg-white';
-
 	return (
 		<header
 			className={cn(
@@ -88,32 +85,26 @@ export function Header() {
 				</Link>
 
 				{/* Mobile Menu Button */}
-				<div className="md:hidden">
+				<div className="md:hidden z-[5] bg-beige h-11 w-11 flex items-center justify-center rounded-lg">
 					<button
 						type="button"
-						className={cn(
-							'relative z-[5] h-[18px] w-[30px] cursor-pointer',
-							isMenuOpen && 'menu-open',
-						)}
+						className={cn('relative h-[18px] w-[24px] cursor-pointer', isMenuOpen && 'menu-open')}
 						onClick={() => setIsMenuOpen(!isMenuOpen)}>
 						<span
 							className={cn(
-								'absolute left-0 top-[calc(50%-1px)] h-[2px] w-full transition-all duration-300',
-								hamburgerColorClass,
+								'absolute left-0 top-[calc(50%-1px)] h-[2px] w-full bg-white transition-all duration-300',
 								isMenuOpen && 'scale-0',
 							)}
 						/>
 						<span
 							className={cn(
-								'absolute left-0 top-0 h-[2px] w-full transition-all duration-300',
-								hamburgerColorClass,
+								'absolute left-0 top-0 h-[2px] w-full bg-white transition-all duration-300',
 								isMenuOpen && 'top-[calc(50%-1px)] rotate-45',
 							)}
 						/>
 						<span
 							className={cn(
-								'absolute bottom-0 left-0 h-[2px] w-full transition-all duration-300',
-								hamburgerColorClass,
+								'absolute bottom-0 left-0 h-[2px] w-full bg-white transition-all duration-300',
 								isMenuOpen && 'bottom-[calc(50%-1px)] -rotate-45',
 							)}
 						/>

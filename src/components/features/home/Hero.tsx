@@ -22,7 +22,9 @@ export function Hero() {
 						className="mb-5 drop-shadow-[1px_1px_2px_rgba(0,0,0,0.2)] xl:mb-[30px]">
 						Эксклюзивные дома из клееного бруса
 					</Title>
-
+					<p className="relative text-xl text-white mb-10">
+						Индивидуальный дизайн и высочайшее качество под ключ в любых масштабах
+					</p>
 					<Button className="w-full text-base xl:w-auto">Оставить заявку</Button>
 				</div>
 			</div>

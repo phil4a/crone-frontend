@@ -1,17 +1,11 @@
 'use client';
-import { cn } from '@/lib/utils';
-import React from 'react';
 import { HeaderThemeObserver } from '@/components/layout/HeaderThemeObserver';
 import { Badge } from '@/components/ui/Badge';
 import { Title } from '@/components/ui/Title';
 import { AdvantagesItem } from './advantages/AdvantagesItem';
-import {
-	PlanningIcon,
-	QualityIcon,
-	WarrantyIcon,
-	EcoIcon,
-	TechIcon,
-} from './advantages/AdvantagesIcons';
+import { PlanningIcon, QualityIcon } from './advantages/AdvantagesIcons';
+import { AdvantagesNumber } from './advantages/AdvantagesNumber';
+import { SITE_CONFIG } from '@/config/site.config';
 
 export function Advantages() {
 	return (
@@ -29,7 +23,7 @@ export function Advantages() {
 				</div>
 
 				{/* Content */}
-				<div className="flex flex-col lg:flex-row gap-[30px] md:gap-10 lg:gap-5">
+				<div className="flex flex-col xl:flex-row gap-[30px] md:gap-10 lg:gap-5">
 					{/* Left Column */}
 					<div className="flex-1 md:basis-1/2 lg:pr-[25px]">
 						<h1 className="text-main font-semibold text-base leading-[1.4] mb-[30px] md:mb-10 lg:mb-[30px]">
@@ -39,11 +33,9 @@ export function Advantages() {
 
 						{/* Bullets: Numbers */}
 						<div className="flex flex-col md:flex-row border-y border-[#61413762] mb-5">
-							<div className="flex-1 p-4 md:py-[14px] md:px-4 md:pb-[18px] border-b border-[#61413762] md:border-b-0">
-								<p className="text-[32px] font-bold text-brown leading-none mb-1">15 лет</p>
-								<p className="text-main leading-[1.4]">в строительстве</p>
-							</div>
-							{/* Add more number items here if needed */}
+							{SITE_CONFIG.advantages.map((advantage) => (
+								<AdvantagesNumber key={advantage.number} {...advantage} />
+							))}
 						</div>
 
 						{/* Bullets: Icons */}
@@ -92,23 +84,6 @@ export function Advantages() {
 							</p>
 						</div>
 					</div>
-				</div>
-
-				{/* Grid for remaining items (moved from previous version or if they were missing, I should check) */}
-				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-6 md:gap-y-10 gap-x-5 lg:gap-x-12 mt-10">
-					<AdvantagesItem icon={<QualityIcon />}>
-						постоянный контроль качества на каждом этапе производства и строительства
-					</AdvantagesItem>
-
-					<AdvantagesItem icon={<WarrantyIcon />}>гарантия на построенный дом 5 лет</AdvantagesItem>
-
-					<AdvantagesItem icon={<EcoIcon />}>
-						экологичность материалов для строительства дома
-					</AdvantagesItem>
-
-					<AdvantagesItem icon={<TechIcon />}>
-						уникальные современные технологии производства
-					</AdvantagesItem>
 				</div>
 			</div>
 		</section>

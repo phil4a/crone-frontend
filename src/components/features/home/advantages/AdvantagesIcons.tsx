@@ -14,7 +14,7 @@ export function PlanningIcon() {
 					d="M13.9982 26.4443C20.1074 26.4443 25.0599 21.4918 25.0599 15.3825C25.0599 9.27331 20.1074 4.3208 13.9982 4.3208C7.88901 4.3208 2.93652 9.27331 2.93652 15.3825C2.93652 21.4918 7.88901 26.4443 13.9982 26.4443Z"
 					stroke="white"
 					strokeWidth="2"
-					stroke-miterlimit="10"
+					strokeMiterlimit="10"
 					strokeLinecap="round"
 					strokeLinejoin="round"
 				/>

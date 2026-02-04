@@ -21,7 +21,7 @@ export function Features() {
 	const [isEnd, setIsEnd] = useState(false);
 
 	return (
-		<section className="features pb-20 md:pb-[100px] lg:pb-[150px] bg-white relative">
+		<section className="features pb-20 md:pb-[100px] lg:pb-[150px] bg-white relative overflow-hidden">
 			<HeaderThemeObserver theme="light" />
 			<div className="container">
 				{/* Top Line */}
@@ -101,7 +101,7 @@ export function Features() {
 				</div>
 
 				{/* Slider */}
-				<div className="mb-[30px] md:mb-[60px] -mx-4 md:mx-0 px-4 md:px-0">
+				<div className="mb-[30px] md:mb-[60px]">
 					<Swiper
 						modules={[Navigation, Autoplay]}
 						onBeforeInit={(swiper: SwiperType) => {
@@ -117,10 +117,10 @@ export function Features() {
 						}}
 						// spaceBetween={20}
 						// slidesPerView={1.1}
-						autoplay={{
-							delay: 3000,
-							disableOnInteraction: false,
-						}}
+						// autoplay={{
+						// 	delay: 3000,
+						// 	disableOnInteraction: false,
+						// }}
 						speed={1800}
 						breakpoints={{
 							320: {
@@ -145,7 +145,7 @@ export function Features() {
 								spaceBetween: 20,
 							},
 						}}
-						className="features-swiper">
+						className="!overflow-visible xl:!overflow-hidden">
 						{FEATURES_DATA.map((item, index) => (
 							<SwiperSlide key={index}>
 								<FeaturesSlide item={item} />

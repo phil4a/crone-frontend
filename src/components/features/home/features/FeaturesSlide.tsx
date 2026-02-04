@@ -31,7 +31,7 @@ export function FeaturesSlide({ item }: FeaturesSlideProps) {
 				<h4 className="text-beige text-xl md:text-2xl font-semibold mb-2.5 drop-shadow-md">
 					{item.title}
 				</h4>
-				<p className="text-white text-base leading-relaxed flex-1">{item.text}</p>
+				<p className="text-white text-sm sm:text-base leading-relaxed flex-1">{item.text}</p>
 				{item.link && (
 					<Link
 						href={item.link.href}

@@ -2,6 +2,7 @@ import { Advantages } from '@/components/features/home/Advantages';
 import { Features } from '@/components/features/home/Features';
 import { Hero } from '@/components/features/home/Hero';
 import { Projects } from '@/components/features/home/Projects';
+import { Steps } from '@/components/features/home/Steps';
 
 export default function HomePage() {
 	return (
@@ -10,6 +11,7 @@ export default function HomePage() {
 			<Advantages />
 			<Features />
 			<Projects />
+			<Steps />
 		</main>
 	);
 }

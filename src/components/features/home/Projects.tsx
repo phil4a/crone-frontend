@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { PROJECTS_DATA } from '@/config/projects.data';
-import { ProjectCard } from './projects/ProjectCard';
+import { ProjectCard } from '../../common/projects/ProjectCard';
 import { Title } from '@/components/ui/Title';
 import { Button } from '@/components/ui/Button';
 import { HeaderThemeObserver } from '@/components/layout/HeaderThemeObserver';
@@ -20,7 +20,7 @@ export function Projects() {
 					</Button>
 				</div>
 
-				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+				<div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
 					{PROJECTS_DATA.map((project) => (
 						<ProjectCard key={project.id} project={project} />
 					))}

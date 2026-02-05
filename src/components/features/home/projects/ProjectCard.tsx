@@ -9,7 +9,7 @@ interface ProjectCardProps {
 export function ProjectCard({ project }: ProjectCardProps) {
 	return (
 		<Link href={project.href} className="group flex flex-col w-full">
-			<div className="relative w-full aspect-[4/3] lg:aspect-[16/9] overflow-hidden rounded-lg">
+			<div className="relative w-full aspect-4/3 lg:aspect-video overflow-hidden rounded-lg">
 				<Image
 					src={project.image}
 					alt={project.title}

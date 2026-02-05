@@ -8,7 +8,7 @@ interface FeaturesSlideProps {
 
 export function FeaturesSlide({ item }: FeaturesSlideProps) {
 	return (
-		<div className="relative h-[500px] w-full overflow-hidden rounded-lg">
+		<div className="relative h-125 w-full overflow-hidden rounded-lg">
 			{/* Background Image */}
 			<Image
 				src={item.image}

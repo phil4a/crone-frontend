@@ -21,11 +21,11 @@ export function Features() {
 	const [isEnd, setIsEnd] = useState(false);
 
 	return (
-		<section className="features pb-20 md:pb-[100px] lg:pb-[150px] bg-white relative overflow-hidden">
+		<section className="features pb-20 md:pb-25 lg:pb-37.5 bg-white relative overflow-hidden">
 			<HeaderThemeObserver theme="light" />
 			<div className="container">
 				{/* Top Line */}
-				<div className="flex flex-col md:flex-row md:items-end justify-between gap-6 md:gap-2.5 mb-[30px] md:mb-10">
+				<div className="flex flex-col md:flex-row md:items-end justify-between gap-6 md:gap-2.5 mb-7.5 md:mb-10">
 					<div className="flex flex-col items-start">
 						<Badge variant="beige" className="mb-3 font-normal">
 							Наш подход
@@ -41,7 +41,7 @@ export function Features() {
 							onClick={() => swiperRef.current?.slidePrev()}
 							disabled={isBeginning}
 							className={cn(
-								'w-[72px] h-[44px] md:w-[84px] md:h-[50px] flex items-center justify-center border border-brown rounded-lg transition-colors',
+								'w-18 h-11 md:w-21 md:h-12.5 flex items-center justify-center border border-brown rounded-lg transition-colors',
 								isBeginning
 									? 'opacity-50 cursor-not-allowed'
 									: 'cursor-pointer hover:bg-brown/10 active:bg-brown/20',
@@ -71,7 +71,7 @@ export function Features() {
 							onClick={() => swiperRef.current?.slideNext()}
 							disabled={isEnd}
 							className={cn(
-								'w-[72px] h-[44px] md:w-[84px] md:h-[50px] flex items-center justify-center border border-brown rounded-lg transition-colors',
+								'w-18 h-11 md:w-21 md:h-12.5 flex items-center justify-center border border-brown rounded-lg transition-colors',
 								isEnd
 									? 'opacity-50 cursor-not-allowed'
 									: 'cursor-pointer hover:bg-brown/10 active:bg-brown/20',
@@ -101,7 +101,7 @@ export function Features() {
 				</div>
 
 				{/* Slider */}
-				<div className="mb-[30px] md:mb-[60px]">
+				<div className="mb-7.5 md:mb-15">
 					<Swiper
 						modules={[Navigation, Autoplay]}
 						onBeforeInit={(swiper: SwiperType) => {
@@ -145,7 +145,7 @@ export function Features() {
 								spaceBetween: 20,
 							},
 						}}
-						className="!overflow-visible xl:!overflow-hidden">
+						className="overflow-visible! xl:overflow-hidden!">
 						{FEATURES_DATA.map((item, index) => (
 							<SwiperSlide key={index}>
 								<FeaturesSlide item={item} />
@@ -155,7 +155,7 @@ export function Features() {
 				</div>
 
 				{/* CTA */}
-				<div className="bg-light-beige rounded-lg p-10 md:p-[60px] lg:px-20 lg:py-[60px] flex flex-col md:flex-row items-center justify-between gap-[30px] md:gap-10">
+				<div className="bg-light-beige rounded-lg p-10 md:p-15 lg:px-20 lg:py-15 flex flex-col md:flex-row items-center justify-between gap-7.5 md:gap-10">
 					<div className="text-center md:text-left">
 						<h3 className="text-2xl md:text-3xl font-semibold text-main mb-3">
 							Оставьте заявку и получите консультацию

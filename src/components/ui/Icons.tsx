@@ -2,7 +2,7 @@ import { cn } from '@/lib/utils';
 
 export const EmailIcon = ({ className }: { className?: string }) => (
 	<svg
-		className={cn('h-[14px] w-[18px]', className)}
+		className={cn('h-3.5 w-4.5', className)}
 		viewBox="0 0 18 14"
 		fill="none"
 		xmlns="http://www.w3.org/2000/svg">
@@ -17,7 +17,7 @@ export const EmailIcon = ({ className }: { className?: string }) => (
 
 export const PhoneIcon = ({ className }: { className?: string }) => (
 	<svg
-		className={cn('h-[18px] w-[18px]', className)}
+		className={cn('h-4.5 w-4.5', className)}
 		viewBox="0 0 18 18"
 		fill="none"
 		xmlns="http://www.w3.org/2000/svg">
@@ -30,7 +30,7 @@ export const PhoneIcon = ({ className }: { className?: string }) => (
 
 export const TelegramIcon = ({ className }: { className?: string }) => (
 	<svg
-		className={cn('h-[18px] w-5', className)}
+		className={cn('h-4.5 w-5', className)}
 		viewBox="0 0 20 18"
 		fill="none"
 		xmlns="http://www.w3.org/2000/svg">
@@ -43,7 +43,7 @@ export const TelegramIcon = ({ className }: { className?: string }) => (
 
 export const WhatsappIcon = ({ className }: { className?: string }) => (
 	<svg
-		className={cn('h-[19px] w-[18px]', className)}
+		className={cn('h-4.75 w-4.5', className)}
 		viewBox="0 0 18 19"
 		fill="none"
 		xmlns="http://www.w3.org/2000/svg">

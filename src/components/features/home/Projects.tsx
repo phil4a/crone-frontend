@@ -8,15 +8,15 @@ import { PAGE } from '@/config/pages.config';
 
 export function Projects() {
 	return (
-		<section className="pb-20 md:pb-[100px] lg:pb-[150px] bg-white relative">
+		<section className="pb-20 md:pb-25 lg:pb-37.5 bg-white relative">
 			<HeaderThemeObserver theme="light" />
 			<div className="container">
 				<div className="flex flex-col md:flex-row md:items-center justify-between gap-6 md:gap-4 mb-10">
 					<Title as="h2" variant="h2">
 						Наши проекты
 					</Title>
-					<Button asChild variant="outline" className="w-full md:w-auto h-11 md:h-[50px] px-8">
-						<Link href={PAGE.OBJECTS}>Посмотреть проекты</Link>
+					<Button asChild variant="outline" className="w-full md:w-auto h-11 md:h-12.5 px-8">
+						<Link href={PAGE.OBJECTS}>Смотреть проекты</Link>
 					</Button>
 				</div>
 

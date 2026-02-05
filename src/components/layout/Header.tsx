@@ -76,35 +76,33 @@ export function Header() {
 			)}>
 			<div
 				className={cn(
-					'container flex items-center justify-between gap-[30px] transition-[padding] duration-300',
+					'container flex items-center justify-between gap-7.5 transition-[padding] duration-300',
 				)}>
-				<Link href="/" className="group relative z-[3] shrink-0">
-					<Logo
-						className={cn('w-[162px] transition-colors duration-300 md:w-[250px]', logoColorClass)}
-					/>
+				<Link href="/" className="group relative z-3 shrink-0">
+					<Logo className={cn('w-40.5 transition-colors duration-300 md:w-62.5', logoColorClass)} />
 				</Link>
 
 				{/* Mobile Menu Button */}
-				<div className="md:hidden z-[5] bg-beige h-11 w-11 flex items-center justify-center rounded-lg">
+				<div className="md:hidden z-5 bg-beige h-11 w-11 flex items-center justify-center rounded-lg">
 					<button
 						type="button"
-						className={cn('relative h-[18px] w-[24px] cursor-pointer', isMenuOpen && 'menu-open')}
+						className={cn('relative h-4.5 w-6 cursor-pointer', isMenuOpen && 'menu-open')}
 						onClick={() => setIsMenuOpen(!isMenuOpen)}>
 						<span
 							className={cn(
-								'absolute left-0 top-[calc(50%-1px)] h-[2px] w-full bg-white transition-all duration-300',
+								'absolute left-0 top-[calc(50%-1px)] h-0.5 w-full bg-white transition-all duration-300',
 								isMenuOpen && 'scale-0',
 							)}
 						/>
 						<span
 							className={cn(
-								'absolute left-0 top-0 h-[2px] w-full bg-white transition-all duration-300',
+								'absolute left-0 top-0 h-0.5 w-full bg-white transition-all duration-300',
 								isMenuOpen && 'top-[calc(50%-1px)] rotate-45',
 							)}
 						/>
 						<span
 							className={cn(
-								'absolute bottom-0 left-0 h-[2px] w-full bg-white transition-all duration-300',
+								'absolute bottom-0 left-0 h-0.5 w-full bg-white transition-all duration-300',
 								isMenuOpen && 'bottom-[calc(50%-1px)] -rotate-45',
 							)}
 						/>
@@ -114,17 +112,17 @@ export function Header() {
 				{/* Navigation & Actions */}
 				<div
 					className={cn(
-						'fixed inset-0 z-[2] flex flex-col bg-white px-5 pt-[100px] transition-transform duration-300 md:static md:flex md:flex-1 md:h-auto md:w-auto md:translate-x-0 md:flex-row md:items-center md:justify-between md:gap-[30px] md:bg-transparent md:p-0',
+						'fixed inset-0 z-2 flex flex-col bg-white px-5 pt-25 transition-transform duration-300 md:static md:flex md:flex-1 md:h-auto md:w-auto md:translate-x-0 md:flex-row md:items-center md:justify-between md:gap-7.5 md:bg-transparent md:p-0',
 						!isMenuOpen && 'translate-x-full',
 					)}>
-					<nav className="mb-10 md:mb-0 md:grow-1">
+					<nav className="mb-10 md:mb-0 md:grow">
 						<ul className="flex flex-col gap-6 md:flex-row md:gap-8 justify-center">
 							{MAIN_MENU.map((item) => (
 								<li key={item.href}>
 									<Link
 										href={item.href}
 										className={cn(
-											'relative text-lg font-medium uppercase font-bold transition-colors after:absolute after:bottom-0 after:left-0 after:h-px after:w-0 after:bg-beige after:transition-[width] hover:after:w-full md:text-base',
+											'relative text-lg font-medium uppercase transition-colors after:absolute after:bottom-0 after:left-0 after:h-px after:w-0 after:bg-beige after:transition-[width] hover:after:w-full md:text-base',
 											linkColorClass,
 											hoverColorClass,
 										)}>

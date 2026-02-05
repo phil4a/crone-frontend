@@ -9,7 +9,7 @@ import { SITE_CONFIG } from '@/config/site.config';
 
 export function Advantages() {
 	return (
-		<section className="relative bg-white py-20 md:py-[100px] lg:py-[150px]">
+		<section className="relative bg-white py-20 md:py-25 lg:py-37.5">
 			<HeaderThemeObserver theme="light" />
 			<div className="container">
 				{/* Heading */}
@@ -23,10 +23,10 @@ export function Advantages() {
 				</div>
 
 				{/* Content */}
-				<div className="flex flex-col xl:flex-row gap-[30px] md:gap-10 lg:gap-5">
+				<div className="flex flex-col xl:flex-row gap-7.5 md:gap-10 lg:gap-5">
 					{/* Left Column */}
-					<div className="flex-1 md:basis-1/2 lg:pr-[25px]">
-						<h1 className="text-main font-semibold text-base leading-[1.4] mb-[30px] md:mb-10 lg:mb-[30px]">
+					<div className="flex-1 md:basis-1/2 lg:pr-6.25">
+						<h1 className="text-main font-semibold text-base leading-[1.4] mb-7.5 md:mb-10 lg:mb-7.5">
 							КРОНА Групп специализируется на проектировании и строительстве домов из клееного
 							бруса, предлагая комплексное решение для требовательных заказчиков
 						</h1>
@@ -39,7 +39,7 @@ export function Advantages() {
 						</div>
 
 						{/* Bullets: Icons */}
-						<div className="flex flex-col lg:flex-row gap-5 px-[10px]">
+						<div className="flex flex-col lg:flex-row gap-5 px-2.5">
 							<AdvantagesItem icon={<PlanningIcon />}>
 								Индивидуальный подход к планированию времени для работы с заказчиком
 							</AdvantagesItem>

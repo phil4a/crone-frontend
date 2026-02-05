@@ -4,7 +4,12 @@ const nextConfig: NextConfig = {
 	reactStrictMode: true,
 	poweredByHeader: false,
 	images: {
-		domains: ['crone-group.ru'],
+		remotePatterns: [
+			{
+				protocol: 'https',
+				hostname: 'crone-group.ru',
+			},
+		],
 	},
 };
 

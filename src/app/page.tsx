@@ -3,6 +3,7 @@ import { Features } from '@/components/features/home/Features';
 import { Hero } from '@/components/features/home/Hero';
 import { Projects } from '@/components/features/home/Projects';
 import { Steps } from '@/components/features/home/Steps';
+import { Creating } from '@/components/features/home/Creating';
 
 export default function HomePage() {
 	return (
@@ -10,6 +11,7 @@ export default function HomePage() {
 			<Hero />
 			<Advantages />
 			<Features />
+			<Creating />
 			<Projects />
 			<Steps />
 		</main>

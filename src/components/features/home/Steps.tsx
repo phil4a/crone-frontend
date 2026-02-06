@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Image from 'next/image';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { type Swiper as SwiperType } from 'swiper';
-import { EffectFade } from 'swiper/modules';
+import { Autoplay, EffectFade } from 'swiper/modules';
 import { cn } from '@/lib/utils';
 import { STEPS_DATA } from '@/config/steps.data';
 import { Title } from '@/components/ui/Title';
@@ -39,9 +39,13 @@ export function Steps() {
 							onSwiper={setSwiper}
 							onSlideChange={(s) => setActiveIndex(s.activeIndex)}
 							effect="fade"
-							modules={[EffectFade]}
+							modules={[EffectFade, Autoplay]}
 							className="rounded-lg overflow-hidden h-full"
 							allowTouchMove={false}
+							autoplay={{
+								delay: 3000,
+								disableOnInteraction: false,
+							}}
 							speed={500}>
 							{STEPS_DATA.map((step) => (
 								<SwiperSlide key={step.id}>

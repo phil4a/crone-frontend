@@ -29,3 +29,16 @@ export const MAIN_MENU: IMenuItem[] = [
 		href: PAGE.ARTICLES,
 	},
 ];
+
+export const FOOTER_MENU: IMenuItem[] = [
+	{ label: 'О компании', href: PAGE.ABOUT },
+	{ label: 'Контакты', href: PAGE.CONTACTS },
+	{ label: 'Услуги', href: PAGE.SERVICES },
+];
+
+export const OBJECTS_MENU: IMenuItem[] = [
+	{ label: 'Тип объектов из клееного бруса 1', href: '#' },
+	{ label: 'Тип объектов из клееного бруса 2', href: '#' },
+	{ label: 'Тип объектов из клееного бруса 3', href: '#' },
+	{ label: 'Тип объектов из клееного бруса 4', href: '#' },
+];

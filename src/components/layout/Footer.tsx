@@ -149,12 +149,12 @@ function FooterLogos() {
 	return (
 		<div className="flex flex-col sm:flex-row gap-6 sm:gap-10 xl:gap-6 items-start">
 			<div className="grid grid-cols-[76px_1fr] gap-4 items-center">
-				<div className="flex justify-center w-full h-full">
+				<div className="relative flex justify-center w-full h-full">
 					<Image
 						src="/images/footer/kadrin.png"
 						alt="Кадрин"
-						width={76}
-						height={56}
+						fill
+						sizes="(max-width: 768px) 100vw, 100px"
 						className="max-h-14 w-auto object-contain"
 					/>
 				</div>
@@ -163,12 +163,12 @@ function FooterLogos() {
 				</p>
 			</div>
 			<div className="grid grid-cols-[76px_1fr] gap-4 items-center">
-				<div className="flex justify-center w-full h-full">
+				<div className="relative flex justify-center w-full h-full">
 					<Image
 						src="/images/footer/npadd.png"
 						alt="Ассоциация деревянного домостроения"
-						width={76}
-						height={56}
+						fill
+						sizes="(max-width: 768px) 100vw, 100px"
 						className="max-h-14 w-auto object-contain"
 					/>
 				</div>

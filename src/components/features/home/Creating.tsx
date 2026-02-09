@@ -63,7 +63,6 @@ export function Creating() {
 								src="https://kinescope.io/embed/216uAEpghNmi3jXtR6W3Q6"
 								allow="autoplay; fullscreen; picture-in-picture; encrypted-media; gyroscope; accelerometer; clipboard-write;"
 								className="absolute top-0 left-0 w-full h-full border-0"
-								allowFullScreen
 								title="Как создаются наши дома"
 							/>
 						</div>

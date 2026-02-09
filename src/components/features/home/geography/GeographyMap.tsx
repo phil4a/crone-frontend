@@ -69,7 +69,7 @@ export function GeographyMap() {
 							minWidth: 150,
 						});
 
-						marker.addListener('click', () => {
+						marker.addListener('gmp-click', () => {
 							if (openInfoWindow) {
 								openInfoWindow.close();
 							}

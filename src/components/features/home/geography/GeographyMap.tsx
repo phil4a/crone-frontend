@@ -89,7 +89,7 @@ export function GeographyMap() {
 	return (
 		<div
 			ref={mapRef}
-			className="w-full h-[350px] md:h-[500px] rounded-[20px] overflow-hidden bg-gray-100"
+			className="w-full h-87.5 md:h-125 rounded-[20px] overflow-hidden bg-gray-100"
 		/>
 	);
 }

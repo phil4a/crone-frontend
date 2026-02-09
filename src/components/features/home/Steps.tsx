@@ -76,15 +76,15 @@ export function Steps() {
 									onClick={() => handleStepClick(index)}>
 									<div
 										className={cn(
-											'flex items-center min-h-17.5 px-4 py-2 gap-4 transition-colors duration-300 w-full rounded-xl',
+											'flex items-center min-h-17.5 px-4 py-2 gap-4 transition-colors duration-300 w-full border-light-beige border-b  lg:rounded-xl',
 											activeIndex === index ? 'bg-light-beige' : 'group-hover:bg-transparent',
 										)}>
 										<div
 											className={cn(
-												'text-sm px-2 py-1 transition-colors duration-300 rounded-lg whitespace-nowrap',
+												'text-base font-normal px-2 py-1 transition-colors duration-300 rounded-lg whitespace-nowrap',
 												activeIndex === index
 													? 'bg-beige text-white'
-													: 'text-main/60 group-hover:bg-beige bg-light-beige group-hover:text-white',
+													: 'text-brown group-hover:bg-beige bg-light-beige group-hover:text-white',
 											)}>
 											{step.number}
 										</div>

@@ -4,6 +4,7 @@ import { Hero } from '@/components/features/home/Hero';
 import { Projects } from '@/components/features/home/Projects';
 import { Steps } from '@/components/features/home/Steps';
 import { Creating } from '@/components/features/home/Creating';
+import { Geography } from '@/components/features/home/Geography';
 
 export default function HomePage() {
 	return (
@@ -13,6 +14,7 @@ export default function HomePage() {
 			<Features />
 			<Creating />
 			<Projects />
+			<Geography />
 			<Steps />
 		</main>
 	);

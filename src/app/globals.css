@@ -61,3 +61,8 @@ body {
 		text-wrap: balance;
 	}
 }
+
+/* Google Maps InfoWindow close button container fix */
+.gm-style-iw-chr {
+	height: 26px !important;
+}

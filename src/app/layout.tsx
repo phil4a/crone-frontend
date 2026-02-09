@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { Manrope } from 'next/font/google';
+import { Toaster } from 'sonner';
 import { Header } from '@/components/layout/Header';
 import './globals.css';
 import { Footer } from '@/components/layout/Footer';
@@ -28,6 +29,17 @@ export default function RootLayout({
 				<Header />
 				{children}
 				<Footer />
+				<Toaster
+					position="top-center"
+					richColors
+					toastOptions={{
+						style: {
+							fontSize: '16px',
+							fontFamily: 'var(--font-manrope)',
+						},
+						className: 'text-base font-light',
+					}}
+				/>
 			</body>
 		</html>
 	);

@@ -5,6 +5,7 @@ import { Projects } from '@/components/features/home/Projects';
 import { Steps } from '@/components/features/home/Steps';
 import { Creating } from '@/components/features/home/Creating';
 import { Geography } from '@/components/features/home/Geography';
+import { FeedbackForm } from '@/components/common/FeedbackForm';
 
 export default function HomePage() {
 	return (
@@ -16,6 +17,7 @@ export default function HomePage() {
 			<Projects />
 			<Geography />
 			<Steps />
+			<FeedbackForm />
 		</main>
 	);
 }

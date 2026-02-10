@@ -53,7 +53,6 @@ class ProjectService {
 					...(fields && { _fields: fields })
 				}
 			});
-
 			return data.map(transformProject);
 		} catch (error) {
 			console.error('Error fetching projects:', error);
@@ -65,9 +64,10 @@ class ProjectService {
 	 * Получает проекты для главной страницы (алиас для getProjectsByCategory)
 	 * @param limit Количество постов (опционально)
 	 */
-	async getHomePageProjects(limit?: number) {
+	async getProjectsPreview(limit?: number) {
 		// Оптимизация: запрашиваем только необходимые поля для карточек
-		const fields = 'slug,title,acf,featured_media';
+		// Важно: _embedded должен быть в списке, чтобы _embed работал корректно
+		const fields = 'id,slug,title,acf,featured_media,_links,_embedded';
 		return this.getProjectsByCategory('project', limit, fields);
 	}
 }

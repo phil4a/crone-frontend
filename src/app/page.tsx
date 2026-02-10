@@ -10,7 +10,7 @@ import { Steps } from '@/components/features/home/Steps';
 import { projectService } from '@/services/project.service';
 
 export default async function HomePage() {
-	const data = await projectService.getHomePageProjects(1);
+	const data = await projectService.getProjectsPreview(6);
 	console.log(data);
 
 	return (
@@ -19,7 +19,7 @@ export default async function HomePage() {
 			<Advantages />
 			<Features />
 			<Creating />
-			<Projects />
+			<Projects projects={data} />
 			<Geography />
 			<Steps />
 			<FeedbackForm />

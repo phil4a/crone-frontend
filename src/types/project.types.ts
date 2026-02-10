@@ -47,4 +47,5 @@ export interface Project {
 		ogImage?: string;
 	};
 	likes: number;
+	tags: string[]; // List of tag slugs
 }

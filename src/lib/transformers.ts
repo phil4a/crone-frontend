@@ -61,10 +61,21 @@ export function transformProject(post: WPProject): Project {
 	// Cover Image
 	const coverImage = findImageInEmbedded(post.featured_media, embedded);
 
+	// Extract tags from embedded terms
+	// wp:term is an array of arrays of terms. We need to flatten and filter by taxonomy 'post_tag'
+	let tags: string[] = [];
+	if (embedded && embedded['wp:term']) {
+		const terms = embedded['wp:term'].flat();
+		tags = terms
+			.filter((term: any) => term.taxonomy === 'post_tag')
+			.map((term: any) => term.slug);
+	}
+
 	return {
 		id: post.id,
 		slug: post.slug,
 		title: post.title.rendered,
+		tags,
 		shortDescription: acf['short-description'] || '',
 		description: post.content?.rendered || '', // Safe access
 		coverImage,

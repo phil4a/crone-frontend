@@ -127,3 +127,14 @@ export interface WPCategory {
 	parent: number;
 	meta: any[];
 }
+
+export interface WPTag {
+	id: number;
+	count: number;
+	description: string;
+	link: string;
+	name: string;
+	slug: string;
+	taxonomy: 'post_tag';
+	meta: any[];
+}

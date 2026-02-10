@@ -4,11 +4,12 @@ import { axiosClassic } from '@/api/axios';
 
 import { transformProject } from '@/lib/transformers';
 import { Project } from '@/types/project.types';
-import { WPCategory, WPProject } from '@/types/wp.types';
+import { WPCategory, WPProject, WPTag } from '@/types/wp.types';
 
 class ProjectService {
 	private _posts = API_PATHS.POSTS;
 	private _categories = '/categories';
+	private _tags = '/tags';
 
 	/**
 	 * Получает ID категории по её слагу
@@ -70,6 +71,29 @@ class ProjectService {
 		// Добавляем project_likes в список полей (требуется регистрация поля в WP)
 		const fields = 'id,slug,title,acf,featured_media,_links,_embedded,project_likes';
 		return this.getProjectsByCategory('project', limit, fields);
+	}
+
+	/**
+	 * Получает список меток (тегов) для фильтрации проектов
+	 * @param limit Лимит меток (по умолчанию 100)
+	 */
+	async getProjectTags(limit: number = 100): Promise<WPTag[]> {
+		try {
+			// Получаем метки, скрываем пустые.
+			// Сортировка по количеству записей (count) по убыванию - чтобы показать самые популярные
+			const { data } = await axiosClassic.get<WPTag[]>(this._tags, {
+				params: {
+					per_page: limit,
+					hide_empty: true,
+					orderby: 'count',
+					order: 'desc'
+				}
+			});
+			return data;
+		} catch (error) {
+			console.error('Error fetching tags:', error);
+			return [];
+		}
 	}
 
 	/**

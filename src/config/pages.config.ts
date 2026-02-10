@@ -12,6 +12,7 @@ class Page {
 		return `${this.ARTICLES}/${path}`;
 	}
 	CONTACTS = '/contacts';
+	SITE_MAP = '/karta-sajta';
 }
 export const PAGE = new Page();
 
@@ -26,5 +27,5 @@ export const PAGE_INFO = {
 	SERVICES: { href: PAGE.SERVICES, title: 'Услуги' },
 	OBJECTS: { href: PAGE.OBJECTS, title: 'Объекты' },
 	ARTICLES: { href: PAGE.ARTICLES, title: 'Полезное' },
-	CONTACTS: { href: PAGE.CONTACTS, title: 'Контакты' },
+	CONTACTS: { href: PAGE.CONTACTS, title: 'Контакты' }
 } as const;

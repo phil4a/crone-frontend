@@ -11,7 +11,6 @@ import { projectService } from '@/services/project.service';
 
 export default async function HomePage() {
 	const data = await projectService.getProjectsPreview(6);
-	console.log(data);
 
 	return (
 		<main className='flex min-h-screen flex-col'>

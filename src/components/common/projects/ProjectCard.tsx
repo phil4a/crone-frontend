@@ -11,11 +11,9 @@ interface ProjectCardProps {
 }
 
 export function ProjectCard({ project }: ProjectCardProps) {
-	// Format specs string: "2 этажа, 228 м²"
 	const floors = project.specs.floor;
 	const area = project.specs.area;
 
-	// Simple pluralization for "этаж"
 	const floorText = floors === 1 ? 'этаж' : floors >= 2 && floors <= 4 ? 'этажа' : 'этажей';
 	const specs = `${floors} ${floorText}, ${area} м²`;
 

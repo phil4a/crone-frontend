@@ -1,4 +1,5 @@
 'use client';
+
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Toaster } from 'sonner';
 
@@ -9,14 +10,14 @@ export function Providers({ children }: { children: React.ReactNode }) {
 		<QueryClientProvider client={client}>
 			{children}
 			<Toaster
-				position="top-center"
+				position='top-center'
 				richColors
 				toastOptions={{
 					style: {
 						fontSize: '16px',
-						fontFamily: 'var(--font-manrope)',
+						fontFamily: 'var(--font-manrope)'
 					},
-					className: 'text-base font-light',
+					className: 'text-base font-light'
 				}}
 			/>
 		</QueryClientProvider>

@@ -46,4 +46,5 @@ export interface Project {
 		description: string;
 		ogImage?: string;
 	};
+	likes: number;
 }

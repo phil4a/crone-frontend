@@ -67,8 +67,32 @@ class ProjectService {
 	async getProjectsPreview(limit?: number) {
 		// Оптимизация: запрашиваем только необходимые поля для карточек
 		// Важно: _embedded должен быть в списке, чтобы _embed работал корректно
-		const fields = 'id,slug,title,acf,featured_media,_links,_embedded';
+		// Добавляем project_likes в список полей (требуется регистрация поля в WP)
+		const fields = 'id,slug,title,acf,featured_media,_links,_embedded,project_likes';
 		return this.getProjectsByCategory('project', limit, fields);
+	}
+
+	/**
+	 * Переключает лайк для проекта (Custom REST API)
+	 */
+	async toggleLike(postId: number, type: 'like' | 'unlike'): Promise<{ likes: number } | null> {
+		try {
+			// Формируем URL для кастомного эндпоинта
+			// API_URL = .../wp-json/wp/v2 -> Root = .../wp-json
+			const rootApiUrl =
+				process.env.NEXT_PUBLIC_API_URL?.replace('/wp/v2', '') || 'https://crone-group.ru/wp-json';
+			const endpoint = `${rootApiUrl}/crone/v1/project/like`;
+
+			const { data } = await axiosClassic.post<{ likes: number }>(endpoint, {
+				post_id: postId,
+				type
+			});
+
+			return data;
+		} catch (error) {
+			console.error('Error toggling like:', error);
+			return null;
+		}
 	}
 }
 

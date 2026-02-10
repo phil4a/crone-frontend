@@ -93,7 +93,8 @@ export function transformProject(post: WPProject): Project {
 		seo: {
 			title: post.yoast_head_json?.title || post.title.rendered,
 			description: post.yoast_head_json?.description || acf['short-description'] || '',
-			ogImage: post.yoast_head_json?.og_image?.[0]?.url || coverImage?.url
-		}
+			ogImage: post.yoast_head_json?.og_image?.[0]?.url || coverImage?.url,
+		},
+		likes: post.project_likes || 0,
 	};
 }

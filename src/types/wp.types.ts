@@ -112,8 +112,9 @@ export interface WPProject {
 	acf: WPACFProject;
 	_embedded?: WPEmbedded;
 	yoast_head?: string;
-	yoast_head_json?: any; // Detailed Yoast JSON structure can be complex
-}
+	yoast_head_json?: any;
+	project_likes?: number; // Custom field exposed via REST API
+} // Detailed Yoast JSON structure can be complex
 
 export interface WPCategory {
 	id: number;

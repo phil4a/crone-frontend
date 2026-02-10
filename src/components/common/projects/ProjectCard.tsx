@@ -28,10 +28,13 @@ export function ProjectCard({ project }: ProjectCardProps) {
 				{project.specs.status}
 			</Badge>
 			<div className='absolute top-5 right-5 z-1'>
-				<ProjectLike />
+				<ProjectLike
+					projectId={project.id}
+					initialLikes={project.likes}
+				/>
 			</div>
 			<Link
-				href={`/projects/${project.slug}`}
+				href={`/project/${project.slug}`}
 				className='group flex flex-col w-full'
 			>
 				<div className='relative w-full aspect-4/3 lg:aspect-video overflow-hidden rounded-lg hover:scale-[1.0125] duration-300 transition-transform will-change-transform'>

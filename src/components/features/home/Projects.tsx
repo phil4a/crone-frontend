@@ -1,20 +1,21 @@
+'use client';
+
 import Link from 'next/link';
 
 import { HeaderThemeObserver } from '@/components/layout/HeaderThemeObserver';
 import { Button } from '@/components/ui/Button';
+import { SkeletonLoader } from '@/components/ui/SkeletonLoader';
 import { Title } from '@/components/ui/Title';
 
 import { PAGE } from '@/config/pages.config';
 
+import { useProjects } from '@/hooks/useProjects';
+
 import { ProjectCard } from '../../common/projects/ProjectCard';
 
-import { Project } from '@/types/project.types';
+export function Projects() {
+	const { data: projects, isLoading, error } = useProjects();
 
-interface ProjectsProps {
-	projects: Project[] | null;
-}
-
-export function Projects({ projects }: ProjectsProps) {
 	return (
 		<section className='pb-20 md:pb-25 lg:pb-37.5 bg-white relative'>
 			<HeaderThemeObserver theme='light' />
@@ -36,6 +37,16 @@ export function Projects({ projects }: ProjectsProps) {
 				</div>
 
 				<div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5'>
+					{isLoading &&
+						Array.from({ length: 6 }).map((_, idx) => (
+							<div key={idx}>
+								<SkeletonLoader
+									count={1}
+									className='h-79 w-full rounded-2xl'
+								/>
+							</div>
+						))}
+					{error && <p>Произошла ошибка загрузки проектов</p>}
 					{projects?.map(project => (
 						<ProjectCard
 							key={project.id}

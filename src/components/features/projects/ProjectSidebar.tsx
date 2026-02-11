@@ -135,9 +135,10 @@ export function ProjectSidebar({ filters, onApply, className }: ProjectSidebarPr
 				<h4 className='text-lg font-bold mb-5 text-main'>Этажность</h4>
 				<div className='flex flex-col gap-3'>
 					{FLOOR_OPTIONS.map(floor => (
-						<label
+						<div
 							key={floor}
 							className='flex items-center gap-3 cursor-pointer group w-fit'
+							onClick={() => handleFloorChange(floor)}
 						>
 							<div
 								className={cn(
@@ -166,12 +167,7 @@ export function ProjectSidebar({ filters, onApply, className }: ProjectSidebarPr
 								)}
 							</div>
 							<span className='text-sm text-brown'>{floor}</span>
-							{/* Hidden checkbox for semantics if needed, but div is fine for now */}
-							<button
-								className='hidden'
-								onClick={() => handleFloorChange(floor)}
-							/>
-						</label>
+						</div>
 					))}
 				</div>
 			</div>
@@ -210,9 +206,10 @@ export function ProjectSidebar({ filters, onApply, className }: ProjectSidebarPr
 				<h4 className='text-lg font-bold mb-5 text-main'>Статус</h4>
 				<div className='flex flex-col gap-3'>
 					{STATUS_OPTIONS.map(status => (
-						<label
+						<div
 							key={status}
 							className='flex items-center gap-3 cursor-pointer group w-fit'
+							onClick={() => handleStatusChange(status)}
 						>
 							<div
 								className={cn(
@@ -241,11 +238,7 @@ export function ProjectSidebar({ filters, onApply, className }: ProjectSidebarPr
 								)}
 							</div>
 							<span className='text-sm text-brown'>{status}</span>
-							<button
-								className='hidden'
-								onClick={() => handleStatusChange(status)}
-							/>
-						</label>
+						</div>
 					))}
 				</div>
 			</div>

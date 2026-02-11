@@ -138,7 +138,7 @@ export function transformGraphQLProject(post: GraphQLProject): Project {
 			year: 0, // Not in query
 			city: '', // Not in query
 			type: '', // Not in query
-			status: fields?.status || ''
+			status: Array.isArray(fields?.status) ? fields.status[0] || '' : fields?.status || ''
 		},
 		features: {
 			terrace: false,

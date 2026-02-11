@@ -27,7 +27,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
 			</Badge>
 			<div className='absolute top-5 right-5 z-1'>
 				<ProjectLike
-					projectId={project.id}
+					projectId={project.globalId || String(project.id)}
 					initialLikes={project.likes}
 				/>
 			</div>

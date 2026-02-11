@@ -1,12 +1,14 @@
 'use client';
 
-import { useEffect, useOptimistic, useState, useTransition } from 'react';
+import { useEffect, useState } from 'react';
 
+// import { projectService } from '@/services/project.service';
+// Assuming useLikeProjectMutation will be generated
+import { useLikeProjectMutation } from '@/graphql/generated';
 import { cn } from '@/lib/utils';
-import { projectService } from '@/services/project.service';
 
 interface ProjectLikeProps {
-	projectId: number;
+	projectId: string | number; // Support Global ID (string) or DB ID (number)
 	initialLikes?: number;
 	className?: string;
 }
@@ -24,16 +26,9 @@ export function ProjectLike({ projectId, initialLikes = 0, className }: ProjectL
 	});
 
 	const [mounted, setMounted] = useState(false);
-	const [isPending, startTransition] = useTransition();
 
-	// Optimistic state handles the immediate UI feedback
-	const [optimisticState, setOptimisticState] = useOptimistic(
-		state,
-		(currentState, newIsLiked: boolean) => ({
-			likes: newIsLiked ? currentState.likes + 1 : Math.max(0, currentState.likes - 1),
-			isLiked: newIsLiked
-		})
-	);
+	// Mutation hook
+	const { mutateAsync: likeProject, isPending } = useLikeProjectMutation();
 
 	// Key for localStorage
 	const storageKey = `project_like_${projectId}`;
@@ -51,45 +46,62 @@ export function ProjectLike({ projectId, initialLikes = 0, className }: ProjectL
 		}
 	}, [storageKey]);
 
-	const handleLike = (e: React.MouseEvent) => {
+	const handleLike = async (e: React.MouseEvent) => {
 		e.preventDefault(); // Prevent link navigation
 		e.stopPropagation();
 
 		if (isPending) return;
 
+		// 1. Calculate optimistic state
+		const prevState = state;
 		const nextIsLiked = !state.isLiked;
+		const nextLikes = nextIsLiked ? state.likes + 1 : Math.max(0, state.likes - 1);
 
-		startTransition(async () => {
-			// 1. Trigger optimistic update immediately
-			setOptimisticState(nextIsLiked);
-
-			try {
-				// 2. Perform API call
-				const type = nextIsLiked ? 'like' : 'unlike';
-				const result = await projectService.toggleLike(projectId, type);
-
-				if (result) {
-					// 3. Update real state on success
-					setState({
-						likes: result.likes,
-						isLiked: nextIsLiked
-					});
-
-					// 4. Update localStorage
-					if (nextIsLiked) {
-						localStorage.setItem(storageKey, 'true');
-					} else {
-						localStorage.removeItem(storageKey);
-					}
-				}
-				// If result is null (error), we don't call setState.
-				// React will discard the optimistic state automatically when transition ends,
-				// reverting the UI to the previous `state`.
-			} catch (error) {
-				console.error('Like toggle failed:', error);
-				// Automatic revert happens here too
-			}
+		// 2. Apply optimistic update immediately
+		setState({
+			likes: nextLikes,
+			isLiked: nextIsLiked
 		});
+
+		// Update localStorage immediately for responsiveness
+		if (nextIsLiked) {
+			localStorage.setItem(storageKey, 'true');
+		} else {
+			localStorage.removeItem(storageKey);
+		}
+
+		try {
+			// 3. Perform API call
+			const type = nextIsLiked ? 'like' : 'unlike';
+
+			const result = await likeProject({
+				input: {
+					postId: String(projectId),
+					type: type
+				}
+			});
+
+			const serverLikes = result.likeProject?.likes;
+
+			if (typeof serverLikes === 'number') {
+				// 4. Sync with exact server value (optional but safer)
+				setState({
+					likes: serverLikes,
+					isLiked: nextIsLiked
+				});
+			}
+		} catch (error) {
+			console.error('Like toggle failed:', error);
+
+			// 5. Revert on error
+			setState(prevState);
+
+			if (prevState.isLiked) {
+				localStorage.setItem(storageKey, 'true');
+			} else {
+				localStorage.removeItem(storageKey);
+			}
+		}
 	};
 
 	// Don't render interactive parts until mounted to avoid hydration mismatch
@@ -113,16 +125,14 @@ export function ProjectLike({ projectId, initialLikes = 0, className }: ProjectL
 			disabled={isPending}
 			className={cn(
 				'flex items-center gap-1.25 py-1.25 px-2.5 rounded-lg transition-all duration-300 cursor-pointer hover:bg-white',
-				optimisticState.isLiked ? 'text-red-500 bg-white' : 'text-[#CCCCCC] bg-light-beige',
+				state.isLiked ? 'text-red-500 bg-white' : 'text-[#CCCCCC] bg-light-beige',
 				isPending && 'opacity-70 cursor-not-allowed',
 				className
 			)}
-			aria-label={optimisticState.isLiked ? 'Убрать лайк' : 'Поставить лайк'}
+			aria-label={state.isLiked ? 'Убрать лайк' : 'Поставить лайк'}
 		>
-			<HeartIcon filled={optimisticState.isLiked} />
-			<span className={cn('text-sm font-normal transition-colors text-main')}>
-				{optimisticState.likes}
-			</span>
+			<HeartIcon filled={state.isLiked} />
+			<span className={cn('text-sm font-normal transition-colors text-main')}>{state.likes}</span>
 		</button>
 	);
 }

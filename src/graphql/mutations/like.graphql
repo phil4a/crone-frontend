@@ -1,0 +1,5 @@
+mutation LikeProject($input: LikeProjectInput!) {
+	likeProject(input: $input) {
+		likes
+	}
+}

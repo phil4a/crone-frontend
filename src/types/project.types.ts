@@ -33,6 +33,7 @@ export interface ProjectGalleries {
 
 export interface Project {
 	id: number;
+	globalId?: string;
 	slug: string;
 	title: string;
 	shortDescription: string;

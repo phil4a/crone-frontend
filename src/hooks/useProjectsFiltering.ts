@@ -78,12 +78,51 @@ export function useProjectsFiltering() {
 		return filteredProjects.slice(start, end);
 	}, [filteredProjects, currentPage]);
 
+	const areaStats = useMemo(() => {
+		if (!projects) return { min: undefined, max: undefined };
+
+		// Calculate stats based on projects filtered by everything EXCEPT area
+		const relevantProjects = projects.filter(project => {
+			// Filter by Tags
+			if (filters.tags.length > 0) {
+				const hasMatchingTag = filters.tags.some(tagSlug => project.tags.includes(tagSlug));
+				if (!hasMatchingTag) return false;
+			}
+
+			// Filter by Floors
+			if (filters.floors.length > 0 && !filters.floors.includes(project.specs.floor)) return false;
+
+			// Filter by Bedrooms
+			if (filters.bedrooms.length > 0 && !filters.bedrooms.includes(project.specs.bedrooms))
+				return false;
+
+			// Filter by Status
+			if (filters.status && project.specs.status !== filters.status) return false;
+
+			return true;
+		});
+
+		if (relevantProjects.length === 0) return { min: undefined, max: undefined };
+
+		const areas = relevantProjects
+			.map(p => p.specs.area)
+			.filter((area): area is number => !!area && area > 0);
+
+		if (areas.length === 0) return { min: undefined, max: undefined };
+
+		return {
+			min: Math.min(...areas),
+			max: Math.max(...areas)
+		};
+	}, [projects, filters.tags, filters.floors, filters.bedrooms, filters.status]);
+
 	return {
 		projects: paginatedProjects,
 		isLoading: isProjectsLoading || isTagsLoading,
 		filters,
 		setFilters,
 		tags,
+		areaStats,
 		pagination: {
 			currentPage,
 			totalPages,

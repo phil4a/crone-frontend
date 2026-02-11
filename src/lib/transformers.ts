@@ -1,3 +1,4 @@
+import { GetProjectsQuery } from '@/graphql/generated';
 import { Project, ProjectImage } from '@/types/project.types';
 import { WPEmbedded, WPEmbeddedMedia, WPProject } from '@/types/wp.types';
 
@@ -66,9 +67,7 @@ export function transformProject(post: WPProject): Project {
 	let tags: string[] = [];
 	if (embedded && embedded['wp:term']) {
 		const terms = embedded['wp:term'].flat();
-		tags = terms
-			.filter((term: any) => term.taxonomy === 'post_tag')
-			.map((term: any) => term.slug);
+		tags = terms.filter((term: any) => term.taxonomy === 'post_tag').map((term: any) => term.slug);
 	}
 
 	return {
@@ -102,10 +101,61 @@ export function transformProject(post: WPProject): Project {
 			result: resolveGallery(acf['result-gallery'])
 		},
 		seo: {
-			title: post.yoast_head_json?.title || post.title.rendered,
-			description: post.yoast_head_json?.description || acf['short-description'] || '',
-			ogImage: post.yoast_head_json?.og_image?.[0]?.url || coverImage?.url,
+			title: post.title.rendered,
+			description: acf['short-description'] || ''
 		},
-		likes: post.project_likes || 0,
+		likes: post.project_likes || 0
+	};
+}
+
+type GraphQLProject = NonNullable<NonNullable<GetProjectsQuery['posts']>['nodes']>[0];
+
+export function transformGraphQLProject(post: GraphQLProject): Project {
+	const fields = post.projectFields;
+
+	return {
+		id: post.databaseId, // Using databaseId for compatibility
+		globalId: post.id,
+		slug: post.slug || '',
+		title: post.title || '',
+		tags: post.tags?.nodes.map(node => node.slug || '') || [],
+		shortDescription: '', // Need to fetch if available or use empty
+		description: '', // Need to fetch content if available
+		coverImage: post.featuredImage?.node?.sourceUrl
+			? {
+					id: 0,
+					url: post.featuredImage.node.sourceUrl,
+					width: 0,
+					height: 0,
+					alt: post.title || ''
+				}
+			: null,
+		specs: {
+			area: fields?.area ? parseInt(String(fields.area), 10) || 0 : 0,
+			floor: fields?.floor ? parseInt(String(fields.floor), 10) || 0 : 0,
+			bedrooms: fields?.bedrooms ? parseInt(String(fields.bedrooms), 10) || 0 : 0,
+			bathrooms: null, // Not in query
+			year: 0, // Not in query
+			city: '', // Not in query
+			type: '', // Not in query
+			status: fields?.status || ''
+		},
+		features: {
+			terrace: false,
+			garage: false,
+			sauna: false,
+			pool: false,
+			fireplace: false
+		},
+		galleries: {
+			plans: [],
+			process: [],
+			result: []
+		},
+		seo: {
+			title: post.title || '',
+			description: ''
+		},
+		likes: post.projectLikes || 0
 	};
 }

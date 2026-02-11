@@ -1,0 +1,43 @@
+query GetProjects($first: Int, $after: String, $tag: String) {
+	posts(first: $first, after: $after, where: { tag: $tag, categoryName: "project" }) {
+		pageInfo {
+			hasNextPage
+			endCursor
+		}
+		nodes {
+			id
+			databaseId
+			title
+			slug
+			featuredImage {
+				node {
+					sourceUrl
+				}
+			}
+			projectFields {
+				area
+				floor
+				bedrooms
+				status
+			}
+			projectLikes
+			tags {
+				nodes {
+					name
+					slug
+				}
+			}
+		}
+	}
+}
+
+query GetTags {
+	tags(first: 100, where: { hideEmpty: true, order: DESC, orderby: COUNT }) {
+		nodes {
+			id
+			name
+			slug
+			count
+		}
+	}
+}

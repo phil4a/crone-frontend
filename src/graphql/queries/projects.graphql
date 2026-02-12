@@ -1,5 +1,31 @@
-query GetProjects($first: Int, $after: String, $tag: String) {
-	posts(first: $first, after: $after, where: { tag: $tag, categoryName: "project" }) {
+query GetProjects(
+	$first: Int
+	$after: String
+	$tag: String
+	$minArea: Float
+	$maxArea: Float
+	$floor: Float
+	$minBedrooms: Float
+	$maxBedrooms: Float
+	$projectStatus: String
+	$offset: Int
+) {
+	posts(
+		first: $first
+		after: $after
+		where: {
+			tag: $tag
+			categoryName: "project"
+			minArea: $minArea
+			maxArea: $maxArea
+			floor: $floor
+			minBedrooms: $minBedrooms
+			maxBedrooms: $maxBedrooms
+			projectStatus: $projectStatus
+			offset: $offset
+		}
+	) {
+		found
 		pageInfo {
 			hasNextPage
 			endCursor
@@ -39,5 +65,16 @@ query GetTags {
 			slug
 			count
 		}
+	}
+}
+
+query GetProjectStats {
+	projectStats {
+		minArea
+		maxArea
+		minBedrooms
+		maxBedrooms
+		minFloor
+		maxFloor
 	}
 }

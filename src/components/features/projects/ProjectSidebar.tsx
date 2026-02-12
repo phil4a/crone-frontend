@@ -13,13 +13,29 @@ interface ProjectSidebarProps {
 	filters: ProjectFiltersData;
 	onApply: (filters: ProjectFiltersData) => void;
 	className?: string;
+	stats?: {
+		minArea: number;
+		maxArea: number;
+		minBedrooms: number;
+		maxBedrooms: number;
+		minFloor: number;
+		maxFloor: number;
+	};
 }
 
-const FLOOR_OPTIONS = [1, 2, 3];
 const STATUS_OPTIONS = ['В работе', 'Завершен'];
 
-export function ProjectSidebar({ filters, onApply, className }: ProjectSidebarProps) {
+export function ProjectSidebar({ filters, onApply, className, stats }: ProjectSidebarProps) {
 	const [localFilters, setLocalFilters] = useState<ProjectFiltersData>(filters);
+
+	const minArea = stats?.minArea ?? 0;
+	const maxArea = stats?.maxArea ?? 1000;
+	const minBedrooms = stats?.minBedrooms ?? 0;
+	const maxBedrooms = stats?.maxBedrooms ?? 10;
+	const minFloor = stats?.minFloor ?? 1;
+	const maxFloor = stats?.maxFloor ?? 3;
+
+	const floorOptions = Array.from({ length: maxFloor - minFloor + 1 }, (_, i) => minFloor + i);
 
 	useEffect(() => {
 		setLocalFilters(filters);
@@ -39,8 +55,8 @@ export function ProjectSidebar({ filters, onApply, className }: ProjectSidebarPr
 		if (isNaN(numValue)) return;
 
 		setLocalFilters(prev => {
-			const currentMin = prev.area?.min ?? 0;
-			const currentMax = prev.area?.max ?? 1000;
+			const currentMin = prev.area?.min ?? minArea;
+			const currentMax = prev.area?.max ?? maxArea;
 
 			if (type === 'min') {
 				return {
@@ -75,8 +91,8 @@ export function ProjectSidebar({ filters, onApply, className }: ProjectSidebarPr
 		if (isNaN(numValue)) return;
 
 		setLocalFilters(prev => {
-			const currentMin = prev.bedrooms?.min ?? 0;
-			const currentMax = prev.bedrooms?.max ?? 10;
+			const currentMin = prev.bedrooms?.min ?? minBedrooms;
+			const currentMax = prev.bedrooms?.max ?? maxBedrooms;
 
 			if (type === 'min') {
 				return {
@@ -105,9 +121,9 @@ export function ProjectSidebar({ filters, onApply, className }: ProjectSidebarPr
 			<div>
 				<h4 className='text-lg font-bold mb-5 text-main'>Площадь</h4>
 				<Slider
-					value={[localFilters.area?.min ?? 0, localFilters.area?.max ?? 1000]}
-					min={0}
-					max={1000}
+					value={[localFilters.area?.min ?? minArea, localFilters.area?.max ?? maxArea]}
+					min={minArea}
+					max={maxArea}
 					step={10}
 					onValueChange={handleAreaChange}
 				/>
@@ -115,7 +131,7 @@ export function ProjectSidebar({ filters, onApply, className }: ProjectSidebarPr
 					<Input
 						id='area-min'
 						type='number'
-						value={localFilters.area?.min ?? 0}
+						value={localFilters.area?.min ?? minArea}
 						onChange={e => handleAreaInputChange('min', e.target.value)}
 						className='flex-1 py-3.25 px-3 rounded-lg border border-light-beige text-center text-sm text-brown bg-white focus:ring-0 focus:border-brown'
 					/>
@@ -123,7 +139,7 @@ export function ProjectSidebar({ filters, onApply, className }: ProjectSidebarPr
 					<Input
 						id='area-max'
 						type='number'
-						value={localFilters.area?.max ?? 1000}
+						value={localFilters.area?.max ?? maxArea}
 						onChange={e => handleAreaInputChange('max', e.target.value)}
 						className='flex-1 py-3.25 px-3 rounded-lg border border-light-beige text-center text-sm text-brown bg-white focus:ring-0 focus:border-brown'
 					/>
@@ -134,7 +150,7 @@ export function ProjectSidebar({ filters, onApply, className }: ProjectSidebarPr
 			<div>
 				<h4 className='text-lg font-bold mb-5 text-main'>Этажность</h4>
 				<div className='flex flex-col gap-3'>
-					{FLOOR_OPTIONS.map(floor => (
+					{floorOptions.map(floor => (
 						<div
 							key={floor}
 							className='flex items-center gap-3 cursor-pointer group w-fit'
@@ -176,9 +192,12 @@ export function ProjectSidebar({ filters, onApply, className }: ProjectSidebarPr
 			<div>
 				<h4 className='text-lg font-bold mb-5 text-main'>Спальни</h4>
 				<Slider
-					value={[localFilters.bedrooms?.min ?? 1, localFilters.bedrooms?.max ?? 10]}
-					min={0}
-					max={10}
+					value={[
+						localFilters.bedrooms?.min ?? minBedrooms,
+						localFilters.bedrooms?.max ?? maxBedrooms
+					]}
+					min={minBedrooms}
+					max={maxBedrooms}
 					step={1}
 					onValueChange={handleBedroomsChange}
 				/>
@@ -186,7 +205,7 @@ export function ProjectSidebar({ filters, onApply, className }: ProjectSidebarPr
 					<Input
 						id='bedrooms-min'
 						type='number'
-						value={localFilters.bedrooms?.min ?? 1}
+						value={localFilters.bedrooms?.min ?? minBedrooms}
 						onChange={e => handleBedroomsInputChange('min', e.target.value)}
 						className='flex-1 py-3.25 px-3 rounded-lg border border-light-beige text-center text-sm text-brown bg-white focus:ring-0 focus:border-brown'
 					/>
@@ -194,7 +213,7 @@ export function ProjectSidebar({ filters, onApply, className }: ProjectSidebarPr
 					<Input
 						id='bedrooms-max'
 						type='number'
-						value={localFilters.bedrooms?.max ?? 10}
+						value={localFilters.bedrooms?.max ?? maxBedrooms}
 						onChange={e => handleBedroomsInputChange('max', e.target.value)}
 						className='flex-1 py-3.25 px-3 rounded-lg border border-light-beige text-center text-sm text-brown bg-white focus:ring-0 focus:border-brown'
 					/>

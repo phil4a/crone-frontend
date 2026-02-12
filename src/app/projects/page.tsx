@@ -11,7 +11,7 @@ import { Pagination } from '@/components/ui/Pagination';
 import { SkeletonLoader } from '@/components/ui/SkeletonLoader';
 import { Title } from '@/components/ui/Title';
 
-import { useGetProjectsQuery, useGetTagsQuery } from '@/graphql/generated';
+import { useGetProjectStatsQuery, useGetProjectsQuery, useGetTagsQuery } from '@/graphql/generated';
 import { transformGraphQLProject } from '@/lib/transformers';
 import { cn } from '@/lib/utils';
 import { ProjectFiltersData } from '@/types/filters.types';
@@ -19,16 +19,28 @@ import { ProjectFiltersData } from '@/types/filters.types';
 const ITEMS_PER_PAGE = 8;
 
 function ProjectsContent() {
+	// Global Stats
+	const { data: statsData } = useGetProjectStatsQuery();
+	const stats = statsData?.projectStats;
+
+	const minArea = stats?.minArea ?? 0;
+	const maxArea = stats?.maxArea ?? 1000;
+	const minBedrooms = stats?.minBedrooms ?? 0;
+	const maxBedrooms = stats?.maxBedrooms ?? 10;
+
 	// URL State
 	const [page, setPage] = useQueryState('page', parseAsInteger.withDefault(1));
 	const [tag, setTag] = useQueryState('tag');
-	const [areaMin, setAreaMin] = useQueryState('areaMin', parseAsInteger.withDefault(0));
-	const [areaMax, setAreaMax] = useQueryState('areaMax', parseAsInteger.withDefault(1000));
+	const [areaMin, setAreaMin] = useQueryState('areaMin', parseAsInteger.withDefault(minArea));
+	const [areaMax, setAreaMax] = useQueryState('areaMax', parseAsInteger.withDefault(maxArea));
 	const [floor, setFloor] = useQueryState('floor', parseAsInteger);
-	const [bedroomsMin, setBedroomsMin] = useQueryState('bedroomsMin', parseAsInteger.withDefault(1));
+	const [bedroomsMin, setBedroomsMin] = useQueryState(
+		'bedroomsMin',
+		parseAsInteger.withDefault(minBedrooms)
+	);
 	const [bedroomsMax, setBedroomsMax] = useQueryState(
 		'bedroomsMax',
-		parseAsInteger.withDefault(10)
+		parseAsInteger.withDefault(maxBedrooms)
 	);
 	const [status, setStatus] = useQueryState('status');
 
@@ -46,59 +58,50 @@ function ProjectsContent() {
 	};
 
 	// Data Fetching
-	// We fetch 100 items to allow client-side filtering of ACF fields while using server-side filtering for tags
+	// We fetch ITEMS_PER_PAGE items with server-side filtering and pagination
+	const offset = (page - 1) * ITEMS_PER_PAGE;
 	const { data, isLoading, error } = useGetProjectsQuery(
 		{
-			first: 100,
-			tag: tag || undefined
+			first: ITEMS_PER_PAGE,
+			offset,
+			tag: tag || undefined,
+			minArea: areaMin,
+			maxArea: areaMax,
+			floor: floor || undefined,
+			minBedrooms: bedroomsMin,
+			maxBedrooms: bedroomsMax,
+			projectStatus: status || undefined
 		},
 		{
-			// Keep previous data while fetching new data to avoid flickering
-			placeholderData: previousData => previousData
+			// Remove placeholderData to show skeletons on filter change
 		}
 	);
 
-	// Transform and Filter Data
+	// Transform Data
 	const filteredProjects = useMemo(() => {
 		if (!data?.posts?.nodes) return [];
+		return data.posts.nodes.map(transformGraphQLProject);
+	}, [data]);
 
-		const projects = data.posts.nodes.map(transformGraphQLProject);
-
-		return projects.filter(project => {
-			// Area Filter
-			const projectArea = project.specs.area;
-			if (projectArea < areaMin || projectArea > areaMax) return false;
-
-			// Floor Filter
-			if (floor !== null && project.specs.floor !== floor) return false;
-
-			// Bedrooms Filter
-			const projectBedrooms = project.specs.bedrooms;
-			if (projectBedrooms < bedroomsMin || projectBedrooms > bedroomsMax) return false;
-
-			// Status Filter
-			if (status !== null && project.specs.status !== status) return false;
-
-			return true;
-		});
-	}, [data, areaMin, areaMax, floor, bedroomsMin, bedroomsMax, status]);
-
-	const handleApplyFilters = (newFilters: ProjectFiltersData) => {
-		setPage(1);
-		setTag(newFilters.tag);
-		setAreaMin(newFilters.area?.min ?? 0);
-		setAreaMax(newFilters.area?.max ?? 1000);
-		setFloor(newFilters.floor);
-		setBedroomsMin(newFilters.bedrooms?.min ?? 1);
-		setBedroomsMax(newFilters.bedrooms?.max ?? 10);
-		setStatus(newFilters.status);
+	const handleApplyFilters = async (newFilters: ProjectFiltersData) => {
+		await setPage(1);
+		await setTag(newFilters.tag);
+		await setAreaMin(newFilters.area?.min ?? minArea);
+		await setAreaMax(newFilters.area?.max ?? maxArea);
+		await setFloor(newFilters.floor);
+		await setBedroomsMin(newFilters.bedrooms?.min ?? minBedrooms);
+		await setBedroomsMax(newFilters.bedrooms?.max ?? maxBedrooms);
+		await setStatus(newFilters.status);
 	};
 
-	const totalPages = Math.ceil(filteredProjects.length / ITEMS_PER_PAGE);
-	const currentProjects = filteredProjects.slice(
-		(page - 1) * ITEMS_PER_PAGE,
-		page * ITEMS_PER_PAGE
-	);
+	// Use 'found' from server response for total count
+	const totalItems = data?.posts?.found || 0;
+	// Fallback: if found is 0 but we have nodes, ensure we show at least 1 page so pagination doesn't break
+	const totalPages =
+		Math.ceil(totalItems / ITEMS_PER_PAGE) || (filteredProjects.length > 0 ? 1 : 0);
+
+	// Client-side slicing is no longer needed since we paginate on server
+	const currentProjects = filteredProjects;
 
 	return (
 		<main className='pt-38 pb-27 container bg-light-gray min-h-screen'>
@@ -112,6 +115,19 @@ function ProjectsContent() {
 					<ProjectSidebar
 						filters={filters}
 						onApply={handleApplyFilters}
+						className='sticky top-32'
+						stats={
+							stats
+								? {
+										minArea: stats.minArea ?? 0,
+										maxArea: stats.maxArea ?? 1000,
+										minBedrooms: stats.minBedrooms ?? 0,
+										maxBedrooms: stats.maxBedrooms ?? 10,
+										minFloor: stats.minFloor ?? 1,
+										maxFloor: stats.maxFloor ?? 3
+									}
+								: undefined
+						}
 					/>
 				</div>
 
@@ -124,7 +140,10 @@ function ProjectsContent() {
 							<Button
 								variant='secondary'
 								size='sm'
-								onClick={() => setTag(null)}
+								onClick={async () => {
+									await setPage(1);
+									await setTag(null);
+								}}
 								className={cn(!tag && 'bg-beige text-white font-semibold border-beige')}
 							>
 								Все
@@ -134,7 +153,10 @@ function ProjectsContent() {
 									size='sm'
 									variant='secondary'
 									key={t.id}
-									onClick={() => setTag(t.slug || null)}
+									onClick={async () => {
+										await setPage(1);
+										await setTag(t.slug || null);
+									}}
 									className={cn(tag === t.slug && 'bg-beige text-white font-semibold border-beige')}
 								>
 									{t.name}
@@ -163,7 +185,7 @@ function ProjectsContent() {
 								</div>
 							))}
 						</div>
-					) : error ? (
+					) : error && !data?.posts?.nodes ? (
 						<div className='p-8 text-center text-red-500'>
 							Произошла ошибка при загрузке проектов. Пожалуйста, попробуйте позже.
 						</div>

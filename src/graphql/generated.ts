@@ -5886,6 +5886,17 @@ export type ProjectFields_FieldsVideoGalleryArgs = {
   last?: InputMaybe<Scalars['Int']['input']>;
 };
 
+/** Global statistics for projects */
+export type ProjectStats = {
+  __typename?: 'ProjectStats';
+  maxArea?: Maybe<Scalars['Float']['output']>;
+  maxBedrooms?: Maybe<Scalars['Float']['output']>;
+  maxFloor?: Maybe<Scalars['Float']['output']>;
+  minArea?: Maybe<Scalars['Float']['output']>;
+  minBedrooms?: Maybe<Scalars['Float']['output']>;
+  minFloor?: Maybe<Scalars['Float']['output']>;
+};
+
 /** The reading setting type */
 export type ReadingSettings = {
   __typename?: 'ReadingSettings';
@@ -6319,6 +6330,8 @@ export type RootQuery = {
   postFormats?: Maybe<RootQueryToPostFormatConnection>;
   /** Connection between the RootQuery type and the post type */
   posts?: Maybe<RootQueryToPostConnection>;
+  /** Get global statistics for projects */
+  projectStats?: Maybe<ProjectStats>;
   /** Fields of the &#039;ReadingSettings&#039; settings group */
   readingSettings?: Maybe<ReadingSettings>;
   /** Connection between the RootQuery type and the EnqueuedScript type */
@@ -7373,6 +7386,8 @@ export type RootQueryToPostConnection = Connection & PostConnection & {
   __typename?: 'RootQueryToPostConnection';
   /** Edges for the RootQueryToPostConnection connection */
   edges: Array<RootQueryToPostConnectionEdge>;
+  /** Total number of posts found matching the criteria */
+  found?: Maybe<Scalars['Int']['output']>;
   /** The nodes of the connection, without the edges */
   nodes: Array<Post>;
   /** Information about pagination in a connection. */
@@ -7423,20 +7438,32 @@ export type RootQueryToPostConnectionWhereArgs = {
   categoryNotIn?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
   /** Filter the connection based on dates */
   dateQuery?: InputMaybe<DateQueryInput>;
+  /** Filter by floor count (ACF field "floor") */
+  floor?: InputMaybe<Scalars['Float']['input']>;
   /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
   hasPassword?: InputMaybe<Scalars['Boolean']['input']>;
   /** Specific database ID of the object */
   id?: InputMaybe<Scalars['Int']['input']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Filter by maximum area (ACF field "area") */
+  maxArea?: InputMaybe<Scalars['Float']['input']>;
+  /** Filter by maximum bedrooms (ACF field "bedrooms") */
+  maxBedrooms?: InputMaybe<Scalars['Float']['input']>;
   /** Get objects with a specific mimeType property */
   mimeType?: InputMaybe<MimeTypeEnum>;
+  /** Filter by minimum area (ACF field "area") */
+  minArea?: InputMaybe<Scalars['Float']['input']>;
+  /** Filter by minimum bedrooms (ACF field "bedrooms") */
+  minBedrooms?: InputMaybe<Scalars['Float']['input']>;
   /** Slug / post_name of the object */
   name?: InputMaybe<Scalars['String']['input']>;
   /** Specify objects to retrieve. Use slugs */
   nameIn?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   /** Specify IDs NOT to retrieve. If this is used in the same query as "in", it will be ignored */
   notIn?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** Offset for pagination */
+  offset?: InputMaybe<Scalars['Int']['input']>;
   /** What parameter to use to order the objects by. */
   orderby?: InputMaybe<Array<InputMaybe<PostObjectsConnectionOrderbyInput>>>;
   /** Use ID to return only children. Use 0 to return only top-level items */
@@ -7447,6 +7474,8 @@ export type RootQueryToPostConnectionWhereArgs = {
   parentNotIn?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
   /** Show posts with a specific password. */
   password?: InputMaybe<Scalars['String']['input']>;
+  /** Filter by status (ACF field "status") */
+  projectStatus?: InputMaybe<Scalars['String']['input']>;
   /** Show Posts based on a keyword search */
   search?: InputMaybe<Scalars['String']['input']>;
   /** Retrieve posts where post status is in an array. */
@@ -10483,15 +10512,27 @@ export type GetProjectsQueryVariables = Exact<{
   first?: InputMaybe<Scalars['Int']['input']>;
   after?: InputMaybe<Scalars['String']['input']>;
   tag?: InputMaybe<Scalars['String']['input']>;
+  minArea?: InputMaybe<Scalars['Float']['input']>;
+  maxArea?: InputMaybe<Scalars['Float']['input']>;
+  floor?: InputMaybe<Scalars['Float']['input']>;
+  minBedrooms?: InputMaybe<Scalars['Float']['input']>;
+  maxBedrooms?: InputMaybe<Scalars['Float']['input']>;
+  projectStatus?: InputMaybe<Scalars['String']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
 }>;
 
 
-export type GetProjectsQuery = { __typename?: 'RootQuery', posts?: { __typename?: 'RootQueryToPostConnection', pageInfo: { __typename?: 'RootQueryToPostConnectionPageInfo', hasNextPage: boolean, endCursor?: string | null }, nodes: Array<{ __typename?: 'Post', id: string, databaseId: number, title?: string | null, slug?: string | null, projectLikes?: number | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node: { __typename?: 'MediaItem', sourceUrl?: string | null } } | null, projectFields?: { __typename?: 'ProjectFields', area?: string | null, floor?: string | null, bedrooms?: string | null, status?: Array<string | null> | null } | null, tags?: { __typename?: 'PostToTagConnection', nodes: Array<{ __typename?: 'Tag', name?: string | null, slug?: string | null }> } | null }> } | null };
+export type GetProjectsQuery = { __typename?: 'RootQuery', posts?: { __typename?: 'RootQueryToPostConnection', found?: number | null, pageInfo: { __typename?: 'RootQueryToPostConnectionPageInfo', hasNextPage: boolean, endCursor?: string | null }, nodes: Array<{ __typename?: 'Post', id: string, databaseId: number, title?: string | null, slug?: string | null, projectLikes?: number | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node: { __typename?: 'MediaItem', sourceUrl?: string | null } } | null, projectFields?: { __typename?: 'ProjectFields', area?: string | null, floor?: string | null, bedrooms?: string | null, status?: Array<string | null> | null } | null, tags?: { __typename?: 'PostToTagConnection', nodes: Array<{ __typename?: 'Tag', name?: string | null, slug?: string | null }> } | null }> } | null };
 
 export type GetTagsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetTagsQuery = { __typename?: 'RootQuery', tags?: { __typename?: 'RootQueryToTagConnection', nodes: Array<{ __typename?: 'Tag', id: string, name?: string | null, slug?: string | null, count?: number | null }> } | null };
+
+export type GetProjectStatsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetProjectStatsQuery = { __typename?: 'RootQuery', projectStats?: { __typename?: 'ProjectStats', minArea?: number | null, maxArea?: number | null, minBedrooms?: number | null, maxBedrooms?: number | null, minFloor?: number | null, maxFloor?: number | null } | null };
 
 
 
@@ -10517,8 +10558,13 @@ export const useLikeProjectMutation = <
     )};
 
 export const GetProjectsDocument = `
-    query GetProjects($first: Int, $after: String, $tag: String) {
-  posts(first: $first, after: $after, where: {tag: $tag, categoryName: "project"}) {
+    query GetProjects($first: Int, $after: String, $tag: String, $minArea: Float, $maxArea: Float, $floor: Float, $minBedrooms: Float, $maxBedrooms: Float, $projectStatus: String, $offset: Int) {
+  posts(
+    first: $first
+    after: $after
+    where: {tag: $tag, categoryName: "project", minArea: $minArea, maxArea: $maxArea, floor: $floor, minBedrooms: $minBedrooms, maxBedrooms: $maxBedrooms, projectStatus: $projectStatus, offset: $offset}
+  ) {
+    found
     pageInfo {
       hasNextPage
       endCursor
@@ -10641,3 +10687,55 @@ export const useInfiniteGetTagsQuery = <
     )};
 
 useInfiniteGetTagsQuery.getKey = (variables?: GetTagsQueryVariables) => variables === undefined ? ['GetTags.infinite'] : ['GetTags.infinite', variables];
+
+export const GetProjectStatsDocument = `
+    query GetProjectStats {
+  projectStats {
+    minArea
+    maxArea
+    minBedrooms
+    maxBedrooms
+    minFloor
+    maxFloor
+  }
+}
+    `;
+
+export const useGetProjectStatsQuery = <
+      TData = GetProjectStatsQuery,
+      TError = unknown
+    >(
+      variables?: GetProjectStatsQueryVariables,
+      options?: Omit<UseQueryOptions<GetProjectStatsQuery, TError, TData>, 'queryKey'> & { queryKey?: UseQueryOptions<GetProjectStatsQuery, TError, TData>['queryKey'] }
+    ) => {
+    
+    return useQuery<GetProjectStatsQuery, TError, TData>(
+      {
+    queryKey: variables === undefined ? ['GetProjectStats'] : ['GetProjectStats', variables],
+    queryFn: fetcher<GetProjectStatsQuery, GetProjectStatsQueryVariables>(GetProjectStatsDocument, variables),
+    ...options
+  }
+    )};
+
+useGetProjectStatsQuery.getKey = (variables?: GetProjectStatsQueryVariables) => variables === undefined ? ['GetProjectStats'] : ['GetProjectStats', variables];
+
+export const useInfiniteGetProjectStatsQuery = <
+      TData = InfiniteData<GetProjectStatsQuery>,
+      TError = unknown
+    >(
+      variables: GetProjectStatsQueryVariables,
+      options: Omit<UseInfiniteQueryOptions<GetProjectStatsQuery, TError, TData>, 'queryKey'> & { queryKey?: UseInfiniteQueryOptions<GetProjectStatsQuery, TError, TData>['queryKey'] }
+    ) => {
+    
+    return useInfiniteQuery<GetProjectStatsQuery, TError, TData>(
+      (() => {
+    const { queryKey: optionsQueryKey, ...restOptions } = options;
+    return {
+      queryKey: optionsQueryKey ?? variables === undefined ? ['GetProjectStats.infinite'] : ['GetProjectStats.infinite', variables],
+      queryFn: (metaData) => fetcher<GetProjectStatsQuery, GetProjectStatsQueryVariables>(GetProjectStatsDocument, {...variables, ...(metaData.pageParam ?? {})})(),
+      ...restOptions
+    }
+  })()
+    )};
+
+useInfiniteGetProjectStatsQuery.getKey = (variables?: GetProjectStatsQueryVariables) => variables === undefined ? ['GetProjectStats.infinite'] : ['GetProjectStats.infinite', variables];

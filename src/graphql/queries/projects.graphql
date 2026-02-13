@@ -45,6 +45,8 @@ query GetProjects(
 				floor
 				bedrooms
 				status
+				year
+				city
 			}
 			projectLikes
 			tags {

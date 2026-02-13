@@ -9,13 +9,12 @@ import { Title } from '@/components/ui/Title';
 
 import { PAGE } from '@/config/pages.config';
 
-import { useProjects } from '@/hooks/useProjects';
+import { useProjects } from '@/hooks/projects/useProjects';
 
 import { ProjectCard } from '../../common/projects/ProjectCard';
 
 export function Projects() {
-	const { data: projects, isLoading, error } = useProjects();
-
+	const { projects, isLoading, error } = useProjects(1, 6);
 	return (
 		<section className='pb-20 md:pb-25 lg:pb-37.5 bg-white relative'>
 			<HeaderThemeObserver theme='light' />
@@ -61,7 +60,7 @@ export function Projects() {
 								</div>
 							</div>
 						))}
-					{error && <p>Произошла ошибка загрузки проектов</p>}
+					{!!error && <p>Произошла ошибка загрузки проектов</p>}
 					{projects?.map(project => (
 						<ProjectCard
 							key={project.id}

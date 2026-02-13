@@ -135,8 +135,8 @@ export function transformGraphQLProject(post: GraphQLProject): Project {
 			floor: fields?.floor ? parseInt(String(fields.floor), 10) || 0 : 0,
 			bedrooms: fields?.bedrooms ? parseInt(String(fields.bedrooms), 10) || 0 : 0,
 			bathrooms: null, // Not in query
-			year: 0, // Not in query
-			city: '', // Not in query
+			year: fields?.year ? parseInt(String(fields.year), 10) || 0 : 0,
+			city: fields?.city || '',
 			type: '', // Not in query
 			status: Array.isArray(fields?.status) ? fields.status[0] || '' : fields?.status || ''
 		},

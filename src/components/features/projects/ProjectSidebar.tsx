@@ -38,7 +38,9 @@ export function ProjectSidebar({ filters, onApply, className, stats }: ProjectSi
 	const floorOptions = Array.from({ length: maxFloor - minFloor + 1 }, (_, i) => minFloor + i);
 
 	useEffect(() => {
-		setLocalFilters(filters);
+		if (JSON.stringify(filters) !== JSON.stringify(localFilters)) {
+			setLocalFilters(filters);
+		}
 	}, [filters]);
 
 	// -- Handlers --

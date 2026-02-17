@@ -5,12 +5,11 @@ import { ProjectStats } from './useProjectStats';
 import { ProjectFiltersData } from '@/types/filters.types';
 
 export function useProjectFilters(stats: ProjectStats) {
-	// URL State
 	const [page, setPage] = useQueryState('page', parseAsInteger.withDefault(1));
 	const [tag, setTag] = useQueryState('tag');
 	const [areaMin, setAreaMin] = useQueryState('areaMin', parseAsInteger.withDefault(stats.minArea));
 	const [areaMax, setAreaMax] = useQueryState('areaMax', parseAsInteger.withDefault(stats.maxArea));
-	const [floor, setFloor] = useQueryState('floor', parseAsInteger);
+	const [floorParam, setFloorParam] = useQueryState('floor');
 	const [bedroomsMin, setBedroomsMin] = useQueryState(
 		'bedroomsMin',
 		parseAsInteger.withDefault(stats.minBedrooms)
@@ -19,29 +18,42 @@ export function useProjectFilters(stats: ProjectStats) {
 		'bedroomsMax',
 		parseAsInteger.withDefault(stats.maxBedrooms)
 	);
-	const [status, setStatus] = useQueryState('status');
+	const [statusParam, setStatusParam] = useQueryState('status');
 
-	// Derived filters object
-	const filters: ProjectFiltersData = useMemo(
-		() => ({
+	const filters: ProjectFiltersData = useMemo(() => {
+		const floors =
+			floorParam && floorParam.length
+				? floorParam
+						.split(',')
+						.map(value => parseInt(value, 10))
+						.filter(value => !Number.isNaN(value))
+				: [];
+
+		const statuses =
+			statusParam && statusParam.length ? statusParam.split(',').filter(Boolean) : [];
+
+		return {
 			tag: tag || null,
 			area: { min: areaMin, max: areaMax },
-			floor: floor || null,
+			floor: floors.length ? floors : null,
 			bedrooms: { min: bedroomsMin, max: bedroomsMax },
-			status: status || null
-		}),
-		[tag, areaMin, areaMax, floor, bedroomsMin, bedroomsMax, status]
-	);
+			status: statuses.length ? statuses : null
+		};
+	}, [tag, areaMin, areaMax, floorParam, bedroomsMin, bedroomsMax, statusParam]);
 
 	const applyFilters = async (newFilters: ProjectFiltersData) => {
 		await setPage(1);
 		await setTag(newFilters.tag);
 		await setAreaMin(newFilters.area?.min ?? stats.minArea);
 		await setAreaMax(newFilters.area?.max ?? stats.maxArea);
-		await setFloor(newFilters.floor);
+		const floorsValue =
+			newFilters.floor && newFilters.floor.length ? newFilters.floor.join(',') : null;
+		await setFloorParam(floorsValue);
 		await setBedroomsMin(newFilters.bedrooms?.min ?? stats.minBedrooms);
 		await setBedroomsMax(newFilters.bedrooms?.max ?? stats.maxBedrooms);
-		await setStatus(newFilters.status);
+		const statusesValue =
+			newFilters.status && newFilters.status.length ? newFilters.status.join(',') : null;
+		await setStatusParam(statusesValue);
 	};
 
 	const resetTag = async () => {

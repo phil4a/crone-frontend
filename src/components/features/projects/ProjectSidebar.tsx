@@ -1,10 +1,10 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Slider } from '@/components/ui/Slider';
+
+import { useProjectSidebar } from '@/hooks/projects/useProjectSidebar';
 
 import { cn } from '@/lib/utils';
 import { ProjectFiltersData } from '@/types/filters.types';
@@ -26,99 +26,26 @@ interface ProjectSidebarProps {
 const STATUS_OPTIONS = ['В работе', 'Завершен'];
 
 export function ProjectSidebar({ filters, onApply, className, stats }: ProjectSidebarProps) {
-	const [localFilters, setLocalFilters] = useState<ProjectFiltersData>(filters);
-
-	const minArea = stats?.minArea ?? 0;
-	const maxArea = stats?.maxArea ?? 1000;
-	const minBedrooms = stats?.minBedrooms ?? 0;
-	const maxBedrooms = stats?.maxBedrooms ?? 10;
-	const minFloor = stats?.minFloor ?? 1;
-	const maxFloor = stats?.maxFloor ?? 3;
-
-	const floorOptions = Array.from({ length: maxFloor - minFloor + 1 }, (_, i) => minFloor + i);
-
-	useEffect(() => {
-		if (JSON.stringify(filters) !== JSON.stringify(localFilters)) {
-			setLocalFilters(filters);
-		}
-	}, [filters]);
-
-	// -- Handlers --
-
-	const handleAreaChange = (value: number[]) => {
-		setLocalFilters(prev => ({
-			...prev,
-			area: { min: value[0], max: value[1] }
-		}));
-	};
-
-	const handleAreaInputChange = (type: 'min' | 'max', value: string) => {
-		const numValue = parseInt(value, 10);
-		if (isNaN(numValue)) return;
-
-		setLocalFilters(prev => {
-			const currentMin = prev.area?.min ?? minArea;
-			const currentMax = prev.area?.max ?? maxArea;
-
-			if (type === 'min') {
-				return {
-					...prev,
-					area: { min: Math.min(numValue, currentMax), max: currentMax }
-				};
-			} else {
-				return {
-					...prev,
-					area: { min: currentMin, max: Math.max(numValue, currentMin) }
-				};
-			}
-		});
-	};
-
-	const handleFloorChange = (floor: number) => {
-		setLocalFilters(prev => ({
-			...prev,
-			floor: prev.floor === floor ? null : floor
-		}));
-	};
-
-	const handleBedroomsChange = (value: number[]) => {
-		setLocalFilters(prev => ({
-			...prev,
-			bedrooms: { min: value[0], max: value[1] }
-		}));
-	};
-
-	const handleBedroomsInputChange = (type: 'min' | 'max', value: string) => {
-		const numValue = parseInt(value, 10);
-		if (isNaN(numValue)) return;
-
-		setLocalFilters(prev => {
-			const currentMin = prev.bedrooms?.min ?? minBedrooms;
-			const currentMax = prev.bedrooms?.max ?? maxBedrooms;
-
-			if (type === 'min') {
-				return {
-					...prev,
-					bedrooms: { min: Math.min(numValue, currentMax), max: currentMax }
-				};
-			} else {
-				return {
-					...prev,
-					bedrooms: { min: currentMin, max: Math.max(numValue, currentMin) }
-				};
-			}
-		});
-	};
-
-	const handleStatusChange = (status: string) => {
-		setLocalFilters(prev => ({
-			...prev,
-			status: prev.status === status ? null : status
-		}));
-	};
+	const {
+		localFilters,
+		minArea,
+		maxArea,
+		minBedrooms,
+		maxBedrooms,
+		floorOptions,
+		handleAreaChange,
+		handleAreaInputChange,
+		handleFloorChange,
+		handleBedroomsChange,
+		handleBedroomsInputChange,
+		handleStatusChange,
+		handleResetFilters,
+		hasActiveFilters,
+		handleApply
+	} = useProjectSidebar({ filters, onApply, stats });
 
 	return (
-		<div className={cn('flex flex-col gap-8', className)}>
+		<div className={cn('flex flex-col gap-5', className)}>
 			{/* Area */}
 			<div>
 				<h4 className='text-lg font-bold mb-5 text-main'>Площадь</h4>
@@ -161,12 +88,12 @@ export function ProjectSidebar({ filters, onApply, className, stats }: ProjectSi
 							<div
 								className={cn(
 									'w-5 h-5 rounded border flex items-center justify-center transition-colors bg-white',
-									localFilters.floor === floor
+									localFilters.floor?.includes(floor)
 										? 'bg-brown border-brown text-white'
 										: 'border-light-beige group-hover:border-brown'
 								)}
 							>
-								{localFilters.floor === floor && (
+								{localFilters.floor?.includes(floor) && (
 									<svg
 										width='10'
 										height='8'
@@ -235,12 +162,12 @@ export function ProjectSidebar({ filters, onApply, className, stats }: ProjectSi
 							<div
 								className={cn(
 									'w-5 h-5 rounded border flex items-center justify-center transition-colors bg-white',
-									localFilters.status === status
+									localFilters.status?.includes(status)
 										? 'bg-brown border-brown text-white'
 										: 'border-light-beige group-hover:border-brown'
 								)}
 							>
-								{localFilters.status === status && (
+								{localFilters.status?.includes(status) && (
 									<svg
 										width='10'
 										height='8'
@@ -265,11 +192,21 @@ export function ProjectSidebar({ filters, onApply, className, stats }: ProjectSi
 			</div>
 
 			<Button
-				variant={'default'}
-				onClick={() => onApply(localFilters)}
+				variant='default'
+				onClick={handleApply}
 			>
 				Показать
 			</Button>
+			{hasActiveFilters && (
+				<Button
+					variant='secondary'
+					size='sm'
+					onClick={handleResetFilters}
+					className='mb-2'
+				>
+					Сбросить фильтры
+				</Button>
+			)}
 		</div>
 	);
 }

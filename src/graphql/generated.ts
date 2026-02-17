@@ -7440,6 +7440,8 @@ export type RootQueryToPostConnectionWhereArgs = {
   dateQuery?: InputMaybe<DateQueryInput>;
   /** Filter by floor count (ACF field "floor") */
   floor?: InputMaybe<Scalars['Float']['input']>;
+  /** Filter by multiple floor counts (ACF field "floor") */
+  floors?: InputMaybe<Array<InputMaybe<Scalars['Float']['input']>>>;
   /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
   hasPassword?: InputMaybe<Scalars['Boolean']['input']>;
   /** Specific database ID of the object */
@@ -7476,6 +7478,8 @@ export type RootQueryToPostConnectionWhereArgs = {
   password?: InputMaybe<Scalars['String']['input']>;
   /** Filter by status (ACF field "status") */
   projectStatus?: InputMaybe<Scalars['String']['input']>;
+  /** Filter by multiple statuses (ACF field "status") */
+  projectStatuses?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   /** Show Posts based on a keyword search */
   search?: InputMaybe<Scalars['String']['input']>;
   /** Retrieve posts where post status is in an array. */
@@ -10515,9 +10519,11 @@ export type GetProjectsQueryVariables = Exact<{
   minArea?: InputMaybe<Scalars['Float']['input']>;
   maxArea?: InputMaybe<Scalars['Float']['input']>;
   floor?: InputMaybe<Scalars['Float']['input']>;
+  floors?: InputMaybe<Array<InputMaybe<Scalars['Float']['input']>> | InputMaybe<Scalars['Float']['input']>>;
   minBedrooms?: InputMaybe<Scalars['Float']['input']>;
   maxBedrooms?: InputMaybe<Scalars['Float']['input']>;
   projectStatus?: InputMaybe<Scalars['String']['input']>;
+  projectStatuses?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>> | InputMaybe<Scalars['String']['input']>>;
   offset?: InputMaybe<Scalars['Int']['input']>;
 }>;
 
@@ -10558,11 +10564,11 @@ export const useLikeProjectMutation = <
     )};
 
 export const GetProjectsDocument = `
-    query GetProjects($first: Int, $after: String, $tag: String, $minArea: Float, $maxArea: Float, $floor: Float, $minBedrooms: Float, $maxBedrooms: Float, $projectStatus: String, $offset: Int) {
+    query GetProjects($first: Int, $after: String, $tag: String, $minArea: Float, $maxArea: Float, $floor: Float, $floors: [Float], $minBedrooms: Float, $maxBedrooms: Float, $projectStatus: String, $projectStatuses: [String], $offset: Int) {
   posts(
     first: $first
     after: $after
-    where: {tag: $tag, categoryName: "project", minArea: $minArea, maxArea: $maxArea, floor: $floor, minBedrooms: $minBedrooms, maxBedrooms: $maxBedrooms, projectStatus: $projectStatus, offset: $offset}
+    where: {tag: $tag, categoryName: "project", minArea: $minArea, maxArea: $maxArea, floor: $floor, floors: $floors, minBedrooms: $minBedrooms, maxBedrooms: $maxBedrooms, projectStatus: $projectStatus, projectStatuses: $projectStatuses, offset: $offset}
   ) {
     found
     pageInfo {

@@ -13,6 +13,14 @@ export function useProjects(
 ) {
 	const offset = (page - 1) * limit;
 
+	const selectedFloors = filters?.floor && filters.floor.length ? filters.floor : null;
+	const selectedStatuses = filters?.status && filters.status.length ? filters.status : null;
+
+	const floorForQuery =
+		selectedFloors && selectedFloors.length === 1 ? selectedFloors[0] : undefined;
+	const statusForQuery =
+		selectedStatuses && selectedStatuses.length === 1 ? selectedStatuses[0] : undefined;
+
 	const { data, isLoading, error } = useGetProjectsQuery(
 		{
 			first: limit,
@@ -20,10 +28,12 @@ export function useProjects(
 			tag: filters?.tag || undefined,
 			minArea: filters?.area?.min,
 			maxArea: filters?.area?.max,
-			floor: filters?.floor || undefined,
+			floor: floorForQuery,
+			floors: selectedFloors || undefined,
 			minBedrooms: filters?.bedrooms?.min,
 			maxBedrooms: filters?.bedrooms?.max,
-			projectStatus: filters?.status || undefined
+			projectStatus: statusForQuery,
+			projectStatuses: selectedStatuses || undefined
 		},
 		{
 			// Remove placeholderData to show skeletons on filter change

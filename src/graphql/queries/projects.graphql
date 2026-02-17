@@ -5,9 +5,11 @@ query GetProjects(
 	$minArea: Float
 	$maxArea: Float
 	$floor: Float
+	$floors: [Float]
 	$minBedrooms: Float
 	$maxBedrooms: Float
 	$projectStatus: String
+	$projectStatuses: [String]
 	$offset: Int
 ) {
 	posts(
@@ -19,9 +21,11 @@ query GetProjects(
 			minArea: $minArea
 			maxArea: $maxArea
 			floor: $floor
+			floors: $floors
 			minBedrooms: $minBedrooms
 			maxBedrooms: $maxBedrooms
 			projectStatus: $projectStatus
+			projectStatuses: $projectStatuses
 			offset: $offset
 		}
 	) {

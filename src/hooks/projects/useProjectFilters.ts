@@ -2,7 +2,7 @@ import { parseAsInteger, useQueryState } from 'nuqs';
 import { useMemo } from 'react';
 
 import { ProjectStats } from './useProjectStats';
-import { ProjectFiltersData } from '@/types/filters.types';
+import { ProjectFiltersData, ProjectSort } from '@/types/filters.types';
 
 export function useProjectFilters(stats: ProjectStats) {
 	const [page, setPage] = useQueryState('page', parseAsInteger.withDefault(1));
@@ -19,6 +19,7 @@ export function useProjectFilters(stats: ProjectStats) {
 		parseAsInteger.withDefault(stats.maxBedrooms)
 	);
 	const [statusParam, setStatusParam] = useQueryState('status');
+	const [sortParam, setSortParam] = useQueryState('sort');
 
 	const filters: ProjectFiltersData = useMemo(() => {
 		const floors =
@@ -40,6 +41,8 @@ export function useProjectFilters(stats: ProjectStats) {
 			status: statuses.length ? statuses : null
 		};
 	}, [tag, areaMin, areaMax, floorParam, bedroomsMin, bedroomsMax, statusParam]);
+
+	const sort: ProjectSort = (sortParam as ProjectSort) || 'default';
 
 	const applyFilters = async (newFilters: ProjectFiltersData) => {
 		await setPage(1);
@@ -71,6 +74,8 @@ export function useProjectFilters(stats: ProjectStats) {
 		setPage,
 		tag,
 		filters,
+		sort,
+		setSort: setSortParam,
 		applyFilters,
 		resetTag,
 		setTagFilter

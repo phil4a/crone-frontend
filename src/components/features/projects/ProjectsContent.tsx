@@ -2,6 +2,7 @@
 
 import { ProjectCard } from '@/components/common/projects/ProjectCard';
 import { ProjectSidebar } from '@/components/features/projects/ProjectSidebar';
+import { ProjectSortPopover } from '@/components/features/projects/ProjectSortPopover';
 import { HeaderThemeObserver } from '@/components/layout/HeaderThemeObserver';
 import { Button } from '@/components/ui/Button';
 import { Pagination } from '@/components/ui/Pagination';
@@ -20,16 +21,15 @@ import { cn } from '@/lib/utils';
 export function ProjectsContent() {
 	// Custom Hooks
 	const { stats } = useProjectStats();
-	const { page, setPage, tag, filters, applyFilters, resetTag, setTagFilter } =
+	const { page, setPage, tag, filters, sort, setSort, applyFilters, resetTag, setTagFilter } =
 		useProjectFilters(stats);
 	const { tags, getPageTitle } = useProjectTags();
-	const {
-		projects: filteredProjects,
-		totalItems,
-		totalPages,
-		isLoading,
-		error
-	} = useProjects(page, ITEMS_PER_PAGE, filters);
+	const { projects, totalItems, totalPages, isLoading, error } = useProjects(
+		page,
+		ITEMS_PER_PAGE,
+		filters,
+		sort
+	);
 
 	return (
 		<main className='pt-38 pb-27 container bg-light-gray min-h-screen'>
@@ -75,10 +75,10 @@ export function ProjectsContent() {
 							))}
 						</div>
 
-						{/* Sort - Placeholder for now */}
-						<div className='text-sm text-dark-gray'>
-							Сортировка: <span className='text-brown cursor-pointer'>по названию (А-Я)</span>
-						</div>
+						<ProjectSortPopover
+							sort={sort}
+							onChange={setSort}
+						/>
 					</div>
 
 					{isLoading ? (
@@ -100,14 +100,14 @@ export function ProjectsContent() {
 						<div className='p-8 text-center text-red-500'>
 							Произошла ошибка при загрузке проектов. Пожалуйста, попробуйте позже.
 						</div>
-					) : filteredProjects.length === 0 ? (
+					) : projects.length === 0 ? (
 						<div className='p-12 text-center text-dark-gray bg-white rounded-2xl'>
 							Проектов по выбранным критериям не найдено.
 						</div>
 					) : (
 						<>
 							<div className='grid grid-cols-1 md:grid-cols-2 gap-5'>
-								{filteredProjects.map(project => (
+								{projects.map(project => (
 									<ProjectCard
 										key={project.id}
 										project={project}

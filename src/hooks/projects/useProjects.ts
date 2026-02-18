@@ -4,12 +4,13 @@ import { ITEMS_PER_PAGE } from '@/config/site.config';
 
 import { useGetProjectsQuery } from '@/graphql/generated';
 import { transformGraphQLProject } from '@/lib/transformers';
-import { ProjectFiltersData } from '@/types/filters.types';
+import { ProjectFiltersData, ProjectSort } from '@/types/filters.types';
 
 export function useProjects(
 	page: number,
 	limit: number = ITEMS_PER_PAGE,
-	filters?: ProjectFiltersData
+	filters?: ProjectFiltersData,
+	sort?: ProjectSort
 ) {
 	const offset = (page - 1) * limit;
 
@@ -33,7 +34,8 @@ export function useProjects(
 			minBedrooms: filters?.bedrooms?.min,
 			maxBedrooms: filters?.bedrooms?.max,
 			projectStatus: statusForQuery,
-			projectStatuses: selectedStatuses || undefined
+			projectStatuses: selectedStatuses || undefined,
+			sort: sort && sort !== 'default' ? sort : undefined
 		},
 		{
 			// Remove placeholderData to show skeletons on filter change

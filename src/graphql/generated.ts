@@ -7482,6 +7482,8 @@ export type RootQueryToPostConnectionWhereArgs = {
   projectStatuses?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   /** Show Posts based on a keyword search */
   search?: InputMaybe<Scalars['String']['input']>;
+  /** Sorting mode for projects */
+  sort?: InputMaybe<Scalars['String']['input']>;
   /** Retrieve posts where post status is in an array. */
   stati?: InputMaybe<Array<InputMaybe<PostStatusEnum>>>;
   /** Show posts with a specific status. */
@@ -10524,6 +10526,7 @@ export type GetProjectsQueryVariables = Exact<{
   maxBedrooms?: InputMaybe<Scalars['Float']['input']>;
   projectStatus?: InputMaybe<Scalars['String']['input']>;
   projectStatuses?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>> | InputMaybe<Scalars['String']['input']>>;
+  sort?: InputMaybe<Scalars['String']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
 }>;
 
@@ -10564,11 +10567,11 @@ export const useLikeProjectMutation = <
     )};
 
 export const GetProjectsDocument = `
-    query GetProjects($first: Int, $after: String, $tag: String, $minArea: Float, $maxArea: Float, $floor: Float, $floors: [Float], $minBedrooms: Float, $maxBedrooms: Float, $projectStatus: String, $projectStatuses: [String], $offset: Int) {
+    query GetProjects($first: Int, $after: String, $tag: String, $minArea: Float, $maxArea: Float, $floor: Float, $floors: [Float], $minBedrooms: Float, $maxBedrooms: Float, $projectStatus: String, $projectStatuses: [String], $sort: String, $offset: Int) {
   posts(
     first: $first
     after: $after
-    where: {tag: $tag, categoryName: "project", minArea: $minArea, maxArea: $maxArea, floor: $floor, floors: $floors, minBedrooms: $minBedrooms, maxBedrooms: $maxBedrooms, projectStatus: $projectStatus, projectStatuses: $projectStatuses, offset: $offset}
+    where: {tag: $tag, categoryName: "project", minArea: $minArea, maxArea: $maxArea, floor: $floor, floors: $floors, minBedrooms: $minBedrooms, maxBedrooms: $maxBedrooms, projectStatus: $projectStatus, projectStatuses: $projectStatuses, sort: $sort, offset: $offset}
   ) {
     found
     pageInfo {

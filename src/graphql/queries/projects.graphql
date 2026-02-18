@@ -10,6 +10,7 @@ query GetProjects(
 	$maxBedrooms: Float
 	$projectStatus: String
 	$projectStatuses: [String]
+	$sort: String
 	$offset: Int
 ) {
 	posts(
@@ -26,6 +27,7 @@ query GetProjects(
 			maxBedrooms: $maxBedrooms
 			projectStatus: $projectStatus
 			projectStatuses: $projectStatuses
+			sort: $sort
 			offset: $offset
 		}
 	) {

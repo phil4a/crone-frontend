@@ -49,7 +49,7 @@ export function ProjectSortPopover({ sort, onChange }: ProjectSortPopoverProps) 
 			<button
 				type='button'
 				onClick={() => setIsOpen(prev => !prev)}
-				className='inline-flex items-center ml-1 px-3 py-1 rounded-lg text-brown cursor-pointer text-sm'
+				className='inline-flex items-center ml-1 pr-3 py-1 rounded-lg text-brown cursor-pointer text-sm'
 			>
 				<div className='flex items-center gap-2'>
 					<span>{getLabel(sort)}</span>

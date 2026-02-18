@@ -5,6 +5,28 @@ import { useProjectSortOptions } from '@/hooks/projects/useProjectSortOptions';
 import { cn } from '@/lib/utils';
 import { ProjectSort } from '@/types/filters.types';
 
+type AreaSortDirection = 'asc' | 'desc';
+
+function AreaSortIcon({ direction }: { direction: AreaSortDirection }) {
+	if (direction === 'asc') {
+		return (
+			<span className='flex flex-col items-start gap-0.5 text-brown shrink-0'>
+				<span className='h-0.5 w-1.5 rounded bg-brown' />
+				<span className='h-0.5 w-2.5 rounded bg-brown' />
+				<span className='h-0.5 w-3.5 rounded bg-brown' />
+			</span>
+		);
+	}
+
+	return (
+		<span className='flex flex-col items-start gap-0.5 text-brown shrink-0'>
+			<span className='h-0.5 w-3.5 rounded bg-brown' />
+			<span className='h-0.5 w-2.5 rounded bg-brown' />
+			<span className='h-0.5 w-1.5 rounded bg-brown' />
+		</span>
+	);
+}
+
 interface ProjectSortPopoverProps {
 	sort: ProjectSort;
 	onChange: (value: ProjectSort | null) => void;
@@ -29,7 +51,11 @@ export function ProjectSortPopover({ sort, onChange }: ProjectSortPopoverProps) 
 				onClick={() => setIsOpen(prev => !prev)}
 				className='inline-flex items-center ml-1 px-3 py-1 rounded-lg text-brown cursor-pointer text-sm'
 			>
-				<span>{getLabel(sort)}</span>
+				<div className='flex items-center gap-2'>
+					<span>{getLabel(sort)}</span>
+					{sort === 'area_asc' && <AreaSortIcon direction='asc' />}
+					{sort === 'area_desc' && <AreaSortIcon direction='desc' />}
+				</div>
 				<svg
 					className='ml-2 h-3 w-3 text-brown'
 					viewBox='0 0 10 6'
@@ -60,8 +86,12 @@ export function ProjectSortPopover({ sort, onChange }: ProjectSortPopoverProps) 
 								sort === option.value && 'bg-light-beige text-brown font-semibold'
 							)}
 						>
-							<span>{option.label}</span>
-							{sort === option.value && <span className='ml-2'>✓</span>}
+							<div className='flex items-center gap-2'>
+								<span>{option.label}</span>
+								{option.value === 'area_asc' && <AreaSortIcon direction='asc' />}
+								{option.value === 'area_desc' && <AreaSortIcon direction='desc' />}
+							</div>
+							{sort === option.value && <span className='ml-1 shrink-0'>✓</span>}
 						</button>
 					))}
 				</div>

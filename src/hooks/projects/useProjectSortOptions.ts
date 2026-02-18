@@ -5,8 +5,8 @@ const SORT_OPTIONS: { value: ProjectSort; label: string }[] = [
 	{ value: 'title_asc', label: 'по названию (А-Я)' },
 	{ value: 'title_desc', label: 'по названию (Я-А)' },
 	{ value: 'likes_desc', label: 'по популярности' },
-	{ value: 'area_desc', label: 'сначала с большей площадью' },
-	{ value: 'area_asc', label: 'сначала с меньшей площадью' }
+	{ value: 'area_desc', label: 'по площади' },
+	{ value: 'area_asc', label: 'по площади' }
 ];
 
 export function useProjectSortOptions() {
@@ -20,4 +20,3 @@ export function useProjectSortOptions() {
 		getLabel
 	};
 }
-

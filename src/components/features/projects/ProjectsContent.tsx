@@ -1,6 +1,6 @@
 'use client';
 
-import { ProjectCard } from '@/components/common/projects/ProjectCard';
+import { ProjectCardDetailed } from '@/components/common/projects/ProjectCardDetailed';
 import { ProjectSidebar } from '@/components/features/projects/ProjectSidebar';
 import { ProjectSortPopover } from '@/components/features/projects/ProjectSortPopover';
 import { HeaderThemeObserver } from '@/components/layout/HeaderThemeObserver';
@@ -86,12 +86,23 @@ export function ProjectsContent() {
 							{Array.from({ length: 6 }).map((_, idx) => (
 								<div
 									key={idx}
-									className='flex flex-col gap-4'
+									className='relative flex flex-col gap-4'
 								>
-									<SkeletonLoader className='w-full aspect-video rounded-2xl' />
-									<div className='flex justify-between'>
-										<SkeletonLoader className='w-1/2 h-6 rounded' />
-										<SkeletonLoader className='w-1/4 h-6 rounded' />
+									<div className='absolute w-23.5 h-7.5 rounded-lg top-5 left-5 z-1 bg-white' />
+									<div className='absolute top-5 right-5 z-1 w-15.25 h-7.5 rounded-lg bg-white' />
+									<SkeletonLoader
+										count={1}
+										className='relative w-full h-full aspect-4/3 lg:aspect-video rounded-2xl'
+									/>
+									<div className='flex justify-between items-center pt-4 pb-5 px-2 gap-2'>
+										<SkeletonLoader
+											count={1}
+											className='w-40.5 h-7 rounded-lg'
+										/>
+										<SkeletonLoader
+											count={1}
+											className='w-28.25 h-6 rounded-lg'
+										/>
 									</div>
 								</div>
 							))}
@@ -108,7 +119,7 @@ export function ProjectsContent() {
 						<>
 							<div className='grid grid-cols-1 md:grid-cols-2 gap-5'>
 								{projects.map(project => (
-									<ProjectCard
+									<ProjectCardDetailed
 										key={project.id}
 										project={project}
 									/>

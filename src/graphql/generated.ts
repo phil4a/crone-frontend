@@ -10531,7 +10531,7 @@ export type GetProjectsQueryVariables = Exact<{
 }>;
 
 
-export type GetProjectsQuery = { __typename?: 'RootQuery', posts?: { __typename?: 'RootQueryToPostConnection', found?: number | null, pageInfo: { __typename?: 'RootQueryToPostConnectionPageInfo', hasNextPage: boolean, endCursor?: string | null }, nodes: Array<{ __typename?: 'Post', id: string, databaseId: number, title?: string | null, slug?: string | null, projectLikes?: number | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node: { __typename?: 'MediaItem', sourceUrl?: string | null } } | null, projectFields?: { __typename?: 'ProjectFields', area?: string | null, floor?: string | null, bedrooms?: string | null, status?: Array<string | null> | null, year?: number | null, city?: string | null } | null, tags?: { __typename?: 'PostToTagConnection', nodes: Array<{ __typename?: 'Tag', name?: string | null, slug?: string | null }> } | null }> } | null };
+export type GetProjectsQuery = { __typename?: 'RootQuery', posts?: { __typename?: 'RootQueryToPostConnection', found?: number | null, pageInfo: { __typename?: 'RootQueryToPostConnectionPageInfo', hasNextPage: boolean, endCursor?: string | null }, nodes: Array<{ __typename?: 'Post', id: string, databaseId: number, title?: string | null, slug?: string | null, projectLikes?: number | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node: { __typename?: 'MediaItem', sourceUrl?: string | null } } | null, projectFields?: { __typename?: 'ProjectFields', area?: string | null, floor?: string | null, bedrooms?: string | null, status?: Array<string | null> | null, year?: number | null, city?: string | null, shortDescription?: string | null } | null, tags?: { __typename?: 'PostToTagConnection', nodes: Array<{ __typename?: 'Tag', name?: string | null, slug?: string | null }> } | null }> } | null };
 
 export type GetTagsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -10595,6 +10595,7 @@ export const GetProjectsDocument = `
         status
         year
         city
+        shortDescription
       }
       projectLikes
       tags {

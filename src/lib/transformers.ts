@@ -119,7 +119,7 @@ export function transformGraphQLProject(post: GraphQLProject): Project {
 		slug: post.slug || '',
 		title: post.title || '',
 		tags: post.tags?.nodes.map(node => node.slug || '') || [],
-		shortDescription: '', // Need to fetch if available or use empty
+		shortDescription: fields?.shortDescription || '',
 		description: '', // Need to fetch content if available
 		coverImage: post.featuredImage?.node?.sourceUrl
 			? {

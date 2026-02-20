@@ -53,7 +53,7 @@ export function ProjectCardDetailed({ project }: ProjectCardDetailedProps) {
 					<h5 className='text-xl md:text-lg font-semibold text-main transition-colors duration-300 group-hover:text-brown'>
 						{project.title}
 					</h5>
-					<div className='flex flex-wrap gap-x-8'>
+					<div className='flex flex-wrap gap-x-8 gap-y-2.5'>
 						<ProjectCardIcon type='area'>{area} м²</ProjectCardIcon>
 						<ProjectCardIcon type='floor'>
 							{floor} {floorText}

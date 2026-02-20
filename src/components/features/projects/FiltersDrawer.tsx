@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { ProjectSidebar, ProjectSidebarProps } from '@/components/features/projects/ProjectSidebar';
 import { FiltersIcon } from '@/components/ui/Icons';
@@ -11,6 +11,22 @@ type FiltersDrawerProps = Omit<ProjectSidebarProps, 'className'>;
 
 export function FiltersDrawer({ filters, onApply, stats }: FiltersDrawerProps) {
 	const [isOpen, setIsOpen] = useState(false);
+
+	useEffect(() => {
+		if (typeof document === 'undefined') return;
+
+		const originalOverflow = document.body.style.overflow;
+
+		if (isOpen) {
+			document.body.style.overflow = 'hidden';
+		} else {
+			document.body.style.overflow = originalOverflow;
+		}
+
+		return () => {
+			document.body.style.overflow = originalOverflow;
+		};
+	}, [isOpen]);
 
 	const handleApply: ProjectSidebarProps['onApply'] = nextFilters => {
 		onApply(nextFilters);
@@ -31,7 +47,7 @@ export function FiltersDrawer({ filters, onApply, stats }: FiltersDrawerProps) {
 			<div
 				className={cn(
 					'fixed inset-0 z-40 xl:hidden pointer-events-none transition-all duration-300',
-					isOpen && 'pointer-events-auto  backdrop-blur-xs'
+					isOpen && 'pointer-events-auto backdrop-blur-xs'
 				)}
 			>
 				<div

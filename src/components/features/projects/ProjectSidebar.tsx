@@ -9,7 +9,7 @@ import { useProjectSidebar } from '@/hooks/projects/useProjectSidebar';
 import { cn } from '@/lib/utils';
 import { ProjectFiltersData } from '@/types/filters.types';
 
-interface ProjectSidebarProps {
+export interface ProjectSidebarProps {
 	filters: ProjectFiltersData;
 	onApply: (filters: ProjectFiltersData) => void;
 	className?: string;

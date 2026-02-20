@@ -17,3 +17,7 @@ export function declension(number: number, titles: [string, string, string]): st
 export function pluralizeYears(years: number): string {
 	return `${years} ${declension(years, ['год', 'года', 'лет'])}`;
 }
+
+export function pluralizeProjects(totalItems: number): string {
+	return `${totalItems} ${declension(totalItems, ['проект', 'проекта', 'проектов'])}`;
+}

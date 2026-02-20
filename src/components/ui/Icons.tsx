@@ -85,3 +85,67 @@ export const WhatsappIcon = ({ className }: { className?: string }) => (
 		/>
 	</svg>
 );
+
+export const FiltersIcon = ({ className }: { className?: string }) => (
+	<svg
+		className={cn('h-6 w-6', className)}
+		viewBox='0 0 24 25'
+		fill='none'
+		xmlns='http://www.w3.org/2000/svg'
+	>
+		<path
+			d='M13 18.5L21 18.5'
+			stroke='currentColor'
+			strokeWidth='2'
+			strokeLinecap='square'
+			strokeLinejoin='round'
+		></path>
+		<path
+			d='M3 18.5H5'
+			stroke='currentColor'
+			strokeWidth='2'
+			strokeLinecap='square'
+			strokeLinejoin='round'
+		></path>
+		<path
+			d='M7.5 21C8.88071 21 10 19.8807 10 18.5C10 17.1193 8.88071 16 7.5 16C6.11929 16 5 17.1193 5 18.5C5 19.8807 6.11929 21 7.5 21Z'
+			fill='currentColor'
+		></path>
+		<path
+			d='M16.5 12.5L21 12.5'
+			stroke='currentColor'
+			strokeWidth='2'
+			strokeLinecap='square'
+			strokeLinejoin='round'
+		></path>
+		<path
+			d='M3 12.5H11.0054'
+			stroke='currentColor'
+			strokeWidth='2'
+			strokeLinecap='square'
+			strokeLinejoin='round'
+		></path>
+		<path
+			d='M16.5 15C17.8807 15 19 13.8807 19 12.5C19 11.1193 17.8807 10 16.5 10C15.1193 10 14 11.1193 14 12.5C14 13.8807 15.1193 15 16.5 15Z'
+			fill='currentColor'
+		></path>
+		<path
+			d='M13 6.5H21'
+			stroke='currentColor'
+			strokeWidth='2'
+			strokeLinecap='square'
+			strokeLinejoin='round'
+		></path>
+		<path
+			d='M3 6.5H5'
+			stroke='currentColor'
+			strokeWidth='2'
+			strokeLinecap='square'
+			strokeLinejoin='round'
+		></path>
+		<path
+			d='M10.5 9C11.8807 9 13 7.88071 13 6.5C13 5.11929 11.8807 4 10.5 4C9.11929 4 8 5.11929 8 6.5C8 7.88071 9.11929 9 10.5 9Z'
+			fill='currentColor'
+		></path>
+	</svg>
+);

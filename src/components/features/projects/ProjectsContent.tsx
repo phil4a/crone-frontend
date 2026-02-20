@@ -1,6 +1,7 @@
 'use client';
 
 import { ProjectCardDetailed } from '@/components/common/projects/ProjectCardDetailed';
+import { FiltersDrawer } from '@/components/features/projects/FiltersDrawer';
 import { ProjectSidebar } from '@/components/features/projects/ProjectSidebar';
 import { ProjectSortPopover } from '@/components/features/projects/ProjectSortPopover';
 import { HeaderThemeObserver } from '@/components/layout/HeaderThemeObserver';
@@ -16,6 +17,7 @@ import { useProjectStats } from '@/hooks/projects/useProjectStats';
 import { useProjectTags } from '@/hooks/projects/useProjectTags';
 import { useProjects } from '@/hooks/projects/useProjects';
 
+import { pluralizeProjects } from '@/lib/formatters/pluralize';
 import { cn } from '@/lib/utils';
 
 export function ProjectsContent() {
@@ -37,9 +39,8 @@ export function ProjectsContent() {
 
 			<Title as='h1'>{getPageTitle(tag)}</Title>
 
-			<div className='grid grid-cols-1 pt-12 lg:grid-cols-5 gap-8'>
-				{/* Sidebar Filters */}
-				<div className='lg:col-span-1'>
+			<div className='grid grid-cols-1 pt-12 xl:grid-cols-5 gap-8'>
+				<div className='hidden xl:block xl:col-span-1'>
 					<ProjectSidebar
 						filters={filters}
 						onApply={applyFilters}
@@ -49,7 +50,12 @@ export function ProjectsContent() {
 				</div>
 
 				{/* Projects Grid */}
-				<div className='lg:col-span-4'>
+				<div className='xl:col-span-4'>
+					<FiltersDrawer
+						filters={filters}
+						onApply={applyFilters}
+						stats={stats}
+					/>
 					{/* Top Bar with Tags and Sorting */}
 					<div className='flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8'>
 						{/* Tags */}
@@ -80,7 +86,9 @@ export function ProjectsContent() {
 							onChange={setSort}
 						/>
 					</div>
-
+					{!isLoading && totalItems > 0 && (
+						<p className='text-dark-gray mb-3'>{pluralizeProjects(totalItems)}</p>
+					)}
 					{isLoading ? (
 						<div className='grid grid-cols-1 md:grid-cols-2 gap-5'>
 							{Array.from({ length: 6 }).map((_, idx) => (

@@ -1,7 +1,6 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 import { Button } from '@/components/ui/Button';
@@ -13,12 +12,14 @@ import { SITE_CONFIG } from '@/config/site.config';
 
 import { useHeaderStore } from '@/store/header';
 
+import { useActivePath } from '@/hooks/useActivePath';
+
 import { cn } from '@/lib/utils';
 
 export function Header() {
 	const [isScrolled, setIsScrolled] = useState(false);
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
-	const pathname = usePathname();
+	const { pathname, isActivePath } = useActivePath();
 	const { theme } = useHeaderStore();
 
 	const HEADER_TRANSITION_DURATION = 600;
@@ -35,7 +36,6 @@ export function Header() {
 		return () => window.removeEventListener('scroll', handleScroll);
 	}, []);
 
-	// Close menu on route change
 	useEffect(() => {
 		setIsMenuOpen(false);
 	}, [pathname]);
@@ -152,7 +152,6 @@ export function Header() {
 						<WhatsappIcon />
 					</Link>
 				</div>
-				{/* Mobile Menu Button */}
 				<button
 					type='button'
 					className='xl:hidden z-5 bg-beige h-11 w-11 flex items-center justify-center rounded-lg'
@@ -180,7 +179,6 @@ export function Header() {
 					</div>
 				</button>
 
-				{/* Navigation & Actions */}
 				<div
 					className={cn(
 						'fixed inset-0 z-2 flex flex-col bg-white px-5 md:px-10 pt-25 pb-5 transition-all duration-300 xl:static xl:flex xl:flex-1 h-dvh xl:h-auto xl:w-auto xl:translate-x-0 xl:flex-row xl:items-center xl:justify-between xl:gap-7.5 xl:bg-transparent xl:p-0',
@@ -189,20 +187,26 @@ export function Header() {
 				>
 					<nav className='mb-10 xl:mb-0 xl:grow'>
 						<ul className='flex flex-col gap-6 xl:flex-row xl:gap-8 justify-center'>
-							{MAIN_MENU.map(item => (
-								<li key={item.href}>
-									<Link
-										href={item.href}
-										className={cn(
-											'relative text-lg font-medium uppercase transition-colors after:absolute after:bottom-0 after:left-0 after:h-px after:w-0 after:bg-beige after:transition-[width] hover:after:w-full xl:text-base text-nowrap',
-											linkColorClass,
-											hoverColorClass
-										)}
-									>
-										{item.label}
-									</Link>
-								</li>
-							))}
+							{MAIN_MENU.map(item => {
+								const isActive = isActivePath(item.href);
+
+								return (
+									<li key={item.href}>
+										<Link
+											href={item.href}
+											className={cn(
+												'relative text-lg font-medium uppercase transition-colors after:absolute after:bottom-0 after:left-0 after:h-px after:w-0 after:bg-beige after:transition-[width] hover:after:w-full xl:text-base text-nowrap',
+												linkColorClass,
+												hoverColorClass,
+												isActive && 'after:w-full'
+											)}
+											aria-current={isActive ? 'page' : undefined}
+										>
+											{item.label}
+										</Link>
+									</li>
+								);
+							})}
 						</ul>
 					</nav>
 

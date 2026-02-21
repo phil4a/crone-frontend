@@ -40,6 +40,22 @@ export function Header() {
 		setIsMenuOpen(false);
 	}, [pathname]);
 
+	useEffect(() => {
+		if (typeof document === 'undefined') return;
+
+		const originalOverflow = document.body.style.overflow;
+
+		if (isMenuOpen) {
+			document.body.style.overflow = 'hidden';
+		} else {
+			document.body.style.overflow = originalOverflow;
+		}
+
+		return () => {
+			document.body.style.overflow = originalOverflow;
+		};
+	}, [isMenuOpen]);
+
 	// Determine styles based on theme and state
 	const isLightTheme = theme === 'light';
 	const isDarkOrTransparent = theme === 'dark' || theme === 'transparent';
@@ -165,7 +181,7 @@ export function Header() {
 				{/* Navigation & Actions */}
 				<div
 					className={cn(
-						'fixed inset-0 z-2 flex flex-col bg-white px-5 md:px-10 pt-25 pb-5 transition-transform duration-300 xl:static xl:flex xl:flex-1 xl:h-auto xl:w-auto xl:translate-x-0 xl:flex-row xl:items-center xl:justify-between xl:gap-7.5 xl:bg-transparent xl:p-0',
+						'fixed inset-0 z-2 flex flex-col bg-white px-5 md:px-10 pt-25 pb-5 transition-transform duration-300 xl:static xl:flex xl:flex-1 min-h-svh xl:h-auto xl:w-auto xl:translate-x-0 xl:flex-row xl:items-center xl:justify-between xl:gap-7.5 xl:bg-transparent xl:p-0',
 						!isMenuOpen && 'translate-x-full'
 					)}
 				>

@@ -88,11 +88,11 @@ export function Header() {
 					href='/'
 					className='group relative z-3 shrink-0'
 				>
-					<Logo className={cn('w-40.5 transition-colors duration-300 md:w-62.5', logoColorClass)} />
+					<Logo className={cn('w-40.5 transition-colors duration-300 xl:w-62.5', logoColorClass)} />
 				</Link>
 
 				{/* Mobile Menu Button */}
-				<div className='md:hidden z-5 bg-beige h-11 w-11 flex items-center justify-center rounded-lg'>
+				<div className='xl:hidden z-5 bg-beige h-11 w-11 flex items-center justify-center rounded-lg'>
 					<button
 						type='button'
 						className={cn('relative h-4.5 w-6 cursor-pointer', isMenuOpen && 'menu-open')}
@@ -122,18 +122,18 @@ export function Header() {
 				{/* Navigation & Actions */}
 				<div
 					className={cn(
-						'fixed inset-0 z-2 flex flex-col bg-white px-5 pt-25 transition-transform duration-300 md:static md:flex md:flex-1 md:h-auto md:w-auto md:translate-x-0 md:flex-row md:items-center md:justify-between md:gap-7.5 md:bg-transparent md:p-0',
+						'fixed inset-0 z-2 flex flex-col bg-white px-5 pt-25 transition-transform duration-300 xl:static xl:flex xl:flex-1 xl:h-auto xl:w-auto xl:translate-x-0 xl:flex-row xl:items-center xl:justify-between xl:gap-7.5 xl:bg-transparent xl:p-0',
 						!isMenuOpen && 'translate-x-full'
 					)}
 				>
-					<nav className='mb-10 md:mb-0 md:grow'>
-						<ul className='flex flex-col gap-6 md:flex-row md:gap-8 justify-center'>
+					<nav className='mb-10 xl:mb-0 xl:grow'>
+						<ul className='flex flex-col gap-6 xl:flex-row xl:gap-8 justify-center'>
 							{MAIN_MENU.map(item => (
 								<li key={item.href}>
 									<Link
 										href={item.href}
 										className={cn(
-											'relative text-lg font-medium uppercase transition-colors after:absolute after:bottom-0 after:left-0 after:h-px after:w-0 after:bg-beige after:transition-[width] hover:after:w-full md:text-base',
+											'relative text-lg font-medium uppercase transition-colors after:absolute after:bottom-0 after:left-0 after:h-px after:w-0 after:bg-beige after:transition-[width] hover:after:w-full xl:text-base text-nowrap',
 											linkColorClass,
 											hoverColorClass
 										)}
@@ -145,7 +145,7 @@ export function Header() {
 						</ul>
 					</nav>
 
-					<div className='flex flex-col gap-5 md:flex-row md:items-center md:gap-8 justify-end md:grow-0'>
+					<div className='flex flex-col gap-4 xl:flex-row xl:items-center 3xl:gap-8 justify-end xl:grow-0'>
 						<Link
 							href={SITE_CONFIG.contacts.email.href}
 							className={cn(
@@ -155,7 +155,9 @@ export function Header() {
 							)}
 						>
 							<EmailIcon className='transition-colors group-hover:text-beige' />
-							<span className='hidden xl:inline'>{SITE_CONFIG.contacts.email.label}</span>
+							<span className='hidden 2xl:inline text-nowrap'>
+								{SITE_CONFIG.contacts.email.label}
+							</span>
 						</Link>
 
 						<Link
@@ -167,7 +169,9 @@ export function Header() {
 							)}
 						>
 							<PhoneIcon className='transition-colors group-hover:text-beige' />
-							<span className='hidden xl:inline'>{SITE_CONFIG.contacts.phone.label}</span>
+							<span className='hidden 2xl:inline text-nowrap'>
+								{SITE_CONFIG.contacts.phone.label}
+							</span>
 						</Link>
 
 						<div className='flex items-center gap-4'>
@@ -187,8 +191,8 @@ export function Header() {
 
 						<Button
 							className={cn(
-								'mt-5 w-full md:mt-0 md:w-auto',
-								!isMenuOpen && !isLightTheme && !isScrolled && 'hidden md:flex'
+								'mt-5 w-full xl:mt-0 xl:w-auto',
+								!isMenuOpen && !isLightTheme && !isScrolled && 'hidden xl:flex'
 							)}
 						>
 							Оставить заявку

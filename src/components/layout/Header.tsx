@@ -153,12 +153,12 @@ export function Header() {
 					</Link>
 				</div>
 				{/* Mobile Menu Button */}
-				<div className='xl:hidden z-5 bg-beige h-11 w-11 flex items-center justify-center rounded-lg'>
-					<button
-						type='button'
-						className={cn('relative h-4.5 w-6 cursor-pointer', isMenuOpen && 'menu-open')}
-						onClick={() => setIsMenuOpen(!isMenuOpen)}
-					>
+				<button
+					type='button'
+					className='xl:hidden z-5 bg-beige h-11 w-11 flex items-center justify-center rounded-lg'
+					onClick={() => setIsMenuOpen(!isMenuOpen)}
+				>
+					<div className={cn('relative h-4.5 w-6 cursor-pointer', isMenuOpen && 'menu-open')}>
 						<span
 							className={cn(
 								'absolute left-0 top-[calc(50%-1px)] h-0.5 w-full bg-white transition-all duration-300',
@@ -177,8 +177,8 @@ export function Header() {
 								isMenuOpen && 'bottom-[calc(50%-1px)] -rotate-45'
 							)}
 						/>
-					</button>
-				</div>
+					</div>
+				</button>
 
 				{/* Navigation & Actions */}
 				<div

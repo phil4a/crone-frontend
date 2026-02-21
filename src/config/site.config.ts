@@ -41,9 +41,10 @@ export const SITE_CONFIG = {
 			href: 'mailto:info@crone-group.ru'
 		},
 		socials: {
-			telegram: 'https://t.me/cronegroupnsk',
+			whatsapp: 'https://wa.me/79139259299',
+			telegram: 'https://t.me/crone_group',
 			instagram: 'https://www.instagram.com/cronegroupnsk',
-			whatsapp: '#'
+			telegramGroup: 'https://t.me/cronegroupnsk'
 		}
 	}
 };

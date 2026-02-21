@@ -105,7 +105,7 @@ function FooterContacts() {
 		<div className='flex flex-col gap-6'>
 			<div className='flex flex-col gap-4 items-start'>
 				<a
-					href={SITE_CONFIG.contacts.socials.telegram}
+					href={SITE_CONFIG.contacts.socials.telegramGroup}
 					target='_blank'
 					rel='noopener noreferrer'
 					className='flex items-center gap-3 text-white hover:text-beige transition-colors'

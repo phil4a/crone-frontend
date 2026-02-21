@@ -139,6 +139,7 @@ export function Header() {
 					<Link
 						href={SITE_CONFIG.contacts.socials.telegram}
 						className={cn('transition-colors', textColorClass, hoverColorClass)}
+						target='_blank'
 					>
 						<TelegramIcon />
 					</Link>
@@ -146,6 +147,7 @@ export function Header() {
 					<Link
 						href={SITE_CONFIG.contacts.socials.whatsapp}
 						className={cn('transition-colors', textColorClass, hoverColorClass)}
+						target='_blank'
 					>
 						<WhatsappIcon />
 					</Link>
@@ -237,12 +239,14 @@ export function Header() {
 							<Link
 								href={SITE_CONFIG.contacts.socials.telegram}
 								className={cn('transition-colors', textColorClass, hoverColorClass)}
+								target='_blank'
 							>
 								<TelegramIcon />
 							</Link>
 							<Link
 								href={SITE_CONFIG.contacts.socials.whatsapp}
 								className={cn('transition-colors', textColorClass, hoverColorClass)}
+								target='_blank'
 							>
 								<WhatsappIcon />
 							</Link>

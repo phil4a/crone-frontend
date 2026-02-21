@@ -50,11 +50,6 @@ export function ProjectsContent() {
 
 				{/* Projects Grid */}
 				<div className='xl:col-span-4'>
-					<FiltersDrawer
-						filters={filters}
-						onApply={applyFilters}
-						stats={stats}
-					/>
 					{/* Top Bar with Tags and Sorting */}
 					<div className='flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8'>
 						{/* Tags */}
@@ -80,10 +75,25 @@ export function ProjectsContent() {
 							))}
 						</div>
 
-						<ProjectSortPopover
-							sort={sort}
-							onChange={setSort}
+						<div className='hidden xl:flex'>
+							<ProjectSortPopover
+								sort={sort}
+								onChange={setSort}
+							/>
+						</div>
+					</div>
+					<div className='flex justify-between items-center mb-5'>
+						<FiltersDrawer
+							filters={filters}
+							onApply={applyFilters}
+							stats={stats}
 						/>
+						<div className='xl:hidden flex'>
+							<ProjectSortPopover
+								sort={sort}
+								onChange={setSort}
+							/>
+						</div>
 					</div>
 					{isLoading && (
 						<div className='text-dark-gray mb-3'>

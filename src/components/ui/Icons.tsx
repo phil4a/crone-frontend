@@ -149,3 +149,41 @@ export const FiltersIcon = ({ className }: { className?: string }) => (
 		></path>
 	</svg>
 );
+
+export const SortIcon = ({ className }: { className?: string }) => (
+	<svg
+		className={cn('h-4.75 w-4.5', className)}
+		viewBox='0 0 24 24'
+		fill='none'
+		xmlns='http://www.w3.org/2000/svg'
+	>
+		<path
+			d='M11 16L8 19L5 16'
+			stroke='currentColor'
+			strokeWidth='2'
+			strokeLinecap='square'
+			strokeLinejoin='round'
+		/>
+		<path
+			d='M13 8L16 5L19 8'
+			stroke='currentColor'
+			strokeWidth='2'
+			strokeLinecap='square'
+			strokeLinejoin='round'
+		/>
+		<path
+			d='M16 19L16 5'
+			stroke='currentColor'
+			strokeWidth='2'
+			strokeLinecap='square'
+			strokeLinejoin='round'
+		/>
+		<path
+			d='M8 5V19'
+			stroke='currentColor'
+			strokeWidth='2'
+			strokeLinecap='square'
+			strokeLinejoin='round'
+		/>
+	</svg>
+);

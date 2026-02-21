@@ -37,7 +37,7 @@ export function FiltersDrawer({ filters, onApply, stats }: FiltersDrawerProps) {
 		<>
 			<button
 				type='button'
-				className='flex items-center gap-2 mb-5 xl:hidden'
+				className='flex items-center gap-2 xl:hidden'
 				onClick={() => setIsOpen(prev => !prev)}
 			>
 				<FiltersIcon className='text-brown' />

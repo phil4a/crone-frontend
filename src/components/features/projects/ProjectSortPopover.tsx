@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 
+import { SortIcon } from '@/components/ui/Icons';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/Popover';
 
 import { useProjectSortOptions } from '@/hooks/projects/useProjectSortOptions';
@@ -46,31 +47,40 @@ export function ProjectSortPopover({ sort, onChange }: ProjectSortPopoverProps) 
 	if (!mounted) {
 		return (
 			<div className='text-sm text-dark-gray'>
-				<span>Сортировка: </span>
-				<span className='ml-1 text-brown inline-flex items-center'>
-					{getLabel(sort)}{' '}
-					<svg
-						className='ml-2 h-3 w-3 text-brown'
-						viewBox='0 0 10 6'
-						fill='none'
-						xmlns='http://www.w3.org/2000/svg'
-					>
-						<path
-							d='M1 1L5 5L9 1'
-							stroke='currentColor'
-							strokeWidth='1.2'
-							strokeLinecap='round'
-							strokeLinejoin='round'
-						></path>
-					</svg>
-				</span>
+				<span className='hidden md:inline-flex'>Сортировка: </span>
+				<button
+					type='button'
+					className='inline-flex items-center ml-1 pr-3 py-1 rounded-lg text-brown cursor-default text-sm'
+				>
+					<div className='flex items-center gap-2'>
+						<div className='hidden md:flex items-center'>
+							<span>{getLabel(sort)}</span>
+							<svg
+								className='ml-2 h-3 w-3 text-brown'
+								viewBox='0 0 10 6'
+								fill='none'
+								xmlns='http://www.w3.org/2000/svg'
+							>
+								<path
+									d='M1 1L5 5L9 1'
+									stroke='currentColor'
+									strokeWidth='1.2'
+									strokeLinecap='round'
+									strokeLinejoin='round'
+								></path>
+							</svg>
+						</div>
+
+						<SortIcon className='inline h-6 w-6 text-brown md:hidden' />
+					</div>
+				</button>
 			</div>
 		);
 	}
 
 	return (
 		<div className='text-sm text-dark-gray'>
-			<span>Сортировка: </span>
+			<span className='hidden md:inline-flex'>Сортировка: </span>
 			<Popover
 				open={open}
 				onOpenChange={setOpen}
@@ -78,27 +88,41 @@ export function ProjectSortPopover({ sort, onChange }: ProjectSortPopoverProps) 
 				<PopoverTrigger asChild>
 					<button
 						type='button'
-						className='inline-flex items-center ml-1 pr-3 py-1 rounded-lg text-brown cursor-pointer text-sm'
+						className='inline-flex items-center md:ml-1 md:pr-3 md:py-1 rounded-lg text-brown cursor-pointer text-sm'
 					>
 						<div className='flex items-center gap-2'>
-							<span>{getLabel(sort)}</span>
-							{sort === 'area_asc' && <AreaSortIcon direction='asc' />}
-							{sort === 'area_desc' && <AreaSortIcon direction='desc' />}
+							{/* Desktop: текст + иконка площади */}
+							<div className='hidden md:inline-flex items-center'>
+								<span>{getLabel(sort)}</span>
+								{sort === 'area_asc' && (
+									<span className='hidden md:inline'>
+										<AreaSortIcon direction='asc' />
+									</span>
+								)}
+								{sort === 'area_desc' && (
+									<span className='hidden md:inline'>
+										<AreaSortIcon direction='desc' />
+									</span>
+								)}
+								<svg
+									className='ml-2 h-3 w-3 text-brown'
+									viewBox='0 0 10 6'
+									fill='none'
+									xmlns='http://www.w3.org/2000/svg'
+								>
+									<path
+										d='M1 1L5 5L9 1'
+										stroke='currentColor'
+										strokeWidth='1.2'
+										strokeLinecap='round'
+										strokeLinejoin='round'
+									/>
+								</svg>
+							</div>
+
+							{/* Мобайл: только иконка сортировки */}
+							<SortIcon className='inline h-6 w-6 text-brown md:hidden' />
 						</div>
-						<svg
-							className='ml-2 h-3 w-3 text-brown'
-							viewBox='0 0 10 6'
-							fill='none'
-							xmlns='http://www.w3.org/2000/svg'
-						>
-							<path
-								d='M1 1L5 5L9 1'
-								stroke='currentColor'
-								strokeWidth='1.2'
-								strokeLinecap='round'
-								strokeLinejoin='round'
-							/>
-						</svg>
 					</button>
 				</PopoverTrigger>
 				<PopoverContent

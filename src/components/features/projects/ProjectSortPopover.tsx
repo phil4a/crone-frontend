@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/Popover';
 
@@ -36,7 +36,37 @@ interface ProjectSortPopoverProps {
 
 export function ProjectSortPopover({ sort, onChange }: ProjectSortPopoverProps) {
 	const { options, getLabel } = useProjectSortOptions();
+	const [mounted, setMounted] = useState(false);
 	const [open, setOpen] = useState(false);
+
+	useEffect(() => {
+		setMounted(true);
+	}, []);
+
+	if (!mounted) {
+		return (
+			<div className='text-sm text-dark-gray'>
+				<span>Сортировка: </span>
+				<span className='ml-1 text-brown inline-flex items-center'>
+					{getLabel(sort)}{' '}
+					<svg
+						className='ml-2 h-3 w-3 text-brown'
+						viewBox='0 0 10 6'
+						fill='none'
+						xmlns='http://www.w3.org/2000/svg'
+					>
+						<path
+							d='M1 1L5 5L9 1'
+							stroke='currentColor'
+							strokeWidth='1.2'
+							strokeLinecap='round'
+							strokeLinejoin='round'
+						></path>
+					</svg>
+				</span>
+			</div>
+		);
+	}
 
 	return (
 		<div className='text-sm text-dark-gray'>

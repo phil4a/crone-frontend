@@ -19,6 +19,7 @@ export default async function ProjectsPage(props: PageProps) {
 		<Suspense fallback={<ProjectsSkeleton title={title} />}>
 			{/* <DebugWrapper> */}
 			<ProjectsContent />
+
 			{/* </DebugWrapper> */}
 		</Suspense>
 	);

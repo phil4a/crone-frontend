@@ -15,7 +15,7 @@ export function ProjectsSkeleton({ title = 'Дома из клееного бр�
 
 			<div className='grid grid-cols-1 pt-12 lg:grid-cols-5 gap-8'>
 				{/* Sidebar Filters Skeleton */}
-				<div className='lg:col-span-1'>
+				<div className='xl:col-span-1'>
 					<div className='sticky top-32 flex flex-col gap-6'>
 						{/* Search/Filter inputs skeleton */}
 						<div className='bg-white rounded-2xl flex flex-col gap-6'>
@@ -36,35 +36,39 @@ export function ProjectsSkeleton({ title = 'Дома из клееного бр�
 				</div>
 
 				{/* Projects Grid Skeleton */}
-				<div className='lg:col-span-4'>
+				<div className='xl:col-span-4'>
 					{/* Top Bar with Tags and Sorting Skeleton */}
-					<div className='flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8'>
+					<div>
 						{/* Tags */}
-						<div className='flex flex-wrap gap-2'>
-							{Array.from({ length: 4 }).map((_, idx) => (
-								<SkeletonLoader
+						<div className='grid grid-cols-1 md:grid-cols-2 gap-5'>
+							{Array.from({ length: 6 }).map((_, idx) => (
+								<div
 									key={idx}
-									className='w-24 h-9 rounded-lg'
-								/>
+									className='relative flex flex-col'
+								>
+									<div className='absolute w-23.5 h-7.5 rounded-lg top-5 left-5 z-1 bg-white' />
+									<div className='absolute top-5 right-5 z-1 w-15.25 h-7.5 rounded-lg bg-white' />
+									<SkeletonLoader
+										count={1}
+										className='relative w-full h-full aspect-4/3 lg:aspect-video rounded-2xl'
+									/>
+									<div className='flex flex-col pt-4 pb-5 px-2 gap-2'>
+										<SkeletonLoader
+											count={1}
+											className='w-30 h-6 mb-1 rounded-lg'
+										/>
+										<div className='flex flex-wrap gap-x-8 gap-y-2.5'>
+											{
+												<SkeletonLoader
+													count={4}
+													className='w-22 h-6 rounded-lg'
+												/>
+											}
+										</div>
+									</div>
+								</div>
 							))}
 						</div>
-						{/* Sort */}
-						<SkeletonLoader className='w-48 h-5 rounded' />
-					</div>
-
-					<div className='grid grid-cols-1 md:grid-cols-2 gap-5'>
-						{Array.from({ length: 6 }).map((_, idx) => (
-							<div
-								key={idx}
-								className='flex flex-col gap-4'
-							>
-								<SkeletonLoader className='w-full aspect-video rounded-2xl' />
-								<div className='flex justify-between'>
-									<SkeletonLoader className='w-1/2 h-6 rounded' />
-									<SkeletonLoader className='w-1/4 h-6 rounded' />
-								</div>
-							</div>
-						))}
 					</div>
 				</div>
 			</div>

@@ -36,7 +36,6 @@ export function ProjectsContent() {
 	return (
 		<main className='pt-38 pb-27 container bg-light-gray min-h-screen'>
 			<HeaderThemeObserver theme='light' />
-
 			<Title as='h1'>{getPageTitle(tag)}</Title>
 
 			<div className='grid grid-cols-1 pt-12 xl:grid-cols-5 gap-8'>

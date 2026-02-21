@@ -17,7 +17,7 @@ export function Projects() {
 	const { projects, isLoading, error } = useProjects(1, 6);
 	return (
 		<section className='pb-20 md:pb-25 lg:pb-37.5 bg-white relative'>
-			<HeaderThemeObserver theme='light' />
+			<HeaderThemeObserver theme='transparent' />
 			<div className='container'>
 				<div className='flex flex-col md:flex-row md:items-center justify-between gap-6 md:gap-4 mb-10'>
 					<Title

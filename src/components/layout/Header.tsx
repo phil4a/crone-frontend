@@ -91,6 +91,49 @@ export function Header() {
 					<Logo className={cn('w-40.5 transition-colors duration-300 xl:w-62.5', logoColorClass)} />
 				</Link>
 
+				<div className='hidden md:flex flex-1 xl:hidden gap-8 justify-end'>
+					<Link
+						href={SITE_CONFIG.contacts.email.href}
+						className={cn(
+							'group flex items-center gap-2.5 transition-colors text-sm font-bold',
+							textColorClass,
+							hoverColorClass
+						)}
+					>
+						<EmailIcon className='transition-colors group-hover:text-beige' />
+						<span className='hidden 2xl:inline text-nowrap'>
+							{SITE_CONFIG.contacts.email.label}
+						</span>
+					</Link>
+
+					<Link
+						href={SITE_CONFIG.contacts.phone.href}
+						className={cn(
+							'group flex items-center gap-2.5 transition-colors text-sm font-bold',
+							textColorClass,
+							hoverColorClass
+						)}
+					>
+						<PhoneIcon className='transition-colors group-hover:text-beige' />
+						<span className='hidden 2xl:inline text-nowrap'>
+							{SITE_CONFIG.contacts.phone.label}
+						</span>
+					</Link>
+
+					<Link
+						href={SITE_CONFIG.contacts.socials.telegram}
+						className={cn('transition-colors', textColorClass, hoverColorClass)}
+					>
+						<TelegramIcon />
+					</Link>
+
+					<Link
+						href={SITE_CONFIG.contacts.socials.whatsapp}
+						className={cn('transition-colors', textColorClass, hoverColorClass)}
+					>
+						<WhatsappIcon />
+					</Link>
+				</div>
 				{/* Mobile Menu Button */}
 				<div className='xl:hidden z-5 bg-beige h-11 w-11 flex items-center justify-center rounded-lg'>
 					<button

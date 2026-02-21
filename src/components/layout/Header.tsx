@@ -165,7 +165,7 @@ export function Header() {
 				{/* Navigation & Actions */}
 				<div
 					className={cn(
-						'fixed inset-0 z-2 flex flex-col bg-white px-5 pt-25 transition-transform duration-300 xl:static xl:flex xl:flex-1 xl:h-auto xl:w-auto xl:translate-x-0 xl:flex-row xl:items-center xl:justify-between xl:gap-7.5 xl:bg-transparent xl:p-0',
+						'fixed inset-0 z-2 flex flex-col bg-white px-5 md:px-10 pt-25 pb-5 transition-transform duration-300 xl:static xl:flex xl:flex-1 xl:h-auto xl:w-auto xl:translate-x-0 xl:flex-row xl:items-center xl:justify-between xl:gap-7.5 xl:bg-transparent xl:p-0',
 						!isMenuOpen && 'translate-x-full'
 					)}
 				>
@@ -188,7 +188,7 @@ export function Header() {
 						</ul>
 					</nav>
 
-					<div className='flex flex-col gap-4 xl:flex-row xl:items-center 3xl:gap-8 justify-end xl:grow-0'>
+					<div className='flex flex-1 flex-col gap-7.5 xl:flex-row xl:items-center 2xl:gap-8 justify-end xl:grow-0'>
 						<Link
 							href={SITE_CONFIG.contacts.email.href}
 							className={cn(
@@ -198,7 +198,7 @@ export function Header() {
 							)}
 						>
 							<EmailIcon className='transition-colors group-hover:text-beige' />
-							<span className='hidden 2xl:inline text-nowrap'>
+							<span className='inline xl:hidden 2xl:inline text-nowrap'>
 								{SITE_CONFIG.contacts.email.label}
 							</span>
 						</Link>
@@ -212,12 +212,12 @@ export function Header() {
 							)}
 						>
 							<PhoneIcon className='transition-colors group-hover:text-beige' />
-							<span className='hidden 2xl:inline text-nowrap'>
+							<span className='inline xl:hidden 2xl:inline text-nowrap'>
 								{SITE_CONFIG.contacts.phone.label}
 							</span>
 						</Link>
 
-						<div className='flex items-center gap-4'>
+						<div className='flex items-center gap-6 xl:gap-4'>
 							<Link
 								href={SITE_CONFIG.contacts.socials.telegram}
 								className={cn('transition-colors', textColorClass, hoverColorClass)}
@@ -234,7 +234,7 @@ export function Header() {
 
 						<Button
 							className={cn(
-								'mt-5 w-full xl:mt-0 xl:w-auto',
+								'mt-0 xl:w-auto',
 								!isMenuOpen && !isLightTheme && !isScrolled && 'hidden xl:flex'
 							)}
 						>

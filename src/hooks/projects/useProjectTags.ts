@@ -12,12 +12,12 @@ export function useProjectTags() {
 	const getPageTitle = (tag: string | null) => {
 		if (!tag) return 'Дома из клееного бруса';
 
+		if (TAG_SEO_TITLES[tag]) {
+			return TAG_SEO_TITLES[tag];
+		}
+
 		const currentTag = tags.find(t => t.slug === tag);
 		if (!currentTag) return 'Дома из клееного бруса';
-
-		if (TAG_SEO_TITLES[currentTag.slug!]) {
-			return TAG_SEO_TITLES[currentTag.slug!];
-		}
 
 		return `${currentTag.name} из клееного бруса`;
 	};

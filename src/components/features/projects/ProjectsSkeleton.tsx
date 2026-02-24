@@ -14,10 +14,8 @@ export function ProjectsSkeleton({ title = 'Дома из клееного бр�
 			<Title as='h1'>{title}</Title>
 
 			<div className='grid grid-cols-1 pt-12 lg:grid-cols-5 gap-8'>
-				{/* Sidebar Filters Skeleton */}
 				<div className='xl:col-span-1'>
 					<div className='sticky top-32 flex flex-col gap-6'>
-						{/* Search/Filter inputs skeleton */}
 						<div className='bg-white rounded-2xl flex flex-col gap-6'>
 							<div className='flex flex-col gap-2'>
 								<SkeletonLoader className='w-24 h-5 rounded' />
@@ -35,11 +33,8 @@ export function ProjectsSkeleton({ title = 'Дома из клееного бр�
 					</div>
 				</div>
 
-				{/* Projects Grid Skeleton */}
 				<div className='xl:col-span-4'>
-					{/* Top Bar with Tags and Sorting Skeleton */}
 					<div>
-						{/* Tags */}
 						<div className='grid grid-cols-1 md:grid-cols-2 gap-5'>
 							{Array.from({ length: 6 }).map((_, idx) => (
 								<div
@@ -58,12 +53,10 @@ export function ProjectsSkeleton({ title = 'Дома из клееного бр�
 											className='w-30 h-6 mb-1 rounded-lg'
 										/>
 										<div className='flex flex-wrap gap-x-8 gap-y-2.5'>
-											{
-												<SkeletonLoader
-													count={4}
-													className='w-22 h-6 rounded-lg'
-												/>
-											}
+											<SkeletonLoader
+												count={4}
+												className='w-22 h-6 rounded-lg'
+											/>
 										</div>
 									</div>
 								</div>

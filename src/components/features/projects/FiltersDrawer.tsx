@@ -2,7 +2,10 @@
 
 import { useEffect, useState } from 'react';
 
-import { ProjectSidebar, ProjectSidebarProps } from '@/components/features/projects/ProjectSidebar';
+import {
+	ProjectSidebar,
+	ProjectSidebarProps
+} from '@/components/features/projects/ProjectsSidebar';
 import { FiltersIcon } from '@/components/ui/Icons';
 
 import { cn } from '@/lib/utils';

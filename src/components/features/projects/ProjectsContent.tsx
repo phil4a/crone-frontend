@@ -2,8 +2,8 @@
 
 import { ProjectCardDetailed } from '@/components/common/projects/ProjectCardDetailed';
 import { FiltersDrawer } from '@/components/features/projects/FiltersDrawer';
-import { ProjectSidebar } from '@/components/features/projects/ProjectSidebar';
-import { ProjectSortPopover } from '@/components/features/projects/ProjectSortPopover';
+import { ProjectSidebar } from '@/components/features/projects/ProjectsSidebar';
+import { ProjectSortPopover } from '@/components/features/projects/ProjectsSortPopover';
 import { HeaderThemeObserver } from '@/components/layout/HeaderThemeObserver';
 import { Button } from '@/components/ui/Button';
 import { Pagination } from '@/components/ui/Pagination';
@@ -17,6 +17,7 @@ import { useProjectStats } from '@/hooks/projects/useProjectStats';
 import { useProjectTags } from '@/hooks/projects/useProjectTags';
 import { useProjects } from '@/hooks/projects/useProjects';
 
+import { ProjectsText } from './ProjectsText';
 import { pluralizeProjects } from '@/lib/formatters/pluralize';
 import { cn } from '@/lib/utils';
 
@@ -169,6 +170,7 @@ export function ProjectsContent() {
 					)}
 				</div>
 			</div>
+			<ProjectsText tag={tag} />
 		</main>
 	);
 }

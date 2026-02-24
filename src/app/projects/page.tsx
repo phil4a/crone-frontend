@@ -5,7 +5,7 @@ import { ProjectsContent } from '@/components/features/projects/ProjectsContent'
 import { ProjectsSkeleton } from '@/components/features/projects/ProjectsSkeleton';
 
 import { PAGE } from '@/config/pages.config';
-import { SITE_CONFIG } from '@/config/site.config';
+import { PAGES_SEO } from '@/config/seo.config';
 
 import { TAG_SEO_TITLES } from '@/hooks/projects/useProjectTags';
 
@@ -21,12 +21,12 @@ const TAG_META: Record<
 	}
 > = {
 	spa: {
-		title: 'Бани из клееного бруса под ключ в Новосибирске | Крона Групп',
+		title: 'Бани из клееного бруса под ключ в Новосибирске',
 		description:
 			'Бани из клееного бруса под ключ от Крона Групп в Новосибирске и по всей России. Индивидуальные проекты, комфортный микроклимат, долговечные и эстетичные банные комплексы.'
 	},
 	'kommercheskaya-nedvizhimost': {
-		title: 'Коммерческие объекты из клееного бруса для бизнеса | Крона Групп',
+		title: 'Коммерческие объекты из клееного бруса для бизнеса',
 		description:
 			'Коммерческие объекты из клееного бруса: гостиницы, рестораны, офисы и SPA-комплексы. Проектирование и строительство под ключ от Крона Групп в Новосибирске и регионах России.'
 	}
@@ -36,8 +36,8 @@ export async function generateMetadata(props: PageProps): Promise<Metadata> {
 	const searchParams = await props.searchParams;
 	const tag = typeof searchParams.tag === 'string' ? searchParams.tag : undefined;
 
-	const baseTitle = SITE_CONFIG.metadata.title;
-	const baseDescription = SITE_CONFIG.metadata.description;
+	const baseTitle = PAGES_SEO.projects.title;
+	const baseDescription = PAGES_SEO.projects.metaDesc;
 
 	const tagMeta = tag ? TAG_META[tag] : undefined;
 

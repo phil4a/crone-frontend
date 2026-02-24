@@ -40,7 +40,6 @@ query GetProjects(
 			id
 			databaseId
 			title
-
 			slug
 			featuredImage {
 				node {
@@ -57,6 +56,10 @@ query GetProjects(
 				shortDescription
 			}
 			projectLikes
+			seo {
+				title
+				metaDesc
+			}
 			tags {
 				nodes {
 					name

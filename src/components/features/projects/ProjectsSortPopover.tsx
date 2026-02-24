@@ -93,7 +93,7 @@ export function ProjectSortPopover({ sort, onChange }: ProjectSortPopoverProps) 
 						<div className='flex items-center gap-2'>
 							{/* Desktop: текст + иконка площади */}
 							<div className='hidden md:inline-flex items-center'>
-								<span>{getLabel(sort)}</span>
+								<span className='mr-1'>{getLabel(sort)}</span>
 								{sort === 'area_asc' && (
 									<span className='hidden md:inline'>
 										<AreaSortIcon direction='asc' />

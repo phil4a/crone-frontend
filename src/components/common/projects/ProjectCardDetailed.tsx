@@ -54,11 +54,13 @@ export function ProjectCardDetailed({ project }: ProjectCardDetailedProps) {
 						{project.title}
 					</h5>
 					<div className='flex flex-wrap gap-x-8 gap-y-2.5'>
-						<ProjectCardIcon type='area'>{area} м²</ProjectCardIcon>
-						<ProjectCardIcon type='floor'>
-							{floor} {floorText}
-						</ProjectCardIcon>
-						<ProjectCardIcon type='year'>{year}</ProjectCardIcon>
+						{area === 0 ? null : <ProjectCardIcon type='area'>{area} м²</ProjectCardIcon>}
+						{floor === 0 ? null : (
+							<ProjectCardIcon type='floor'>
+								{floor} {floorText}
+							</ProjectCardIcon>
+						)}
+						{year === 0 ? null : <ProjectCardIcon type='year'>{year}</ProjectCardIcon>}
 						<ProjectCardIcon type='city'>{city}</ProjectCardIcon>
 					</div>
 					<p className='text-main'>{project.shortDescription}</p>

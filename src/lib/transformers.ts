@@ -148,9 +148,36 @@ export function transformGraphQLProject(post: GraphQLProject): Project {
 			fireplace: false
 		},
 		galleries: {
-			plans: [],
-			process: [],
-			result: []
+			plans:
+				fields?.plansGallery?.nodes
+					?.filter(node => node.sourceUrl)
+					.map((node, idx) => ({
+						id: idx,
+						url: node.sourceUrl || '',
+						width: 0,
+						height: 0,
+						alt: ''
+					})) || [],
+			process:
+				fields?.processGallery?.nodes
+					?.filter(node => node.sourceUrl)
+					.map((node, idx) => ({
+						id: idx,
+						url: node.sourceUrl || '',
+						width: 0,
+						height: 0,
+						alt: ''
+					})) || [],
+			result:
+				fields?.resultGallery?.nodes
+					?.filter(node => node.sourceUrl)
+					.map((node, idx) => ({
+						id: idx,
+						url: node.sourceUrl || '',
+						width: 0,
+						height: 0,
+						alt: ''
+					})) || []
 		},
 		seo: {
 			title: post.title || '',

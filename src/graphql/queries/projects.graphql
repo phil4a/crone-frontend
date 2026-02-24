@@ -54,6 +54,21 @@ query GetProjects(
 				year
 				city
 				shortDescription
+				plansGallery {
+					nodes {
+						sourceUrl
+					}
+				}
+				processGallery {
+					nodes {
+						sourceUrl
+					}
+				}
+				resultGallery {
+					nodes {
+						sourceUrl
+					}
+				}
 			}
 			projectLikes
 			seo {

@@ -10531,7 +10531,7 @@ export type GetProjectsQueryVariables = Exact<{
 }>;
 
 
-export type GetProjectsQuery = { __typename?: 'RootQuery', posts?: { __typename?: 'RootQueryToPostConnection', found?: number | null, pageInfo: { __typename?: 'RootQueryToPostConnectionPageInfo', hasNextPage: boolean, endCursor?: string | null }, nodes: Array<{ __typename?: 'Post', id: string, databaseId: number, title?: string | null, slug?: string | null, projectLikes?: number | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node: { __typename?: 'MediaItem', sourceUrl?: string | null } } | null, projectFields?: { __typename?: 'ProjectFields', area?: string | null, floor?: string | null, bedrooms?: string | null, status?: Array<string | null> | null, year?: number | null, city?: string | null, shortDescription?: string | null } | null, seo?: { __typename?: 'PostTypeSEO', title?: string | null, metaDesc?: string | null } | null, tags?: { __typename?: 'PostToTagConnection', nodes: Array<{ __typename?: 'Tag', name?: string | null, slug?: string | null }> } | null }> } | null };
+export type GetProjectsQuery = { __typename?: 'RootQuery', posts?: { __typename?: 'RootQueryToPostConnection', found?: number | null, pageInfo: { __typename?: 'RootQueryToPostConnectionPageInfo', hasNextPage: boolean, endCursor?: string | null }, nodes: Array<{ __typename?: 'Post', id: string, databaseId: number, title?: string | null, slug?: string | null, projectLikes?: number | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node: { __typename?: 'MediaItem', sourceUrl?: string | null } } | null, projectFields?: { __typename?: 'ProjectFields', area?: string | null, floor?: string | null, bedrooms?: string | null, status?: Array<string | null> | null, year?: number | null, city?: string | null, shortDescription?: string | null, plansGallery?: { __typename?: 'AcfMediaItemConnection', nodes: Array<{ __typename?: 'MediaItem', sourceUrl?: string | null }> } | null, processGallery?: { __typename?: 'AcfMediaItemConnection', nodes: Array<{ __typename?: 'MediaItem', sourceUrl?: string | null }> } | null, resultGallery?: { __typename?: 'AcfMediaItemConnection', nodes: Array<{ __typename?: 'MediaItem', sourceUrl?: string | null }> } | null } | null, seo?: { __typename?: 'PostTypeSEO', title?: string | null, metaDesc?: string | null } | null, tags?: { __typename?: 'PostToTagConnection', nodes: Array<{ __typename?: 'Tag', name?: string | null, slug?: string | null }> } | null }> } | null };
 
 export type GetTagsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -10596,6 +10596,21 @@ export const GetProjectsDocument = `
         year
         city
         shortDescription
+        plansGallery {
+          nodes {
+            sourceUrl
+          }
+        }
+        processGallery {
+          nodes {
+            sourceUrl
+          }
+        }
+        resultGallery {
+          nodes {
+            sourceUrl
+          }
+        }
       }
       projectLikes
       seo {

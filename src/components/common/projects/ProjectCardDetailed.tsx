@@ -16,6 +16,10 @@ export function ProjectCardDetailed({ project }: ProjectCardDetailedProps) {
 
 	const floorText = floor === 1 ? 'этаж' : floor >= 2 && floor <= 4 ? 'этажа' : 'этажей';
 
+	// Logic for displaying the image: result -> process -> coverImage
+	const displayImage =
+		project.galleries.result[0] || project.galleries.process[0] || project.coverImage;
+
 	return (
 		<li className='relative group flex flex-col w-full'>
 			<Badge
@@ -35,10 +39,10 @@ export function ProjectCardDetailed({ project }: ProjectCardDetailedProps) {
 				className='group flex flex-col w-full'
 			>
 				<div className='relative w-full aspect-4/3 lg:aspect-video overflow-hidden rounded-lg hover:scale-[1.0125] duration-300 transition-transform will-change-transform'>
-					{project.coverImage ? (
+					{displayImage ? (
 						<Image
-							src={project.coverImage.url}
-							alt={`Изображение проекта «${project.title}»`}
+							src={displayImage.url}
+							alt={displayImage.alt || `Изображение проекта «${project.title}»`}
 							fill
 							className='object-cover'
 							sizes='(max-width: 640px) 100vw, (max-width: 992px) 50vw, 33vw'

@@ -16,18 +16,14 @@ export function FiltersDrawer({ filters, onApply, stats }: FiltersDrawerProps) {
 	const [isOpen, setIsOpen] = useState(false);
 
 	useEffect(() => {
-		if (typeof document === 'undefined') return;
-
-		const originalOverflow = document.body.style.overflow;
-
 		if (isOpen) {
 			document.body.style.overflow = 'hidden';
 		} else {
-			document.body.style.overflow = originalOverflow;
+			document.body.style.overflow = '';
 		}
 
 		return () => {
-			document.body.style.overflow = originalOverflow;
+			document.body.style.overflow = '';
 		};
 	}, [isOpen]);
 

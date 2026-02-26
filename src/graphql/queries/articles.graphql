@@ -1,0 +1,45 @@
+fragment ArticleFields on Post {
+	id
+	databaseId
+	title
+	slug
+	date
+	categories {
+		nodes {
+			name
+			slug
+		}
+	}
+	featuredImage {
+		node {
+			sourceUrl
+		}
+	}
+	articlesField {
+		shortDescription
+	}
+	seo {
+		title
+		metaDesc
+	}
+}
+
+query GetArticles($first: Int, $after: String, $categoryName: String, $offset: Int) {
+	posts(first: $first, after: $after, where: { categoryName: $categoryName, offset: $offset }) {
+		pageInfo {
+			hasNextPage
+			endCursor
+		}
+		found
+		nodes {
+			...ArticleFields
+		}
+	}
+}
+
+query GetArticleBySlug($slug: ID!) {
+	post(id: $slug, idType: SLUG) {
+		...ArticleFields
+		content
+	}
+}

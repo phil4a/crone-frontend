@@ -69,6 +69,33 @@ export type AcfMediaItemConnectionPageInfo = MediaItemConnectionPageInfo & PageI
   startCursor?: Maybe<Scalars['String']['output']>;
 };
 
+/** The &quot;ArticlesField&quot; Field Group. Added to the Schema by &quot;WPGraphQL for ACF&quot;. */
+export type ArticlesField = AcfFieldGroup & AcfFieldGroupFields & ArticlesField_Fields & {
+  __typename?: 'ArticlesField';
+  /**
+   * The name of the field group
+   * @deprecated Use __typename instead
+   */
+  fieldGroupName?: Maybe<Scalars['String']['output']>;
+  /** Field of the &quot;wysiwyg&quot; Field Type added to the schema as part of the &quot;ArticlesField&quot; Field Group */
+  shortDescription?: Maybe<Scalars['String']['output']>;
+  /** Field of the &quot;url&quot; Field Type added to the schema as part of the &quot;ArticlesField&quot; Field Group */
+  vkVideoUrl?: Maybe<Scalars['String']['output']>;
+};
+
+/** Interface representing fields of the ACF &quot;ArticlesField&quot; Field Group */
+export type ArticlesField_Fields = {
+  /**
+   * The name of the field group
+   * @deprecated Use __typename instead
+   */
+  fieldGroupName?: Maybe<Scalars['String']['output']>;
+  /** Field of the &quot;wysiwyg&quot; Field Type added to the schema as part of the &quot;ArticlesField&quot; Field Group */
+  shortDescription?: Maybe<Scalars['String']['output']>;
+  /** Field of the &quot;url&quot; Field Type added to the schema as part of the &quot;ArticlesField&quot; Field Group */
+  vkVideoUrl?: Maybe<Scalars['String']['output']>;
+};
+
 /** Avatars are profile images for users. WordPress by default uses the Gravatar service to host and fetch avatars from. */
 export type Avatar = {
   __typename?: 'Avatar';
@@ -4288,13 +4315,15 @@ export enum PluginStatusEnum {
 }
 
 /** A chronological content entry typically used for blog posts, news articles, or similar date-based content. */
-export type Post = ContentNode & DatabaseIdentifier & MenuItemLinkable & Node & NodeWithAuthor & NodeWithComments & NodeWithContentEditor & NodeWithExcerpt & NodeWithFeaturedImage & NodeWithRevisions & NodeWithTemplate & NodeWithTitle & NodeWithTrackbacks & Previewable & UniformResourceIdentifiable & WithAcfProjectFields & {
+export type Post = ContentNode & DatabaseIdentifier & MenuItemLinkable & Node & NodeWithAuthor & NodeWithComments & NodeWithContentEditor & NodeWithExcerpt & NodeWithFeaturedImage & NodeWithRevisions & NodeWithTemplate & NodeWithTitle & NodeWithTrackbacks & Previewable & UniformResourceIdentifiable & WithAcfArticlesField & WithAcfProjectFields & {
   __typename?: 'Post';
   /**
    * The ancestors of the content node.
    * @deprecated This content type is not hierarchical and typically will not have ancestors
    */
   ancestors?: Maybe<PostToPostConnection>;
+  /** Fields of the ArticlesField ACF Field Group */
+  articlesField?: Maybe<ArticlesField>;
   /** Connection between the NodeWithAuthor type and the User type */
   author?: Maybe<NodeWithAuthorToUserConnectionEdge>;
   /** The database identifier of the author of the node */
@@ -10490,6 +10519,12 @@ export type WpPageInfo = {
   startCursor?: Maybe<Scalars['String']['output']>;
 };
 
+/** Provides access to fields of the &quot;ArticlesField&quot; ACF Field Group via the &quot;articlesField&quot; field */
+export type WithAcfArticlesField = {
+  /** Fields of the ArticlesField ACF Field Group */
+  articlesField?: Maybe<ArticlesField>;
+};
+
 /** Provides access to fields of the &quot;ProjectFields&quot; ACF Field Group via the &quot;projectFields&quot; field */
 export type WithAcfProjectFields = {
   /** Fields of the ProjectFields ACF Field Group */
@@ -10513,6 +10548,32 @@ export type LikeProjectMutationVariables = Exact<{
 
 
 export type LikeProjectMutation = { __typename?: 'RootMutation', likeProject?: { __typename?: 'LikeProjectPayload', likes?: number | null } | null };
+
+export type ArticleFieldsFragment = { __typename?: 'Post', id: string, databaseId: number, title?: string | null, slug?: string | null, date?: string | null, categories?: { __typename?: 'PostToCategoryConnection', nodes: Array<{ __typename?: 'Category', name?: string | null, slug?: string | null }> } | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node: { __typename?: 'MediaItem', sourceUrl?: string | null } } | null, articlesField?: { __typename?: 'ArticlesField', shortDescription?: string | null } | null, seo?: { __typename?: 'PostTypeSEO', title?: string | null, metaDesc?: string | null } | null };
+
+export type GetArticlesQueryVariables = Exact<{
+  first?: InputMaybe<Scalars['Int']['input']>;
+  after?: InputMaybe<Scalars['String']['input']>;
+  categoryName?: InputMaybe<Scalars['String']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+
+export type GetArticlesQuery = { __typename?: 'RootQuery', posts?: { __typename?: 'RootQueryToPostConnection', found?: number | null, pageInfo: { __typename?: 'RootQueryToPostConnectionPageInfo', hasNextPage: boolean, endCursor?: string | null }, nodes: Array<{ __typename?: 'Post', id: string, databaseId: number, title?: string | null, slug?: string | null, date?: string | null, categories?: { __typename?: 'PostToCategoryConnection', nodes: Array<{ __typename?: 'Category', name?: string | null, slug?: string | null }> } | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node: { __typename?: 'MediaItem', sourceUrl?: string | null } } | null, articlesField?: { __typename?: 'ArticlesField', shortDescription?: string | null } | null, seo?: { __typename?: 'PostTypeSEO', title?: string | null, metaDesc?: string | null } | null }> } | null };
+
+export type GetArticleBySlugQueryVariables = Exact<{
+  slug: Scalars['ID']['input'];
+}>;
+
+
+export type GetArticleBySlugQuery = { __typename?: 'RootQuery', post?: { __typename?: 'Post', content?: string | null, id: string, databaseId: number, title?: string | null, slug?: string | null, date?: string | null, categories?: { __typename?: 'PostToCategoryConnection', nodes: Array<{ __typename?: 'Category', name?: string | null, slug?: string | null }> } | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node: { __typename?: 'MediaItem', sourceUrl?: string | null } } | null, articlesField?: { __typename?: 'ArticlesField', shortDescription?: string | null } | null, seo?: { __typename?: 'PostTypeSEO', title?: string | null, metaDesc?: string | null } | null } | null };
+
+export type GetChildCategoriesQueryVariables = Exact<{
+  slug: Scalars['ID']['input'];
+}>;
+
+
+export type GetChildCategoriesQuery = { __typename?: 'RootQuery', category?: { __typename?: 'Category', databaseId: number, name?: string | null, slug?: string | null, children?: { __typename?: 'CategoryToCategoryConnection', nodes: Array<{ __typename?: 'Category', id: string, databaseId: number, name?: string | null, slug?: string | null, count?: number | null }> } | null } | null };
 
 export type GetProjectsQueryVariables = Exact<{
   first?: InputMaybe<Scalars['Int']['input']>;
@@ -10544,7 +10605,33 @@ export type GetProjectStatsQueryVariables = Exact<{ [key: string]: never; }>;
 export type GetProjectStatsQuery = { __typename?: 'RootQuery', projectStats?: { __typename?: 'ProjectStats', minArea?: number | null, maxArea?: number | null, minBedrooms?: number | null, maxBedrooms?: number | null, minFloor?: number | null, maxFloor?: number | null } | null };
 
 
-
+export const ArticleFieldsFragmentDoc = `
+    fragment ArticleFields on Post {
+  id
+  databaseId
+  title
+  slug
+  date
+  categories {
+    nodes {
+      name
+      slug
+    }
+  }
+  featuredImage {
+    node {
+      sourceUrl
+    }
+  }
+  articlesField {
+    shortDescription
+  }
+  seo {
+    title
+    metaDesc
+  }
+}
+    `;
 export const LikeProjectDocument = `
     mutation LikeProject($input: LikeProjectInput!) {
   likeProject(input: $input) {
@@ -10565,6 +10652,170 @@ export const useLikeProjectMutation = <
     ...options
   }
     )};
+
+export const GetArticlesDocument = `
+    query GetArticles($first: Int, $after: String, $categoryName: String, $offset: Int) {
+  posts(
+    first: $first
+    after: $after
+    where: {categoryName: $categoryName, offset: $offset}
+  ) {
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+    found
+    nodes {
+      ...ArticleFields
+    }
+  }
+}
+    ${ArticleFieldsFragmentDoc}`;
+
+export const useGetArticlesQuery = <
+      TData = GetArticlesQuery,
+      TError = unknown
+    >(
+      variables?: GetArticlesQueryVariables,
+      options?: Omit<UseQueryOptions<GetArticlesQuery, TError, TData>, 'queryKey'> & { queryKey?: UseQueryOptions<GetArticlesQuery, TError, TData>['queryKey'] }
+    ) => {
+    
+    return useQuery<GetArticlesQuery, TError, TData>(
+      {
+    queryKey: variables === undefined ? ['GetArticles'] : ['GetArticles', variables],
+    queryFn: fetcher<GetArticlesQuery, GetArticlesQueryVariables>(GetArticlesDocument, variables),
+    ...options
+  }
+    )};
+
+useGetArticlesQuery.getKey = (variables?: GetArticlesQueryVariables) => variables === undefined ? ['GetArticles'] : ['GetArticles', variables];
+
+export const useInfiniteGetArticlesQuery = <
+      TData = InfiniteData<GetArticlesQuery>,
+      TError = unknown
+    >(
+      variables: GetArticlesQueryVariables,
+      options: Omit<UseInfiniteQueryOptions<GetArticlesQuery, TError, TData>, 'queryKey'> & { queryKey?: UseInfiniteQueryOptions<GetArticlesQuery, TError, TData>['queryKey'] }
+    ) => {
+    
+    return useInfiniteQuery<GetArticlesQuery, TError, TData>(
+      (() => {
+    const { queryKey: optionsQueryKey, ...restOptions } = options;
+    return {
+      queryKey: optionsQueryKey ?? variables === undefined ? ['GetArticles.infinite'] : ['GetArticles.infinite', variables],
+      queryFn: (metaData) => fetcher<GetArticlesQuery, GetArticlesQueryVariables>(GetArticlesDocument, {...variables, ...(metaData.pageParam ?? {})})(),
+      ...restOptions
+    }
+  })()
+    )};
+
+useInfiniteGetArticlesQuery.getKey = (variables?: GetArticlesQueryVariables) => variables === undefined ? ['GetArticles.infinite'] : ['GetArticles.infinite', variables];
+
+export const GetArticleBySlugDocument = `
+    query GetArticleBySlug($slug: ID!) {
+  post(id: $slug, idType: SLUG) {
+    ...ArticleFields
+    content
+  }
+}
+    ${ArticleFieldsFragmentDoc}`;
+
+export const useGetArticleBySlugQuery = <
+      TData = GetArticleBySlugQuery,
+      TError = unknown
+    >(
+      variables: GetArticleBySlugQueryVariables,
+      options?: Omit<UseQueryOptions<GetArticleBySlugQuery, TError, TData>, 'queryKey'> & { queryKey?: UseQueryOptions<GetArticleBySlugQuery, TError, TData>['queryKey'] }
+    ) => {
+    
+    return useQuery<GetArticleBySlugQuery, TError, TData>(
+      {
+    queryKey: ['GetArticleBySlug', variables],
+    queryFn: fetcher<GetArticleBySlugQuery, GetArticleBySlugQueryVariables>(GetArticleBySlugDocument, variables),
+    ...options
+  }
+    )};
+
+useGetArticleBySlugQuery.getKey = (variables: GetArticleBySlugQueryVariables) => ['GetArticleBySlug', variables];
+
+export const useInfiniteGetArticleBySlugQuery = <
+      TData = InfiniteData<GetArticleBySlugQuery>,
+      TError = unknown
+    >(
+      variables: GetArticleBySlugQueryVariables,
+      options: Omit<UseInfiniteQueryOptions<GetArticleBySlugQuery, TError, TData>, 'queryKey'> & { queryKey?: UseInfiniteQueryOptions<GetArticleBySlugQuery, TError, TData>['queryKey'] }
+    ) => {
+    
+    return useInfiniteQuery<GetArticleBySlugQuery, TError, TData>(
+      (() => {
+    const { queryKey: optionsQueryKey, ...restOptions } = options;
+    return {
+      queryKey: optionsQueryKey ?? ['GetArticleBySlug.infinite', variables],
+      queryFn: (metaData) => fetcher<GetArticleBySlugQuery, GetArticleBySlugQueryVariables>(GetArticleBySlugDocument, {...variables, ...(metaData.pageParam ?? {})})(),
+      ...restOptions
+    }
+  })()
+    )};
+
+useInfiniteGetArticleBySlugQuery.getKey = (variables: GetArticleBySlugQueryVariables) => ['GetArticleBySlug.infinite', variables];
+
+export const GetChildCategoriesDocument = `
+    query GetChildCategories($slug: ID!) {
+  category(id: $slug, idType: SLUG) {
+    databaseId
+    name
+    slug
+    children {
+      nodes {
+        id
+        databaseId
+        name
+        slug
+        count
+      }
+    }
+  }
+}
+    `;
+
+export const useGetChildCategoriesQuery = <
+      TData = GetChildCategoriesQuery,
+      TError = unknown
+    >(
+      variables: GetChildCategoriesQueryVariables,
+      options?: Omit<UseQueryOptions<GetChildCategoriesQuery, TError, TData>, 'queryKey'> & { queryKey?: UseQueryOptions<GetChildCategoriesQuery, TError, TData>['queryKey'] }
+    ) => {
+    
+    return useQuery<GetChildCategoriesQuery, TError, TData>(
+      {
+    queryKey: ['GetChildCategories', variables],
+    queryFn: fetcher<GetChildCategoriesQuery, GetChildCategoriesQueryVariables>(GetChildCategoriesDocument, variables),
+    ...options
+  }
+    )};
+
+useGetChildCategoriesQuery.getKey = (variables: GetChildCategoriesQueryVariables) => ['GetChildCategories', variables];
+
+export const useInfiniteGetChildCategoriesQuery = <
+      TData = InfiniteData<GetChildCategoriesQuery>,
+      TError = unknown
+    >(
+      variables: GetChildCategoriesQueryVariables,
+      options: Omit<UseInfiniteQueryOptions<GetChildCategoriesQuery, TError, TData>, 'queryKey'> & { queryKey?: UseInfiniteQueryOptions<GetChildCategoriesQuery, TError, TData>['queryKey'] }
+    ) => {
+    
+    return useInfiniteQuery<GetChildCategoriesQuery, TError, TData>(
+      (() => {
+    const { queryKey: optionsQueryKey, ...restOptions } = options;
+    return {
+      queryKey: optionsQueryKey ?? ['GetChildCategories.infinite', variables],
+      queryFn: (metaData) => fetcher<GetChildCategoriesQuery, GetChildCategoriesQueryVariables>(GetChildCategoriesDocument, {...variables, ...(metaData.pageParam ?? {})})(),
+      ...restOptions
+    }
+  })()
+    )};
+
+useInfiniteGetChildCategoriesQuery.getKey = (variables: GetChildCategoriesQueryVariables) => ['GetChildCategories.infinite', variables];
 
 export const GetProjectsDocument = `
     query GetProjects($first: Int, $after: String, $tag: String, $minArea: Float, $maxArea: Float, $floor: Float, $floors: [Float], $minBedrooms: Float, $maxBedrooms: Float, $projectStatus: String, $projectStatuses: [String], $sort: String, $offset: Int) {

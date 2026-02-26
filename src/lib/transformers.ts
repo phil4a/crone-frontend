@@ -1,4 +1,5 @@
-import { GetProjectsQuery } from '@/graphql/generated';
+import { GetArticlesQuery, GetProjectsQuery } from '@/graphql/generated';
+import { Article } from '@/types/article.types';
 import { Project, ProjectImage } from '@/types/project.types';
 import { WPEmbedded, WPEmbeddedMedia, WPProject } from '@/types/wp.types';
 
@@ -26,6 +27,39 @@ function mapWPMediaToProjectImage(media: WPEmbeddedMedia): ProjectImage {
 		width: media.media_details?.width,
 		height: media.media_details?.height,
 		alt: media.alt_text || media.title?.rendered || ''
+	};
+}
+
+type GraphQLArticle = NonNullable<NonNullable<GetArticlesQuery['posts']>['nodes']>[0] & { content?: string | null };
+
+export function transformGraphQLArticle(post: GraphQLArticle): Article {
+	const categories = post.categories?.nodes;
+	const lastCategory = categories && categories.length > 0 ? categories[categories.length - 1] : null;
+
+	return {
+		id: post.databaseId,
+		globalId: post.id,
+		title: post.title || '',
+		slug: post.slug || '',
+		content: post.content || '',
+		shortDescription: post.articlesField?.shortDescription || '',
+		date: post.date || '',
+		category: lastCategory
+			? {
+					name: lastCategory.name || '',
+					slug: lastCategory.slug || ''
+				}
+			: null,
+		coverImage: post.featuredImage?.node?.sourceUrl
+			? {
+					url: post.featuredImage.node.sourceUrl,
+					alt: post.title || ''
+				}
+			: null,
+		seo: {
+			title: post.seo?.title || post.title || '',
+			description: post.seo?.metaDesc || ''
+		}
 	};
 }
 

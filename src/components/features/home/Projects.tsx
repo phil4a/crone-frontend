@@ -27,11 +27,12 @@ export function Projects() {
 						Наши проекты
 					</Title>
 					<Button
-						asChild
+						as={Link}
+						href={PAGE.OBJECTS}
 						variant='outline'
 						className='hidden md:inline-flex w-full md:w-auto h-11 md:h-12.5 px-8'
 					>
-						<Link href={PAGE.OBJECTS}>Смотреть проекты</Link>
+						Смотреть проекты
 					</Button>
 				</div>
 
@@ -69,11 +70,12 @@ export function Projects() {
 					))}
 				</div>
 				<Button
-					asChild
+					as={Link}
+					href={PAGE.OBJECTS}
 					variant='outline'
 					className='w-full md:hidden md:w-auto h-11 md:h-12.5 px-8'
 				>
-					<Link href={PAGE.OBJECTS}>Смотреть проекты</Link>
+					Смотреть проекты
 				</Button>
 			</div>
 		</section>

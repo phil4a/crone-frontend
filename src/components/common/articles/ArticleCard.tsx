@@ -13,17 +13,17 @@ interface ArticleCardProps {
 
 export function ArticleCard({ article }: ArticleCardProps) {
 	return (
-		<article className='flex flex-col h-full bg-white rounded-lg overflow-hidden group hover:shadow-lg transition-shadow duration-300'>
+		<article className='flex flex-col h-full bg-white rounded-lg border border-brown/20 overflow-hidden group'>
 			<Link
 				href={`/articles/${article.slug}`}
-				className='relative w-full aspect-video overflow-hidden'
+				className='relative w-full aspect-4/3 overflow-hidden'
 			>
 				{article.coverImage ? (
 					<Image
 						src={article.coverImage.url}
 						alt={article.coverImage.alt || article.title}
 						fill
-						className='object-cover transition-transform duration-500 group-hover:scale-105'
+						className='object-cover  transition-transform duration-500 group-hover:scale-102'
 						sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
 					/>
 				) : (
@@ -34,17 +34,22 @@ export function ArticleCard({ article }: ArticleCardProps) {
 			</Link>
 
 			<div className='flex flex-col grow p-6'>
-				<div className='flex items-center gap-4 mb-4 text-xs text-gray-500 uppercase font-medium tracking-wider'>
+				<div className='flex items-center gap-4 mb-4 text-xs text-gray-500  font-medium tracking-wider'>
 					<Badge
-						variant='outline'
-						className='bg-beige/10 text-beige border-none px-2 py-1'
+						variant='beige'
+						className='font-normal'
 					>
 						{article.category?.name || 'Статьи'}
 					</Badge>
-					<time dateTime={article.date}>{formatDate(article.date)}</time>
+					<time
+						className='uppercase'
+						dateTime={article.date}
+					>
+						{formatDate(article.date)}
+					</time>
 				</div>
 
-				<h3 className='text-xl font-bold mb-3 leading-tight group-hover:text-beige transition-colors'>
+				<h3 className='text-2xl font-normal mb-3 group-hover:text-brown transition-colors'>
 					<Link href={`/articles/${article.slug}`}>{article.title}</Link>
 				</h3>
 
@@ -57,6 +62,7 @@ export function ArticleCard({ article }: ArticleCardProps) {
 					as={Link}
 					href={`/articles/${article.slug}`}
 					variant='default'
+					size='lg'
 					className='w-full mt-auto'
 				>
 					Читать далее

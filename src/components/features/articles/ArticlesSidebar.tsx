@@ -1,6 +1,8 @@
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 
+import { SkeletonLoader } from '@/components/ui/SkeletonLoader';
+
 import { useArticleCategories } from '@/hooks/articles/useArticleCategories';
 
 import { cn } from '@/lib/utils';
@@ -29,12 +31,12 @@ export function ArticlesSidebar({ className }: ArticlesSidebarProps) {
 						Все
 					</Link>
 				</li>
-				{isLoading &&
-					Array.from({ length: 3 }).map((_, i) => (
-						<li key={i}>
-							<div className='h-5 w-24 bg-gray-200 animate-pulse rounded' />
-						</li>
-					))}
+				{isLoading && (
+					<SkeletonLoader
+						count={3}
+						className='h-5 w-24 rounded'
+					/>
+				)}
 				{categories?.map(category => (
 					<li key={category.slug}>
 						<Link

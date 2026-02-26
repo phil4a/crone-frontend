@@ -65,17 +65,15 @@ export function ArticlesContent() {
 						{getTitle()}
 					</Title>
 					{isLoading ? (
-						<div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6'>
-							{Array.from({ length: 6 }).map((_, i) => (
-								<SkeletonLoader
-									key={i}
-									className='aspect-video w-full rounded-lg'
-								/>
-							))}
+						<div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-y-12 gap-x-6 mb-12'>
+							<SkeletonLoader
+								count={6}
+								className='w-full relative h-full aspect-12/16 rounded-lg'
+							/>
 						</div>
 					) : articles.length > 0 ? (
 						<>
-							<div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mb-12'>
+							<div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-y-12 gap-x-6 mb-12'>
 								{articles.map(article => (
 									<ArticleCard
 										key={article.id}

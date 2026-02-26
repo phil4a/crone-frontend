@@ -15,14 +15,14 @@ export function ArticlesSidebar({ className }: ArticlesSidebarProps) {
 	const { categories, isLoading } = useArticleCategories();
 
 	return (
-		<aside className={cn('w-full', className)}>
-			<h3 className='text-lg font-bold mb-6 uppercase'>Категории:</h3>
-			<ul className='flex flex-col gap-4'>
+		<aside className={cn('w-full pt-3', className)}>
+			<h3 className='text-xl font-bold mb-4 lg:mb-6 uppercase'>Категории:</h3>
+			<ul className='flex lg:flex-col gap-x-8 gap-y-3 lg:gap-4 flex-wrap'>
 				<li>
 					<Link
 						href='/articles'
 						className={cn(
-							'text-sm uppercase tracking-wider transition-colors hover:text-beige',
+							'text-lg uppercase tracking-wider transition-colors hover:text-beige',
 							!currentCategory ? 'text-beige font-bold' : 'text-gray-500'
 						)}
 					>
@@ -40,7 +40,7 @@ export function ArticlesSidebar({ className }: ArticlesSidebarProps) {
 						<Link
 							href={`/articles?category=${category.slug}`}
 							className={cn(
-								'text-sm uppercase tracking-wider transition-colors hover:text-beige',
+								'text-lg uppercase tracking-wider transition-colors hover:text-beige',
 								currentCategory === category.slug ? 'text-beige font-bold' : 'text-gray-500'
 							)}
 						>

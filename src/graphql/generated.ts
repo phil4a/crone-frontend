@@ -10575,6 +10575,8 @@ export type GetChildCategoriesQueryVariables = Exact<{
 
 export type GetChildCategoriesQuery = { __typename?: 'RootQuery', category?: { __typename?: 'Category', databaseId: number, name?: string | null, slug?: string | null, children?: { __typename?: 'CategoryToCategoryConnection', nodes: Array<{ __typename?: 'Category', id: string, databaseId: number, name?: string | null, slug?: string | null, count?: number | null }> } | null } | null };
 
+export type ProjectFieldsFragment = { __typename?: 'Post', id: string, databaseId: number, title?: string | null, slug?: string | null, projectLikes?: number | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node: { __typename?: 'MediaItem', sourceUrl?: string | null } } | null, projectFields?: { __typename?: 'ProjectFields', area?: string | null, rooms?: string | null, floor?: string | null, bedrooms?: string | null, bathrooms?: string | null, status?: Array<string | null> | null, year?: number | null, city?: string | null, type?: Array<string | null> | null, terrace?: boolean | null, garage?: boolean | null, sauna?: boolean | null, pool?: boolean | null, fireplace?: boolean | null, shortDescription?: string | null, plansGallery?: { __typename?: 'AcfMediaItemConnection', nodes: Array<{ __typename?: 'MediaItem', sourceUrl?: string | null }> } | null, processGallery?: { __typename?: 'AcfMediaItemConnection', nodes: Array<{ __typename?: 'MediaItem', sourceUrl?: string | null }> } | null, resultGallery?: { __typename?: 'AcfMediaItemConnection', nodes: Array<{ __typename?: 'MediaItem', sourceUrl?: string | null }> } | null } | null, seo?: { __typename?: 'PostTypeSEO', title?: string | null, metaDesc?: string | null } | null, tags?: { __typename?: 'PostToTagConnection', nodes: Array<{ __typename?: 'Tag', name?: string | null, slug?: string | null }> } | null };
+
 export type GetProjectsQueryVariables = Exact<{
   first?: InputMaybe<Scalars['Int']['input']>;
   after?: InputMaybe<Scalars['String']['input']>;
@@ -10592,7 +10594,19 @@ export type GetProjectsQueryVariables = Exact<{
 }>;
 
 
-export type GetProjectsQuery = { __typename?: 'RootQuery', posts?: { __typename?: 'RootQueryToPostConnection', found?: number | null, pageInfo: { __typename?: 'RootQueryToPostConnectionPageInfo', hasNextPage: boolean, endCursor?: string | null }, nodes: Array<{ __typename?: 'Post', id: string, databaseId: number, title?: string | null, slug?: string | null, projectLikes?: number | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node: { __typename?: 'MediaItem', sourceUrl?: string | null } } | null, projectFields?: { __typename?: 'ProjectFields', area?: string | null, floor?: string | null, bedrooms?: string | null, status?: Array<string | null> | null, year?: number | null, city?: string | null, shortDescription?: string | null, plansGallery?: { __typename?: 'AcfMediaItemConnection', nodes: Array<{ __typename?: 'MediaItem', sourceUrl?: string | null }> } | null, processGallery?: { __typename?: 'AcfMediaItemConnection', nodes: Array<{ __typename?: 'MediaItem', sourceUrl?: string | null }> } | null, resultGallery?: { __typename?: 'AcfMediaItemConnection', nodes: Array<{ __typename?: 'MediaItem', sourceUrl?: string | null }> } | null } | null, seo?: { __typename?: 'PostTypeSEO', title?: string | null, metaDesc?: string | null } | null, tags?: { __typename?: 'PostToTagConnection', nodes: Array<{ __typename?: 'Tag', name?: string | null, slug?: string | null }> } | null }> } | null };
+export type GetProjectsQuery = { __typename?: 'RootQuery', posts?: { __typename?: 'RootQueryToPostConnection', found?: number | null, pageInfo: { __typename?: 'RootQueryToPostConnectionPageInfo', hasNextPage: boolean, endCursor?: string | null }, nodes: Array<{ __typename?: 'Post', id: string, databaseId: number, title?: string | null, slug?: string | null, projectLikes?: number | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node: { __typename?: 'MediaItem', sourceUrl?: string | null } } | null, projectFields?: { __typename?: 'ProjectFields', area?: string | null, rooms?: string | null, floor?: string | null, bedrooms?: string | null, bathrooms?: string | null, status?: Array<string | null> | null, year?: number | null, city?: string | null, type?: Array<string | null> | null, terrace?: boolean | null, garage?: boolean | null, sauna?: boolean | null, pool?: boolean | null, fireplace?: boolean | null, shortDescription?: string | null, plansGallery?: { __typename?: 'AcfMediaItemConnection', nodes: Array<{ __typename?: 'MediaItem', sourceUrl?: string | null }> } | null, processGallery?: { __typename?: 'AcfMediaItemConnection', nodes: Array<{ __typename?: 'MediaItem', sourceUrl?: string | null }> } | null, resultGallery?: { __typename?: 'AcfMediaItemConnection', nodes: Array<{ __typename?: 'MediaItem', sourceUrl?: string | null }> } | null } | null, seo?: { __typename?: 'PostTypeSEO', title?: string | null, metaDesc?: string | null } | null, tags?: { __typename?: 'PostToTagConnection', nodes: Array<{ __typename?: 'Tag', name?: string | null, slug?: string | null }> } | null }> } | null };
+
+export type GetProjectBySlugQueryVariables = Exact<{
+  slug: Scalars['ID']['input'];
+}>;
+
+
+export type GetProjectBySlugQuery = { __typename?: 'RootQuery', post?: { __typename?: 'Post', content?: string | null, id: string, databaseId: number, title?: string | null, slug?: string | null, projectLikes?: number | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node: { __typename?: 'MediaItem', sourceUrl?: string | null } } | null, projectFields?: { __typename?: 'ProjectFields', area?: string | null, rooms?: string | null, floor?: string | null, bedrooms?: string | null, bathrooms?: string | null, status?: Array<string | null> | null, year?: number | null, city?: string | null, type?: Array<string | null> | null, terrace?: boolean | null, garage?: boolean | null, sauna?: boolean | null, pool?: boolean | null, fireplace?: boolean | null, shortDescription?: string | null, plansGallery?: { __typename?: 'AcfMediaItemConnection', nodes: Array<{ __typename?: 'MediaItem', sourceUrl?: string | null }> } | null, processGallery?: { __typename?: 'AcfMediaItemConnection', nodes: Array<{ __typename?: 'MediaItem', sourceUrl?: string | null }> } | null, resultGallery?: { __typename?: 'AcfMediaItemConnection', nodes: Array<{ __typename?: 'MediaItem', sourceUrl?: string | null }> } | null } | null, seo?: { __typename?: 'PostTypeSEO', title?: string | null, metaDesc?: string | null } | null, tags?: { __typename?: 'PostToTagConnection', nodes: Array<{ __typename?: 'Tag', name?: string | null, slug?: string | null }> } | null } | null };
+
+export type GetAllProjectSlugsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetAllProjectSlugsQuery = { __typename?: 'RootQuery', posts?: { __typename?: 'RootQueryToPostConnection', nodes: Array<{ __typename?: 'Post', slug?: string | null }> } | null };
 
 export type GetTagsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -10602,7 +10616,7 @@ export type GetTagsQuery = { __typename?: 'RootQuery', tags?: { __typename?: 'Ro
 export type GetProjectStatsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetProjectStatsQuery = { __typename?: 'RootQuery', projectStats?: { __typename?: 'ProjectStats', minArea?: number | null, maxArea?: number | null, minBedrooms?: number | null, maxBedrooms?: number | null, minFloor?: number | null, maxFloor?: number | null } | null };
+export type GetProjectStatsQuery = { __typename?: 'RootQuery', projectStats?: { __typename?: 'ProjectStats', minArea?: number | null, maxArea?: number | null, minBedrooms?: number | null, maxBedrooms?: number | null } | null };
 
 
 export const ArticleFieldsFragmentDoc = `
@@ -10629,6 +10643,62 @@ export const ArticleFieldsFragmentDoc = `
   seo {
     title
     metaDesc
+  }
+}
+    `;
+export const ProjectFieldsFragmentDoc = `
+    fragment ProjectFields on Post {
+  id
+  databaseId
+  title
+  slug
+  featuredImage {
+    node {
+      sourceUrl
+    }
+  }
+  projectFields {
+    area
+    rooms
+    floor
+    bedrooms
+    bathrooms
+    status
+    year
+    city
+    type
+    terrace
+    garage
+    sauna
+    pool
+    fireplace
+    shortDescription
+    plansGallery {
+      nodes {
+        sourceUrl
+      }
+    }
+    processGallery {
+      nodes {
+        sourceUrl
+      }
+    }
+    resultGallery {
+      nodes {
+        sourceUrl
+      }
+    }
+  }
+  projectLikes
+  seo {
+    title
+    metaDesc
+  }
+  tags {
+    nodes {
+      name
+      slug
+    }
   }
 }
     `;
@@ -10830,54 +10900,11 @@ export const GetProjectsDocument = `
       endCursor
     }
     nodes {
-      id
-      databaseId
-      title
-      slug
-      featuredImage {
-        node {
-          sourceUrl
-        }
-      }
-      projectFields {
-        area
-        floor
-        bedrooms
-        status
-        year
-        city
-        shortDescription
-        plansGallery {
-          nodes {
-            sourceUrl
-          }
-        }
-        processGallery {
-          nodes {
-            sourceUrl
-          }
-        }
-        resultGallery {
-          nodes {
-            sourceUrl
-          }
-        }
-      }
-      projectLikes
-      seo {
-        title
-        metaDesc
-      }
-      tags {
-        nodes {
-          name
-          slug
-        }
-      }
+      ...ProjectFields
     }
   }
 }
-    `;
+    ${ProjectFieldsFragmentDoc}`;
 
 export const useGetProjectsQuery = <
       TData = GetProjectsQuery,
@@ -10917,6 +10944,103 @@ export const useInfiniteGetProjectsQuery = <
     )};
 
 useInfiniteGetProjectsQuery.getKey = (variables?: GetProjectsQueryVariables) => variables === undefined ? ['GetProjects.infinite'] : ['GetProjects.infinite', variables];
+
+export const GetProjectBySlugDocument = `
+    query GetProjectBySlug($slug: ID!) {
+  post(id: $slug, idType: SLUG) {
+    ...ProjectFields
+    content
+  }
+}
+    ${ProjectFieldsFragmentDoc}`;
+
+export const useGetProjectBySlugQuery = <
+      TData = GetProjectBySlugQuery,
+      TError = unknown
+    >(
+      variables: GetProjectBySlugQueryVariables,
+      options?: Omit<UseQueryOptions<GetProjectBySlugQuery, TError, TData>, 'queryKey'> & { queryKey?: UseQueryOptions<GetProjectBySlugQuery, TError, TData>['queryKey'] }
+    ) => {
+    
+    return useQuery<GetProjectBySlugQuery, TError, TData>(
+      {
+    queryKey: ['GetProjectBySlug', variables],
+    queryFn: fetcher<GetProjectBySlugQuery, GetProjectBySlugQueryVariables>(GetProjectBySlugDocument, variables),
+    ...options
+  }
+    )};
+
+useGetProjectBySlugQuery.getKey = (variables: GetProjectBySlugQueryVariables) => ['GetProjectBySlug', variables];
+
+export const useInfiniteGetProjectBySlugQuery = <
+      TData = InfiniteData<GetProjectBySlugQuery>,
+      TError = unknown
+    >(
+      variables: GetProjectBySlugQueryVariables,
+      options: Omit<UseInfiniteQueryOptions<GetProjectBySlugQuery, TError, TData>, 'queryKey'> & { queryKey?: UseInfiniteQueryOptions<GetProjectBySlugQuery, TError, TData>['queryKey'] }
+    ) => {
+    
+    return useInfiniteQuery<GetProjectBySlugQuery, TError, TData>(
+      (() => {
+    const { queryKey: optionsQueryKey, ...restOptions } = options;
+    return {
+      queryKey: optionsQueryKey ?? ['GetProjectBySlug.infinite', variables],
+      queryFn: (metaData) => fetcher<GetProjectBySlugQuery, GetProjectBySlugQueryVariables>(GetProjectBySlugDocument, {...variables, ...(metaData.pageParam ?? {})})(),
+      ...restOptions
+    }
+  })()
+    )};
+
+useInfiniteGetProjectBySlugQuery.getKey = (variables: GetProjectBySlugQueryVariables) => ['GetProjectBySlug.infinite', variables];
+
+export const GetAllProjectSlugsDocument = `
+    query GetAllProjectSlugs {
+  posts(first: 1000, where: {categoryName: "project"}) {
+    nodes {
+      slug
+    }
+  }
+}
+    `;
+
+export const useGetAllProjectSlugsQuery = <
+      TData = GetAllProjectSlugsQuery,
+      TError = unknown
+    >(
+      variables?: GetAllProjectSlugsQueryVariables,
+      options?: Omit<UseQueryOptions<GetAllProjectSlugsQuery, TError, TData>, 'queryKey'> & { queryKey?: UseQueryOptions<GetAllProjectSlugsQuery, TError, TData>['queryKey'] }
+    ) => {
+    
+    return useQuery<GetAllProjectSlugsQuery, TError, TData>(
+      {
+    queryKey: variables === undefined ? ['GetAllProjectSlugs'] : ['GetAllProjectSlugs', variables],
+    queryFn: fetcher<GetAllProjectSlugsQuery, GetAllProjectSlugsQueryVariables>(GetAllProjectSlugsDocument, variables),
+    ...options
+  }
+    )};
+
+useGetAllProjectSlugsQuery.getKey = (variables?: GetAllProjectSlugsQueryVariables) => variables === undefined ? ['GetAllProjectSlugs'] : ['GetAllProjectSlugs', variables];
+
+export const useInfiniteGetAllProjectSlugsQuery = <
+      TData = InfiniteData<GetAllProjectSlugsQuery>,
+      TError = unknown
+    >(
+      variables: GetAllProjectSlugsQueryVariables,
+      options: Omit<UseInfiniteQueryOptions<GetAllProjectSlugsQuery, TError, TData>, 'queryKey'> & { queryKey?: UseInfiniteQueryOptions<GetAllProjectSlugsQuery, TError, TData>['queryKey'] }
+    ) => {
+    
+    return useInfiniteQuery<GetAllProjectSlugsQuery, TError, TData>(
+      (() => {
+    const { queryKey: optionsQueryKey, ...restOptions } = options;
+    return {
+      queryKey: optionsQueryKey ?? variables === undefined ? ['GetAllProjectSlugs.infinite'] : ['GetAllProjectSlugs.infinite', variables],
+      queryFn: (metaData) => fetcher<GetAllProjectSlugsQuery, GetAllProjectSlugsQueryVariables>(GetAllProjectSlugsDocument, {...variables, ...(metaData.pageParam ?? {})})(),
+      ...restOptions
+    }
+  })()
+    )};
+
+useInfiniteGetAllProjectSlugsQuery.getKey = (variables?: GetAllProjectSlugsQueryVariables) => variables === undefined ? ['GetAllProjectSlugs.infinite'] : ['GetAllProjectSlugs.infinite', variables];
 
 export const GetTagsDocument = `
     query GetTags {
@@ -10977,8 +11101,6 @@ export const GetProjectStatsDocument = `
     maxArea
     minBedrooms
     maxBedrooms
-    minFloor
-    maxFloor
   }
 }
     `;

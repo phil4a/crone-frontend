@@ -8,6 +8,7 @@ export interface ProjectImage {
 
 export interface ProjectSpecs {
 	area: number; // Parsed from string '344'
+	rooms: number;
 	floor: number; // Parsed from string '2'
 	bedrooms: number; // Parsed from string '4'
 	bathrooms: number | null; // Empty string -> null

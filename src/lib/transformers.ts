@@ -30,11 +30,14 @@ function mapWPMediaToProjectImage(media: WPEmbeddedMedia): ProjectImage {
 	};
 }
 
-type GraphQLArticle = NonNullable<NonNullable<GetArticlesQuery['posts']>['nodes']>[0] & { content?: string | null };
+type GraphQLArticle = NonNullable<NonNullable<GetArticlesQuery['posts']>['nodes']>[0] & {
+	content?: string | null;
+};
 
 export function transformGraphQLArticle(post: GraphQLArticle): Article {
 	const categories = post.categories?.nodes;
-	const lastCategory = categories && categories.length > 0 ? categories[categories.length - 1] : null;
+	const lastCategory =
+		categories && categories.length > 0 ? categories[categories.length - 1] : null;
 
 	return {
 		id: post.databaseId,
@@ -114,6 +117,7 @@ export function transformProject(post: WPProject): Project {
 		coverImage,
 		specs: {
 			area: parseNumber(acf.area),
+			rooms: parseNumber(acf.rooms),
 			floor: parseNumber(acf.floor),
 			bedrooms: parseNumber(acf.bedrooms),
 			bathrooms: parseNumberNullable(acf.bathrooms),
@@ -142,7 +146,9 @@ export function transformProject(post: WPProject): Project {
 	};
 }
 
-type GraphQLProject = NonNullable<NonNullable<GetProjectsQuery['posts']>['nodes']>[0];
+type GraphQLProject = NonNullable<NonNullable<GetProjectsQuery['posts']>['nodes']>[0] & {
+	content?: string | null;
+};
 
 export function transformGraphQLProject(post: GraphQLProject): Project {
 	const fields = post.projectFields;
@@ -154,7 +160,7 @@ export function transformGraphQLProject(post: GraphQLProject): Project {
 		title: post.title || '',
 		tags: post.tags?.nodes.map(node => node.slug || '') || [],
 		shortDescription: fields?.shortDescription || '',
-		description: '', // Need to fetch content if available
+		description: post.content || '', // Need to fetch content if available
 		coverImage: post.featuredImage?.node?.sourceUrl
 			? {
 					id: 0,
@@ -166,20 +172,21 @@ export function transformGraphQLProject(post: GraphQLProject): Project {
 			: null,
 		specs: {
 			area: fields?.area ? parseInt(String(fields.area), 10) || 0 : 0,
+			rooms: fields?.rooms ? parseInt(String(fields.rooms), 10) || 0 : 0,
 			floor: fields?.floor ? parseInt(String(fields.floor), 10) || 0 : 0,
 			bedrooms: fields?.bedrooms ? parseInt(String(fields.bedrooms), 10) || 0 : 0,
-			bathrooms: null, // Not in query
+			bathrooms: fields?.bathrooms ? parseInt(String(fields.bathrooms), 10) || 0 : null,
 			year: fields?.year ? parseInt(String(fields.year), 10) || 0 : 0,
 			city: fields?.city || '',
-			type: '', // Not in query
+			type: Array.isArray(fields?.type) ? fields.type[0] || '' : fields?.type || '',
 			status: Array.isArray(fields?.status) ? fields.status[0] || '' : fields?.status || ''
 		},
 		features: {
-			terrace: false,
-			garage: false,
-			sauna: false,
-			pool: false,
-			fireplace: false
+			terrace: !!fields?.terrace,
+			garage: !!fields?.garage,
+			sauna: !!fields?.sauna,
+			pool: !!fields?.pool,
+			fireplace: !!fields?.fireplace
 		},
 		galleries: {
 			plans:

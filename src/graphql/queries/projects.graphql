@@ -1,3 +1,58 @@
+fragment ProjectFields on Post {
+	id
+	databaseId
+	title
+	slug
+	featuredImage {
+		node {
+			sourceUrl
+		}
+	}
+	projectFields {
+		area
+		rooms
+		floor
+		bedrooms
+		bathrooms
+		status
+		year
+		city
+		type
+		terrace
+		garage
+		sauna
+		pool
+		fireplace
+		shortDescription
+		plansGallery {
+			nodes {
+				sourceUrl
+			}
+		}
+		processGallery {
+			nodes {
+				sourceUrl
+			}
+		}
+		resultGallery {
+			nodes {
+				sourceUrl
+			}
+		}
+	}
+	projectLikes
+	seo {
+		title
+		metaDesc
+	}
+	tags {
+		nodes {
+			name
+			slug
+		}
+	}
+}
+
 query GetProjects(
 	$first: Int
 	$after: String
@@ -37,50 +92,22 @@ query GetProjects(
 			endCursor
 		}
 		nodes {
-			id
-			databaseId
-			title
+			...ProjectFields
+		}
+	}
+}
+
+query GetProjectBySlug($slug: ID!) {
+	post(id: $slug, idType: SLUG) {
+		...ProjectFields
+		content
+	}
+}
+
+query GetAllProjectSlugs {
+	posts(first: 1000, where: { categoryName: "project" }) {
+		nodes {
 			slug
-			featuredImage {
-				node {
-					sourceUrl
-				}
-			}
-			projectFields {
-				area
-				floor
-				bedrooms
-				status
-				year
-				city
-				shortDescription
-				plansGallery {
-					nodes {
-						sourceUrl
-					}
-				}
-				processGallery {
-					nodes {
-						sourceUrl
-					}
-				}
-				resultGallery {
-					nodes {
-						sourceUrl
-					}
-				}
-			}
-			projectLikes
-			seo {
-				title
-				metaDesc
-			}
-			tags {
-				nodes {
-					name
-					slug
-				}
-			}
 		}
 	}
 }
@@ -102,7 +129,5 @@ query GetProjectStats {
 		maxArea
 		minBedrooms
 		maxBedrooms
-		minFloor
-		maxFloor
 	}
 }

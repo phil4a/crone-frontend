@@ -3,13 +3,13 @@ import Link from 'next/link';
 
 import { FeedbackForm } from '@/components/common/FeedbackForm';
 import { ProjectCardDetailed } from '@/components/common/projects/ProjectCardDetailed';
-import { HeaderThemeObserver } from '@/components/layout/HeaderThemeObserver';
-import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
 import { Button } from '@/components/ui/Button';
 import { Title } from '@/components/ui/Title';
 
 import { PAGE } from '@/config/pages.config';
 
+import { ProjectHero } from './ProjectHero';
+import { formatValue } from '@/lib/formatters/values';
 import { Project, ProjectImage } from '@/types/project.types';
 
 interface ProjectContentProps {
@@ -17,23 +17,25 @@ interface ProjectContentProps {
 	relatedProjects?: Project[];
 }
 
-const formatValue = (value: number | null | undefined, suffix?: string) => {
-	if (!value || value <= 0) return null;
-	return suffix ? `${value} ${suffix}` : String(value);
-};
-
 const GallerySection = ({ title, items }: { title: string; items: ProjectImage[] }) => {
 	if (!items.length) return null;
 
 	return (
 		<section className='py-12 md:py-16 bg-white'>
 			<div className='container'>
-				<Title as='h2' variant='h3' className='mb-8'>
+				<Title
+					as='h2'
+					variant='h3'
+					className='mb-8'
+				>
 					{title}
 				</Title>
 				<div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5'>
 					{items.map((item, index) => (
-						<div key={`${item.url}-${index}`} className='relative w-full aspect-[4/3]'>
+						<div
+							key={`${item.url}-${index}`}
+							className='relative w-full aspect-4/3'
+						>
 							<Image
 								src={item.url}
 								alt={item.alt || title}
@@ -50,19 +52,15 @@ const GallerySection = ({ title, items }: { title: string; items: ProjectImage[]
 };
 
 export function ProjectContent({ project, relatedProjects = [] }: ProjectContentProps) {
-	const heroItems = [
-		{ label: 'Площадь', value: formatValue(project.specs.area, 'м²') },
-		{ label: 'Комнат', value: formatValue(project.specs.rooms) },
-		{ label: 'Этажей', value: formatValue(project.specs.floor) },
-		{ label: 'Тип', value: project.specs.type || null }
-	].filter(item => item.value);
-
 	const params = [
 		{ label: 'Площадь', value: formatValue(project.specs.area, 'м²') },
 		{ label: 'Этажей', value: formatValue(project.specs.floor) },
 		{ label: 'Жилых комнат', value: formatValue(project.specs.rooms) },
 		{ label: 'Спален', value: formatValue(project.specs.bedrooms) },
-		{ label: 'Ванных комнат', value: project.specs.bathrooms ? String(project.specs.bathrooms) : null },
+		{
+			label: 'Ванных комнат',
+			value: project.specs.bathrooms ? String(project.specs.bathrooms) : null
+		},
 		{ label: 'Терраса', value: project.features.terrace ? 'есть' : 'нет' },
 		{ label: 'Гараж', value: project.features.garage ? 'есть' : 'нет' },
 		{ label: 'Баня', value: project.features.sauna ? 'есть' : 'нет' }
@@ -72,35 +70,8 @@ export function ProjectContent({ project, relatedProjects = [] }: ProjectContent
 
 	return (
 		<main className='bg-light-gray'>
-			<HeaderThemeObserver theme='light' />
-			<section className='pt-28 md:pt-36 pb-10 bg-light-gray'>
-				<div className='container'>
-					<Breadcrumbs
-						items={[
-							{ label: 'Проекты', href: PAGE.OBJECTS },
-							{ label: project.title }
-						]}
-					/>
-					<div className='flex flex-col gap-8'>
-						<Title as='h1' variant='h2'>
-							{project.title}
-						</Title>
-						<div className='flex flex-col gap-6 md:flex-row md:items-end md:justify-between'>
-							<div className='grid grid-cols-2 sm:grid-cols-4 gap-4'>
-								{heroItems.map(item => (
-									<div key={item.label} className='bg-white rounded-2xl p-4'>
-										<div className='text-xl md:text-2xl font-semibold text-main'>{item.value}</div>
-										<div className='text-dark-gray text-sm'>{item.label}</div>
-									</div>
-								))}
-							</div>
-							<Button className='w-full md:w-auto'>Получить презентацию</Button>
-						</div>
-					</div>
-				</div>
-			</section>
-
-			<section className='relative w-full aspect-[16/7] bg-light-gray'>
+			<ProjectHero {...project} />
+			<section className='relative w-full aspect-16/7 bg-light-gray'>
 				{project.coverImage ? (
 					<Image
 						src={project.coverImage.url}
@@ -120,7 +91,11 @@ export function ProjectContent({ project, relatedProjects = [] }: ProjectContent
 				<div className='container'>
 					<div className='grid grid-cols-1 xl:grid-cols-5 gap-8'>
 						<div className='xl:col-span-3'>
-							<Title as='h2' variant='h3' className='mb-6'>
+							<Title
+								as='h2'
+								variant='h3'
+								className='mb-6'
+							>
 								Особенности проекта
 							</Title>
 							<div
@@ -131,7 +106,10 @@ export function ProjectContent({ project, relatedProjects = [] }: ProjectContent
 						<div className='xl:col-span-2'>
 							<div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
 								{params.map(item => (
-									<div key={item.label} className='bg-light-gray rounded-2xl p-4'>
+									<div
+										key={item.label}
+										className='bg-light-gray rounded-2xl p-4'
+									>
 										<div className='text-sm text-dark-gray'>{item.label}</div>
 										<div className='text-lg font-semibold text-main'>{item.value}</div>
 									</div>
@@ -142,20 +120,33 @@ export function ProjectContent({ project, relatedProjects = [] }: ProjectContent
 				</div>
 			</section>
 
-			<GallerySection title='Результат' items={project.galleries.result} />
-			<GallerySection title='Планировка' items={project.galleries.plans} />
+			<GallerySection
+				title='Результат'
+				items={project.galleries.result}
+			/>
+			<GallerySection
+				title='Планировка'
+				items={project.galleries.plans}
+			/>
 
 			<FeedbackForm />
 
 			{filteredRelated.length > 0 && (
 				<section className='py-16 md:py-20 bg-light-gray'>
 					<div className='container'>
-						<Title as='h2' variant='h3' className='mb-8'>
+						<Title
+							as='h2'
+							variant='h3'
+							className='mb-8'
+						>
 							Похожие проекты
 						</Title>
 						<ul className='grid grid-cols-1 md:grid-cols-2 gap-5'>
 							{filteredRelated.map(item => (
-								<ProjectCardDetailed key={item.id} project={item} />
+								<ProjectCardDetailed
+									key={item.id}
+									project={item}
+								/>
 							))}
 						</ul>
 					</div>
@@ -164,7 +155,12 @@ export function ProjectContent({ project, relatedProjects = [] }: ProjectContent
 
 			<section className='py-10 md:py-12 bg-white'>
 				<div className='container'>
-					<Button as={Link} href={PAGE.OBJECTS} variant='outline' className='gap-2'>
+					<Button
+						as={Link}
+						href={PAGE.OBJECTS}
+						variant='outline'
+						className='gap-2'
+					>
 						<span className='flex items-center'>
 							<svg
 								width='24'
@@ -173,7 +169,12 @@ export function ProjectContent({ project, relatedProjects = [] }: ProjectContent
 								fill='none'
 								xmlns='http://www.w3.org/2000/svg'
 							>
-								<path d='M19 12L5 12' stroke='currentColor' strokeLinecap='round' strokeLinejoin='round' />
+								<path
+									d='M19 12L5 12'
+									stroke='currentColor'
+									strokeLinecap='round'
+									strokeLinejoin='round'
+								/>
 								<path
 									d='M11 18L5 12L11 6'
 									stroke='currentColor'

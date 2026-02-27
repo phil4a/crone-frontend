@@ -11,6 +11,7 @@ interface ProjectLikeProps {
 	projectId: string | number; // Support Global ID (string) or DB ID (number)
 	initialLikes?: number;
 	className?: string;
+	textClassName?: string;
 }
 
 interface LikeState {
@@ -18,7 +19,12 @@ interface LikeState {
 	isLiked: boolean;
 }
 
-export function ProjectLike({ projectId, initialLikes = 0, className }: ProjectLikeProps) {
+export function ProjectLike({
+	projectId,
+	initialLikes = 0,
+	className,
+	textClassName
+}: ProjectLikeProps) {
 	const storageKey = `project_like_${projectId}`;
 
 	// Base state (synced with server/localStorage)
@@ -105,7 +111,9 @@ export function ProjectLike({ projectId, initialLikes = 0, className }: ProjectL
 			aria-label={state.isLiked ? 'Убрать лайк' : 'Поставить лайк'}
 		>
 			<HeartIcon filled={state.isLiked} />
-			<span className={cn('text-sm font-normal transition-colors text-main')}>{state.likes}</span>
+			<span className={cn('text-sm font-normal transition-colors text-main', textClassName)}>
+				{state.likes}
+			</span>
 		</button>
 	);
 }

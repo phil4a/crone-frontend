@@ -5,6 +5,7 @@ import { Badge } from '@/components/ui/Badge';
 
 import { ProjectCardIcon } from './ProjectCardIcons';
 import { ProjectLike } from './ProjectLike';
+import { pluralizeFloors } from '@/lib/formatters/pluralize';
 import { Project } from '@/types/project.types';
 
 interface ProjectCardDetailedProps {
@@ -13,8 +14,6 @@ interface ProjectCardDetailedProps {
 
 export function ProjectCardDetailed({ project }: ProjectCardDetailedProps) {
 	const { area, floor, year, city } = project.specs;
-
-	const floorText = floor === 1 ? 'этаж' : floor >= 2 && floor <= 4 ? 'этажа' : 'этажей';
 
 	// Logic for displaying the image: result -> process -> coverImage
 	const displayImage =
@@ -60,9 +59,7 @@ export function ProjectCardDetailed({ project }: ProjectCardDetailedProps) {
 					<div className='flex flex-wrap gap-x-8 gap-y-2.5'>
 						{area === 0 ? null : <ProjectCardIcon type='area'>{area} м²</ProjectCardIcon>}
 						{floor === 0 ? null : (
-							<ProjectCardIcon type='floor'>
-								{floor} {floorText}
-							</ProjectCardIcon>
+							<ProjectCardIcon type='floor'>{pluralizeFloors(floor)}</ProjectCardIcon>
 						)}
 						{year === 0 ? null : <ProjectCardIcon type='year'>{year}</ProjectCardIcon>}
 						<ProjectCardIcon type='city'>{city}</ProjectCardIcon>

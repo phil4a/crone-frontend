@@ -21,3 +21,11 @@ export function pluralizeYears(years: number): string {
 export function pluralizeProjects(totalItems: number): string {
 	return `${totalItems} ${declension(totalItems, ['проект', 'проекта', 'проектов'])}`;
 }
+
+export function pluralizeFloors(floors: number): string {
+	return `${floors} ${declension(floors, ['этаж', 'этажа', 'этажей'])}`;
+}
+
+export function floorsLabel(floors: number): string {
+	return declension(floors, ['этаж', 'этажа', 'этажей']);
+}

@@ -1,4 +1,4 @@
-import { ProjectLike } from '@/components/common/projects/ProjectLike';
+import { ProjectLikeClient } from '@/components/common/projects/ProjectLikeClient';
 import { HeaderThemeObserver } from '@/components/layout/HeaderThemeObserver';
 import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
 import { Button } from '@/components/ui/Button';
@@ -27,34 +27,38 @@ export function ProjectHero({ title, specs, globalId, id, likes }: Project) {
 					items={[{ label: 'Проекты', href: PAGE.OBJECTS }, { label: title }]}
 				/>
 				<div className='flex flex-col'>
-					<div className='flex gap-5'>
+					<div className='flex gap-5 items-baseline sm:items-center'>
 						<Title
 							as='h1'
 							variant='h2'
-							className='uppercase leading-none'
+							className='uppercase'
 						>
 							{title}
 						</Title>
-						<ProjectLike
+						<ProjectLikeClient
 							projectId={globalId || String(id)}
 							initialLikes={likes}
-							className='bg-light-beige hover:bg-beige'
-							textClassName='text-lg'
+							className='h-fit bg-light-beige hover:bg-beige'
+							textClassName='text-sm md:text-lg'
 						/>
 					</div>
-					<div className='flex flex-col gap-6 my-10  md:flex-row md:items-center md:justify-between border-y border-y-brown/35'>
-						<div className='grow py-5.5 grid grid-cols-2 sm:grid-cols-5 gap-4'>
+					<div className='flex flex-col gap-6 mt-10 xl:my-10 xl:flex-row xl:items-center xl:justify-between border-t border-t-brown/35 xl:border-y xl:border-y-brown/35'>
+						<div className='grow pt-5.5 xl:py-5.5 grid grid-cols-2 xl:grid-cols-5 gap-4'>
 							{heroItems.map(item => (
 								<div
 									key={item.label}
 									className='bg-white rounded-2xl'
 								>
-									<div className='text-xl md:text-2xl font-bold text-brown'>{item.value}</div>
+									<div className='text-xl md:text-2xl font-bold text-nowrap text-brown'>
+										{item.value}
+									</div>
 									<div className='text-main'>{item.label}</div>
 								</div>
 							))}
 						</div>
-						<Button className='w-full md:w-auto'>Написать нам</Button>
+						<div className='w-full md:w-auto pt-10 border-t border-t-brown/35 xl:border-t-0 xl:pt-0'>
+							<Button className='w-full'>Написать нам</Button>
+						</div>
 					</div>
 				</div>
 			</div>

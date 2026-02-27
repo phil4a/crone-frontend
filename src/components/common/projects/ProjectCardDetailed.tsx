@@ -2,9 +2,9 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import { Badge } from '@/components/ui/Badge';
+import { ProjectLikeClient } from '@/components/common/projects/ProjectLikeClient';
 
 import { ProjectCardIcon } from './ProjectCardIcons';
-import { ProjectLike } from './ProjectLike';
 import { pluralizeFloors } from '@/lib/formatters/pluralize';
 import { Project } from '@/types/project.types';
 
@@ -28,7 +28,7 @@ export function ProjectCardDetailed({ project }: ProjectCardDetailedProps) {
 				{project.specs.status}
 			</Badge>
 			<div className='absolute top-5 right-5 z-1'>
-				<ProjectLike
+				<ProjectLikeClient
 					projectId={project.globalId || String(project.id)}
 					initialLikes={project.likes}
 				/>

@@ -11,30 +11,51 @@ export const useHeaderTheme = (theme: HeaderTheme) => {
 	useEffect(() => {
 		const element = elementRef.current;
 		if (!element) return;
+		const target = element.parentElement ?? element;
+		const headerHeight = 80;
+
+		const updateTheme = () => {
+			const rect = target.getBoundingClientRect();
+			if (rect.top <= headerHeight && rect.bottom > headerHeight) {
+				setTheme(theme);
+			}
+		};
+
+		let rafId = 0;
+		const onScroll = () => {
+			if (rafId) return;
+			rafId = window.requestAnimationFrame(() => {
+				rafId = 0;
+				updateTheme();
+			});
+		};
 
 		const observer = new IntersectionObserver(
 			entries => {
 				entries.forEach(entry => {
 					if (entry.isIntersecting) {
-						setTheme(theme);
+						updateTheme();
 					}
 				});
 			},
 			{
-				// Detect when the element is near the top of the viewport
-				// rootMargin: '-80px 0px -80% 0px' means:
-				// Top: -80px (header height approx)
-				// Bottom: -80% (ignore bottom part of screen)
-				// This ensures we trigger when the element is actually "under" the header area
-				rootMargin: '-80px 0px -90% 0px',
-				threshold: 0
+				rootMargin: `-${headerHeight}px 0px -80% 0px`,
+				threshold: [0, 1]
 			}
 		);
 
-		observer.observe(element);
+		observer.observe(target);
+		updateTheme();
+		window.addEventListener('scroll', onScroll, { passive: true });
+		window.addEventListener('resize', onScroll);
 
 		return () => {
 			observer.disconnect();
+			window.removeEventListener('scroll', onScroll);
+			window.removeEventListener('resize', onScroll);
+			if (rafId) {
+				window.cancelAnimationFrame(rafId);
+			}
 		};
 	}, [theme, setTheme]);
 

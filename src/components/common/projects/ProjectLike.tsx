@@ -2,8 +2,6 @@
 
 import { useState } from 'react';
 
-// import { projectService } from '@/services/project.service';
-// Assuming useLikeProjectMutation will be generated
 import { useLikeProjectMutation } from '@/graphql/generated';
 import { cn } from '@/lib/utils';
 

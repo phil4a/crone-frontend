@@ -9,6 +9,7 @@ import { Title } from '@/components/ui/Title';
 import { PAGE } from '@/config/pages.config';
 
 import { ProjectHero } from './ProjectHero';
+import { ProjectMainImage } from './ProjectMainImage';
 import { formatValue } from '@/lib/formatters/values';
 import { Project, ProjectImage } from '@/types/project.types';
 
@@ -71,21 +72,7 @@ export function ProjectContent({ project, relatedProjects = [] }: ProjectContent
 	return (
 		<main className='bg-light-gray'>
 			<ProjectHero {...project} />
-			<section className='relative w-full aspect-16/7 bg-light-gray'>
-				{project.coverImage ? (
-					<Image
-						src={project.coverImage.url}
-						alt={project.coverImage.alt || project.title}
-						fill
-						className='object-cover'
-						sizes='100vw'
-					/>
-				) : (
-					<div className='w-full h-full flex items-center justify-center text-dark-gray'>
-						Нет фото
-					</div>
-				)}
-			</section>
+			<ProjectMainImage {...project.coverImage} />
 
 			<section className='py-16 md:py-20 bg-white'>
 				<div className='container'>

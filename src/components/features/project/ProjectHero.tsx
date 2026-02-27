@@ -1,4 +1,5 @@
 import { ProjectLike } from '@/components/common/projects/ProjectLike';
+import { HeaderThemeObserver } from '@/components/layout/HeaderThemeObserver';
 import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
 import { Button } from '@/components/ui/Button';
 import { Title } from '@/components/ui/Title';
@@ -19,6 +20,7 @@ export function ProjectHero({ title, specs, globalId, id, likes }: Project) {
 	].filter(item => item.value);
 	return (
 		<section className='pt-28 md:pt-36 pb-10 bg-light-gray'>
+			<HeaderThemeObserver theme='light' />
 			<div className='container'>
 				<Breadcrumbs
 					className='mb-12'

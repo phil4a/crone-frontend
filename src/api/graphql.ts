@@ -1,6 +1,6 @@
 import { GraphQLClient } from 'graphql-request';
 
-const endpoint = 'https://crone-group.ru/graphql';
+const endpoint = process.env.NEXT_PUBLIC_GRAPHQL_API_URL!;
 
 export const client = new GraphQLClient(endpoint);
 

@@ -10618,6 +10618,14 @@ export type GetProjectStatsQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetProjectStatsQuery = { __typename?: 'RootQuery', projectStats?: { __typename?: 'ProjectStats', minArea?: number | null, maxArea?: number | null, minBedrooms?: number | null, maxBedrooms?: number | null, minFloor?: number | null, maxFloor?: number | null } | null };
 
+export type GetProjectLikesQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+  idType?: InputMaybe<PostIdType>;
+}>;
+
+
+export type GetProjectLikesQuery = { __typename?: 'RootQuery', post?: { __typename?: 'Post', projectLikes?: number | null } | null };
+
 
 export const ArticleFieldsFragmentDoc = `
     fragment ArticleFields on Post {
@@ -11145,3 +11153,50 @@ export const useInfiniteGetProjectStatsQuery = <
     )};
 
 useInfiniteGetProjectStatsQuery.getKey = (variables?: GetProjectStatsQueryVariables) => variables === undefined ? ['GetProjectStats.infinite'] : ['GetProjectStats.infinite', variables];
+
+export const GetProjectLikesDocument = `
+    query GetProjectLikes($id: ID!, $idType: PostIdType = ID) {
+  post(id: $id, idType: $idType) {
+    projectLikes
+  }
+}
+    `;
+
+export const useGetProjectLikesQuery = <
+      TData = GetProjectLikesQuery,
+      TError = unknown
+    >(
+      variables: GetProjectLikesQueryVariables,
+      options?: Omit<UseQueryOptions<GetProjectLikesQuery, TError, TData>, 'queryKey'> & { queryKey?: UseQueryOptions<GetProjectLikesQuery, TError, TData>['queryKey'] }
+    ) => {
+    
+    return useQuery<GetProjectLikesQuery, TError, TData>(
+      {
+    queryKey: ['GetProjectLikes', variables],
+    queryFn: fetcher<GetProjectLikesQuery, GetProjectLikesQueryVariables>(GetProjectLikesDocument, variables),
+    ...options
+  }
+    )};
+
+useGetProjectLikesQuery.getKey = (variables: GetProjectLikesQueryVariables) => ['GetProjectLikes', variables];
+
+export const useInfiniteGetProjectLikesQuery = <
+      TData = InfiniteData<GetProjectLikesQuery>,
+      TError = unknown
+    >(
+      variables: GetProjectLikesQueryVariables,
+      options: Omit<UseInfiniteQueryOptions<GetProjectLikesQuery, TError, TData>, 'queryKey'> & { queryKey?: UseInfiniteQueryOptions<GetProjectLikesQuery, TError, TData>['queryKey'] }
+    ) => {
+    
+    return useInfiniteQuery<GetProjectLikesQuery, TError, TData>(
+      (() => {
+    const { queryKey: optionsQueryKey, ...restOptions } = options;
+    return {
+      queryKey: optionsQueryKey ?? ['GetProjectLikes.infinite', variables],
+      queryFn: (metaData) => fetcher<GetProjectLikesQuery, GetProjectLikesQueryVariables>(GetProjectLikesDocument, {...variables, ...(metaData.pageParam ?? {})})(),
+      ...restOptions
+    }
+  })()
+    )};
+
+useInfiniteGetProjectLikesQuery.getKey = (variables: GetProjectLikesQueryVariables) => ['GetProjectLikes.infinite', variables];

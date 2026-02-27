@@ -1,8 +1,11 @@
 'use client';
 
+import { useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 
-import { useLikeProjectMutation } from '@/graphql/generated';
+import { useProjectLikes } from '@/hooks/projects/useProjectLikes';
+
+import { GetProjectLikesQuery, useLikeProjectMutation } from '@/graphql/generated';
 import { cn } from '@/lib/utils';
 
 interface ProjectLikeProps {
@@ -10,11 +13,6 @@ interface ProjectLikeProps {
 	initialLikes?: number;
 	className?: string;
 	textClassName?: string;
-}
-
-interface LikeState {
-	likes: number;
-	isLiked: boolean;
 }
 
 export function ProjectLike({
@@ -25,18 +23,16 @@ export function ProjectLike({
 }: ProjectLikeProps) {
 	const storageKey = `project_like_${projectId}`;
 
-	// Base state (synced with server/localStorage)
-	const [state, setState] = useState<LikeState>(() => {
-		if (typeof window === 'undefined') {
-			return { likes: initialLikes, isLiked: false };
-		}
-
-		const liked = localStorage.getItem(storageKey) === 'true';
-		return { likes: initialLikes, isLiked: liked };
+	const [isLiked, setIsLiked] = useState(() => {
+		if (typeof window === 'undefined') return false;
+		return localStorage.getItem(storageKey) === 'true';
 	});
 
 	// Mutation hook
 	const { mutateAsync: likeProject, isPending } = useLikeProjectMutation();
+	const { likes: latestLikes, queryKey } = useProjectLikes(projectId);
+	const queryClient = useQueryClient();
+	const displayLikes = typeof latestLikes === 'number' ? latestLikes : initialLikes;
 
 	const handleLike = async (e: React.MouseEvent) => {
 		e.preventDefault(); // Prevent link navigation
@@ -44,16 +40,19 @@ export function ProjectLike({
 
 		if (isPending) return;
 
-		// 1. Calculate optimistic state
-		const prevState = state;
-		const nextIsLiked = !state.isLiked;
-		const nextLikes = nextIsLiked ? state.likes + 1 : Math.max(0, state.likes - 1);
+		const prevLikes = displayLikes;
+		const nextIsLiked = !isLiked;
+		const nextLikes = nextIsLiked ? prevLikes + 1 : Math.max(0, prevLikes - 1);
 
-		// 2. Apply optimistic update immediately
-		setState({
-			likes: nextLikes,
-			isLiked: nextIsLiked
-		});
+		queryClient.setQueryData<GetProjectLikesQuery>(queryKey, previous => ({
+			...previous,
+			post: {
+				...previous?.post,
+				projectLikes: nextLikes
+			}
+		}));
+
+		setIsLiked(nextIsLiked);
 
 		// Update localStorage immediately for responsiveness
 		if (nextIsLiked) {
@@ -76,19 +75,28 @@ export function ProjectLike({
 			const serverLikes = result.likeProject?.likes;
 
 			if (typeof serverLikes === 'number') {
-				// 4. Sync with exact server value (optional but safer)
-				setState({
-					likes: serverLikes,
-					isLiked: nextIsLiked
-				});
+				queryClient.setQueryData<GetProjectLikesQuery>(queryKey, previous => ({
+					...previous,
+					post: {
+						...previous?.post,
+						projectLikes: serverLikes
+					}
+				}));
 			}
 		} catch (error) {
 			console.error('Like toggle failed:', error);
 
-			// 5. Revert on error
-			setState(prevState);
+			queryClient.setQueryData<GetProjectLikesQuery>(queryKey, previous => ({
+				...previous,
+				post: {
+					...previous?.post,
+					projectLikes: prevLikes
+				}
+			}));
 
-			if (prevState.isLiked) {
+			setIsLiked(!nextIsLiked);
+
+			if (!nextIsLiked) {
 				localStorage.setItem(storageKey, 'true');
 			} else {
 				localStorage.removeItem(storageKey);
@@ -102,15 +110,15 @@ export function ProjectLike({
 			disabled={isPending}
 			className={cn(
 				'flex items-center gap-1.25 py-1.25 px-2.5 rounded-lg transition-all duration-300 cursor-pointer hover:bg-white',
-				state.isLiked ? 'text-red-500 bg-white' : 'text-[#CCCCCC] bg-light-beige',
+				isLiked ? 'text-red-500 bg-white' : 'text-[#CCCCCC] bg-light-beige',
 				isPending && 'opacity-70 cursor-not-allowed',
 				className
 			)}
-			aria-label={state.isLiked ? 'Убрать лайк' : 'Поставить лайк'}
+			aria-label={isLiked ? 'Убрать лайк' : 'Поставить лайк'}
 		>
-			<HeartIcon filled={state.isLiked} />
+			<HeartIcon filled={isLiked} />
 			<span className={cn('text-sm font-normal transition-colors text-main', textClassName)}>
-				{state.likes}
+				{displayLikes}
 			</span>
 		</button>
 	);

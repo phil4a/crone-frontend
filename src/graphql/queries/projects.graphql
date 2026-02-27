@@ -133,3 +133,9 @@ query GetProjectStats {
 		maxFloor
 	}
 }
+
+query GetProjectLikes($id: ID!, $idType: PostIdType = ID) {
+	post(id: $id, idType: $idType) {
+		projectLikes
+	}
+}

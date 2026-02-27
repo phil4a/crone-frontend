@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 // import { projectService } from '@/services/project.service';
 // Assuming useLikeProjectMutation will be generated
@@ -19,32 +19,20 @@ interface LikeState {
 }
 
 export function ProjectLike({ projectId, initialLikes = 0, className }: ProjectLikeProps) {
-	// Base state (synced with server/localStorage)
-	const [state, setState] = useState<LikeState>({
-		likes: initialLikes,
-		isLiked: false
-	});
+	const storageKey = `project_like_${projectId}`;
 
-	const [mounted, setMounted] = useState(false);
+	// Base state (synced with server/localStorage)
+	const [state, setState] = useState<LikeState>(() => {
+		if (typeof window === 'undefined') {
+			return { likes: initialLikes, isLiked: false };
+		}
+
+		const liked = localStorage.getItem(storageKey) === 'true';
+		return { likes: initialLikes, isLiked: liked };
+	});
 
 	// Mutation hook
 	const { mutateAsync: likeProject, isPending } = useLikeProjectMutation();
-
-	// Key for localStorage
-	const storageKey = `project_like_${projectId}`;
-
-	// Initialize state from localStorage on client side
-	useEffect(() => {
-		setMounted(true);
-		const liked = localStorage.getItem(storageKey) === 'true';
-
-		if (liked) {
-			setState(prev => ({
-				...prev,
-				isLiked: true
-			}));
-		}
-	}, [storageKey]);
 
 	const handleLike = async (e: React.MouseEvent) => {
 		e.preventDefault(); // Prevent link navigation
@@ -103,21 +91,6 @@ export function ProjectLike({ projectId, initialLikes = 0, className }: ProjectL
 			}
 		}
 	};
-
-	// Don't render interactive parts until mounted to avoid hydration mismatch
-	if (!mounted) {
-		return (
-			<div
-				className={cn(
-					'flex items-center text-[#CCCCCC] bg-light-beige gap-1.25 py-1.25 px-2.5 rounded-lg transition-colors duration-300',
-					className
-				)}
-			>
-				<HeartIcon />
-				<span className='text-sm font-normal text-main'>{initialLikes}</span>
-			</div>
-		);
-	}
 
 	return (
 		<button

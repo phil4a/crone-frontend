@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import { SortIcon } from '@/components/ui/Icons';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/Popover';
@@ -37,46 +37,7 @@ interface ProjectSortPopoverProps {
 
 export function ProjectSortPopover({ sort, onChange }: ProjectSortPopoverProps) {
 	const { options, getLabel } = useProjectSortOptions();
-	const [mounted, setMounted] = useState(false);
 	const [open, setOpen] = useState(false);
-
-	useEffect(() => {
-		setMounted(true);
-	}, []);
-
-	if (!mounted) {
-		return (
-			<div className='text-sm text-dark-gray'>
-				<span className='hidden md:inline-flex'>Сортировка: </span>
-				<button
-					type='button'
-					className='inline-flex items-center ml-1 pr-3 py-1 rounded-lg text-brown cursor-default text-sm'
-				>
-					<div className='flex items-center gap-2'>
-						<div className='hidden md:flex items-center'>
-							<span>{getLabel(sort)}</span>
-							<svg
-								className='ml-2 h-3 w-3 text-brown'
-								viewBox='0 0 10 6'
-								fill='none'
-								xmlns='http://www.w3.org/2000/svg'
-							>
-								<path
-									d='M1 1L5 5L9 1'
-									stroke='currentColor'
-									strokeWidth='1.2'
-									strokeLinecap='round'
-									strokeLinejoin='round'
-								></path>
-							</svg>
-						</div>
-
-						<SortIcon className='inline h-6 w-6 text-brown md:hidden' />
-					</div>
-				</button>
-			</div>
-		);
-	}
 
 	return (
 		<div className='text-sm text-dark-gray'>

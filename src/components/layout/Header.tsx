@@ -18,7 +18,7 @@ import { cn } from '@/lib/utils';
 
 export function Header() {
 	const [isScrolled, setIsScrolled] = useState(false);
-	const [isMenuOpen, setIsMenuOpen] = useState(false);
+	const [menuPath, setMenuPath] = useState<string | null>(null);
 	const { pathname, isActivePath } = useActivePath();
 	const { theme } = useHeaderStore();
 
@@ -37,15 +37,11 @@ export function Header() {
 	}, []);
 
 	useEffect(() => {
-		setIsMenuOpen(false);
-	}, [pathname]);
-
-	useEffect(() => {
 		if (typeof document === 'undefined') return;
 
 		const originalOverflow = document.body.style.overflow;
 
-		if (isMenuOpen) {
+		if (menuPath === pathname) {
 			document.body.style.overflow = 'hidden';
 		} else {
 			document.body.style.overflow = originalOverflow;
@@ -54,7 +50,7 @@ export function Header() {
 		return () => {
 			document.body.style.overflow = originalOverflow;
 		};
-	}, [isMenuOpen]);
+	}, [menuPath, pathname]);
 
 	// Determine styles based on theme and state
 	const isLightTheme = theme === 'light';
@@ -66,6 +62,7 @@ export function Header() {
 	// 3. Dark/Transparent Theme:
 	//    - Scrolled -> Blurred Dark
 	//    - Top -> Transparent
+	const isMenuOpen = menuPath === pathname;
 	const bgClass = (() => {
 		if (isMenuOpen) return 'bg-white';
 		if (isLightTheme) return 'bg-white shadow-[0px_5px_16px_0px_rgba(241,236,231,0.4)]';
@@ -155,7 +152,7 @@ export function Header() {
 				<button
 					type='button'
 					className='xl:hidden z-5 bg-beige h-11 w-11 flex items-center justify-center rounded-lg'
-					onClick={() => setIsMenuOpen(!isMenuOpen)}
+					onClick={() => setMenuPath(prev => (prev === pathname ? null : pathname))}
 				>
 					<div className={cn('relative h-4.5 w-6 cursor-pointer', isMenuOpen && 'menu-open')}>
 						<span

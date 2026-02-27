@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import { ProjectStats } from './useProjectStats';
 import { ProjectFiltersData } from '@/types/filters.types';
@@ -20,12 +20,6 @@ export function useProjectSidebar({ filters, onApply, stats }: UseProjectSidebar
 	const maxFloor = stats?.maxFloor ?? 3;
 
 	const floorOptions = Array.from({ length: maxFloor - minFloor + 1 }, (_, i) => minFloor + i);
-
-	useEffect(() => {
-		if (JSON.stringify(filters) !== JSON.stringify(localFilters)) {
-			setLocalFilters(filters);
-		}
-	}, [filters]);
 
 	const handleAreaChange = (value: number[]) => {
 		setLocalFilters(prev => ({

@@ -129,5 +129,7 @@ query GetProjectStats {
 		maxArea
 		minBedrooms
 		maxBedrooms
+		minFloor
+		maxFloor
 	}
 }

@@ -1,9 +1,10 @@
 'use client';
 
+import dynamic from 'next/dynamic';
+
 import { ProjectCardDetailed } from '@/components/common/projects/ProjectCardDetailed';
 import { FiltersDrawer } from '@/components/features/projects/FiltersDrawer';
 import { ProjectSidebar } from '@/components/features/projects/ProjectsSidebar';
-import { ProjectSortPopover } from '@/components/features/projects/ProjectsSortPopover';
 import { HeaderThemeObserver } from '@/components/layout/HeaderThemeObserver';
 import { Button } from '@/components/ui/Button';
 import { Pagination } from '@/components/ui/Pagination';
@@ -21,6 +22,14 @@ import { ProjectsText } from './ProjectsText';
 import { pluralizeProjects } from '@/lib/formatters/pluralize';
 import { cn } from '@/lib/utils';
 
+const ProjectSortPopoverClient = dynamic(
+	() =>
+		import('@/components/features/projects/ProjectsSortPopover').then(
+			module => module.ProjectSortPopover
+		),
+	{ ssr: false }
+);
+
 export function ProjectsContent() {
 	// Custom Hooks
 	const { stats } = useProjectStats();
@@ -33,6 +42,7 @@ export function ProjectsContent() {
 		filters,
 		sort
 	);
+	const sidebarKey = JSON.stringify(filters);
 
 	return (
 		<main className='pt-38 pb-27 container bg-light-gray min-h-screen'>
@@ -42,6 +52,7 @@ export function ProjectsContent() {
 			<div className='grid grid-cols-1 pt-12 xl:grid-cols-5 gap-8'>
 				<div className='hidden xl:block xl:col-span-1'>
 					<ProjectSidebar
+						key={sidebarKey}
 						filters={filters}
 						onApply={applyFilters}
 						className='sticky top-32'
@@ -77,7 +88,7 @@ export function ProjectsContent() {
 						</div>
 
 						<div className='hidden xl:flex'>
-							<ProjectSortPopover
+							<ProjectSortPopoverClient
 								sort={sort}
 								onChange={setSort}
 							/>
@@ -90,7 +101,7 @@ export function ProjectsContent() {
 							stats={stats}
 						/>
 						<div className='xl:hidden flex'>
-							<ProjectSortPopover
+							<ProjectSortPopoverClient
 								sort={sort}
 								onChange={setSort}
 							/>

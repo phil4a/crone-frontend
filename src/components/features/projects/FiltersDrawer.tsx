@@ -14,6 +14,7 @@ type FiltersDrawerProps = Omit<ProjectSidebarProps, 'className'>;
 
 export function FiltersDrawer({ filters, onApply, stats }: FiltersDrawerProps) {
 	const [isOpen, setIsOpen] = useState(false);
+	const sidebarKey = JSON.stringify(filters);
 
 	useEffect(() => {
 		if (isOpen) {
@@ -92,6 +93,7 @@ export function FiltersDrawer({ filters, onApply, stats }: FiltersDrawerProps) {
 
 					<div className='p-5 overflow-y-auto h-[calc(100%-56px)]'>
 						<ProjectSidebar
+							key={sidebarKey}
 							filters={filters}
 							onApply={handleApply}
 							stats={stats}

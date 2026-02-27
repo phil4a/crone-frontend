@@ -16,13 +16,13 @@ export function Breadcrumbs({ items, className }: BreadcrumbsProps) {
 	return (
 		<nav
 			aria-label='Breadcrumb'
-			className={cn('text-sm text-gray-400 mb-8 uppercase', className)}
+			className={cn('text-sm text-main mb-8', className)}
 		>
 			<ol className='flex flex-wrap items-center gap-2'>
 				<li>
 					<Link
 						href='/'
-						className='hover:text-dark-gray transition-colors'
+						className='hover:text-brown transition-colors'
 					>
 						Главная
 					</Link>
@@ -35,13 +35,13 @@ export function Breadcrumbs({ items, className }: BreadcrumbsProps) {
 							key={index}
 							className='flex items-center gap-2'
 						>
-							<span>→</span>
+							<span>/</span>
 							{isLast || !item.href ? (
 								<span className='text-dark-gray font-medium'>{item.label}</span>
 							) : (
 								<Link
 									href={item.href}
-									className='hover:text-dark-gray transition-colors'
+									className='hover:hover:text-brown transition-colors'
 								>
 									{item.label}
 								</Link>

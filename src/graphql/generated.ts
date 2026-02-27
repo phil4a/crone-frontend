@@ -10616,7 +10616,7 @@ export type GetTagsQuery = { __typename?: 'RootQuery', tags?: { __typename?: 'Ro
 export type GetProjectStatsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetProjectStatsQuery = { __typename?: 'RootQuery', projectStats?: { __typename?: 'ProjectStats', minArea?: number | null, maxArea?: number | null, minBedrooms?: number | null, maxBedrooms?: number | null } | null };
+export type GetProjectStatsQuery = { __typename?: 'RootQuery', projectStats?: { __typename?: 'ProjectStats', minArea?: number | null, maxArea?: number | null, minBedrooms?: number | null, maxBedrooms?: number | null, minFloor?: number | null, maxFloor?: number | null } | null };
 
 
 export const ArticleFieldsFragmentDoc = `
@@ -11101,6 +11101,8 @@ export const GetProjectStatsDocument = `
     maxArea
     minBedrooms
     maxBedrooms
+    minFloor
+    maxFloor
   }
 }
     `;

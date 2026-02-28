@@ -2,23 +2,32 @@ import Image from 'next/image';
 
 import { HeaderThemeObserver } from '@/components/layout/HeaderThemeObserver';
 
-import { ProjectImage } from '@/types/project.types';
+import { Project } from '@/types/project.types';
 
-export function ProjectMainImage({ url, alt }: Partial<ProjectImage>) {
+export function ProjectMainImage({ coverImage, videos }: Project) {
 	return (
-		<section className='relative h-svh w-full bg-light-gray'>
+		<section className='relative w-full bg-light-gray'>
 			<HeaderThemeObserver theme='transparent' />
-			{url ? (
+			{videos.main && coverImage?.url ? (
+				<video
+					src={videos.main}
+					loop
+					autoPlay
+					muted
+					className='w-full landscape:h-full portrait:h-fit object-cover'
+					poster={coverImage?.url}
+				/>
+			) : coverImage?.url ? (
 				<Image
-					src={url}
-					alt={alt || url}
+					src={coverImage.url}
+					alt={coverImage.alt || coverImage.url}
 					fill
 					className='object-cover'
 					sizes='100vw'
 					priority
 				/>
 			) : (
-				<div className='w-full h-full flex items-center justify-center text-dark-gray'>
+				<div className='w-full landscape:h-full portrait:h-fit flex items-center justify-center text-dark-gray'>
 					Нет фото
 				</div>
 			)}

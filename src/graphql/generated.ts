@@ -10601,7 +10601,7 @@ export type GetProjectBySlugQueryVariables = Exact<{
 }>;
 
 
-export type GetProjectBySlugQuery = { __typename?: 'RootQuery', post?: { __typename?: 'Post', content?: string | null, id: string, databaseId: number, title?: string | null, slug?: string | null, projectLikes?: number | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node: { __typename?: 'MediaItem', sourceUrl?: string | null } } | null, projectFields?: { __typename?: 'ProjectFields', area?: string | null, rooms?: string | null, floor?: string | null, bedrooms?: string | null, bathrooms?: string | null, status?: Array<string | null> | null, year?: number | null, city?: string | null, type?: Array<string | null> | null, terrace?: boolean | null, garage?: boolean | null, sauna?: boolean | null, pool?: boolean | null, fireplace?: boolean | null, shortDescription?: string | null, plansGallery?: { __typename?: 'AcfMediaItemConnection', nodes: Array<{ __typename?: 'MediaItem', sourceUrl?: string | null }> } | null, processGallery?: { __typename?: 'AcfMediaItemConnection', nodes: Array<{ __typename?: 'MediaItem', sourceUrl?: string | null }> } | null, resultGallery?: { __typename?: 'AcfMediaItemConnection', nodes: Array<{ __typename?: 'MediaItem', sourceUrl?: string | null }> } | null } | null, seo?: { __typename?: 'PostTypeSEO', title?: string | null, metaDesc?: string | null } | null, tags?: { __typename?: 'PostToTagConnection', nodes: Array<{ __typename?: 'Tag', name?: string | null, slug?: string | null }> } | null } | null };
+export type GetProjectBySlugQuery = { __typename?: 'RootQuery', post?: { __typename?: 'Post', content?: string | null, id: string, databaseId: number, title?: string | null, slug?: string | null, projectLikes?: number | null, projectFields?: { __typename?: 'ProjectFields', area?: string | null, rooms?: string | null, floor?: string | null, bedrooms?: string | null, bathrooms?: string | null, status?: Array<string | null> | null, year?: number | null, city?: string | null, type?: Array<string | null> | null, terrace?: boolean | null, garage?: boolean | null, sauna?: boolean | null, pool?: boolean | null, fireplace?: boolean | null, shortDescription?: string | null, projectVideo?: { __typename?: 'AcfMediaItemConnectionEdge', node: { __typename?: 'MediaItem', mediaItemUrl?: string | null } } | null, videoGallery?: { __typename?: 'AcfMediaItemConnection', nodes: Array<{ __typename?: 'MediaItem', mediaItemUrl?: string | null }> } | null, plansGallery?: { __typename?: 'AcfMediaItemConnection', nodes: Array<{ __typename?: 'MediaItem', sourceUrl?: string | null }> } | null, processGallery?: { __typename?: 'AcfMediaItemConnection', nodes: Array<{ __typename?: 'MediaItem', sourceUrl?: string | null }> } | null, resultGallery?: { __typename?: 'AcfMediaItemConnection', nodes: Array<{ __typename?: 'MediaItem', sourceUrl?: string | null }> } | null } | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node: { __typename?: 'MediaItem', sourceUrl?: string | null } } | null, seo?: { __typename?: 'PostTypeSEO', title?: string | null, metaDesc?: string | null } | null, tags?: { __typename?: 'PostToTagConnection', nodes: Array<{ __typename?: 'Tag', name?: string | null, slug?: string | null }> } | null } | null };
 
 export type GetAllProjectSlugsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -10958,6 +10958,18 @@ export const GetProjectBySlugDocument = `
   post(id: $slug, idType: SLUG) {
     ...ProjectFields
     content
+    projectFields {
+      projectVideo {
+        node {
+          mediaItemUrl
+        }
+      }
+      videoGallery {
+        nodes {
+          mediaItemUrl
+        }
+      }
+    }
   }
 }
     ${ProjectFieldsFragmentDoc}`;

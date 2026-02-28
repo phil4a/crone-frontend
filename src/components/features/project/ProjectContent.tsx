@@ -72,7 +72,7 @@ export function ProjectContent({ project, relatedProjects = [] }: ProjectContent
 	return (
 		<main className='bg-light-gray'>
 			<ProjectHero {...project} />
-			<ProjectMainImage {...project.coverImage} />
+			<ProjectMainImage {...project} />
 
 			<section className='py-16 md:py-20 bg-white'>
 				<div className='container'>

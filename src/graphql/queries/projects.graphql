@@ -101,6 +101,18 @@ query GetProjectBySlug($slug: ID!) {
 	post(id: $slug, idType: SLUG) {
 		...ProjectFields
 		content
+		projectFields {
+			projectVideo {
+				node {
+					mediaItemUrl
+				}
+			}
+			videoGallery {
+				nodes {
+					mediaItemUrl
+				}
+			}
+		}
 	}
 }
 

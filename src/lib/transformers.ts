@@ -1,4 +1,4 @@
-import { GetArticlesQuery, GetProjectsQuery } from '@/graphql/generated';
+import { GetArticlesQuery, GetProjectBySlugQuery, GetProjectsQuery } from '@/graphql/generated';
 import { Article } from '@/types/article.types';
 import { Project, ProjectImage } from '@/types/project.types';
 import { WPEmbedded, WPEmbeddedMedia, WPProject } from '@/types/wp.types';
@@ -138,6 +138,10 @@ export function transformProject(post: WPProject): Project {
 			process: resolveGallery(acf['process-gallery']),
 			result: resolveGallery(acf['result-gallery'])
 		},
+		videos: {
+			main: null,
+			gallery: []
+		},
 		seo: {
 			title: post.title.rendered,
 			description: acf['short-description'] || ''
@@ -146,8 +150,18 @@ export function transformProject(post: WPProject): Project {
 	};
 }
 
-type GraphQLProject = NonNullable<NonNullable<GetProjectsQuery['posts']>['nodes']>[0] & {
+type GraphQLProjectNode = NonNullable<NonNullable<GetProjectsQuery['posts']>['nodes']>[0];
+type GraphQLProjectBySlug = NonNullable<GetProjectBySlugQuery['post']>;
+type GraphQLVideoNode = { mediaItemUrl?: string | null } | null;
+
+type GraphQLProjectFields = NonNullable<GraphQLProjectNode['projectFields']> & {
+	projectVideo?: { node?: GraphQLVideoNode } | null;
+	videoGallery?: { nodes?: GraphQLVideoNode[] | null } | null;
+};
+
+type GraphQLProject = (GraphQLProjectNode | GraphQLProjectBySlug) & {
 	content?: string | null;
+	projectFields?: GraphQLProjectFields | null;
 };
 
 export function transformGraphQLProject(post: GraphQLProject): Project {
@@ -219,6 +233,13 @@ export function transformGraphQLProject(post: GraphQLProject): Project {
 						height: 0,
 						alt: ''
 					})) || []
+		},
+		videos: {
+			main: fields?.projectVideo?.node?.mediaItemUrl || null,
+			gallery:
+				fields?.videoGallery?.nodes
+					?.map((node: GraphQLVideoNode) => node?.mediaItemUrl)
+					.filter((url): url is string => typeof url === 'string' && url.length > 0) || []
 		},
 		seo: {
 			title: post.title || '',

@@ -32,6 +32,11 @@ export interface ProjectGalleries {
 	result: ProjectImage[];
 }
 
+export interface ProjectVideos {
+	main: string | null;
+	gallery: string[];
+}
+
 export interface Project {
 	id: number;
 	globalId?: string;
@@ -43,6 +48,7 @@ export interface Project {
 	specs: ProjectSpecs;
 	features: ProjectFeatures;
 	galleries: ProjectGalleries;
+	videos: ProjectVideos;
 	seo: {
 		title: string;
 		description: string;

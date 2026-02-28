@@ -6,15 +6,15 @@ import { Project } from '@/types/project.types';
 
 export function ProjectMainImage({ coverImage, videos }: Project) {
 	return (
-		<section className='relative w-full bg-light-gray'>
+		<section className='relative w-full aspect-video landscape:h-full portrait:h-fit bg-light-gray'>
 			<HeaderThemeObserver theme='transparent' />
-			{videos.main && coverImage?.url ? (
+			{videos.main ? (
 				<video
 					src={videos.main}
 					loop
 					autoPlay
 					muted
-					className='w-full landscape:h-full portrait:h-fit object-cover'
+					className='w-full h-full object-cover'
 					poster={coverImage?.url}
 				/>
 			) : coverImage?.url ? (
@@ -22,14 +22,12 @@ export function ProjectMainImage({ coverImage, videos }: Project) {
 					src={coverImage.url}
 					alt={coverImage.alt || coverImage.url}
 					fill
-					className='object-cover'
+					className='w-full h-full object-cover'
 					sizes='100vw'
 					priority
 				/>
 			) : (
-				<div className='w-full landscape:h-full portrait:h-fit flex items-center justify-center text-dark-gray'>
-					Нет фото
-				</div>
+				<div className='w-full flex items-center justify-center text-dark-gray'>Нет фото</div>
 			)}
 		</section>
 	);

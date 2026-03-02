@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import Link from 'next/link';
 
 import { FeedbackForm } from '@/components/common/FeedbackForm';
@@ -8,49 +7,16 @@ import { Title } from '@/components/ui/Title';
 
 import { PAGE } from '@/config/pages.config';
 
+import { ProjectGallery } from './ProjectGallery';
 import { ProjectHero } from './ProjectHero';
 import { ProjectMainImage } from './ProjectMainImage';
 import { ProjectParams } from './ProjectParams';
-import { Project, ProjectImage } from '@/types/project.types';
+import type { Project } from '@/types/project.types';
 
 interface ProjectContentProps {
 	project: Project;
 	relatedProjects?: Project[];
 }
-
-const GallerySection = ({ title, items }: { title: string; items: ProjectImage[] }) => {
-	if (!items.length) return null;
-
-	return (
-		<section className='py-12 md:py-16'>
-			<div className='container'>
-				<Title
-					as='h2'
-					variant='h3'
-					className='mb-8'
-				>
-					{title}
-				</Title>
-				<div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5'>
-					{items.map((item, index) => (
-						<div
-							key={`${item.url}-${index}`}
-							className='relative w-full aspect-4/3'
-						>
-							<Image
-								src={item.url}
-								alt={item.alt || title}
-								fill
-								className='object-cover rounded-2xl'
-								sizes='(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw'
-							/>
-						</div>
-					))}
-				</div>
-			</div>
-		</section>
-	);
-};
 
 export function ProjectContent({ project, relatedProjects = [] }: ProjectContentProps) {
 	const filteredRelated = relatedProjects.filter(item => item.slug !== project.slug).slice(0, 4);
@@ -61,11 +27,11 @@ export function ProjectContent({ project, relatedProjects = [] }: ProjectContent
 			<ProjectMainImage {...project} />
 			<ProjectParams {...project} />
 
-			<GallerySection
+			<ProjectGallery
 				title='Результат'
 				items={project.galleries.result}
 			/>
-			<GallerySection
+			<ProjectGallery
 				title='Планировка'
 				items={project.galleries.plans}
 			/>

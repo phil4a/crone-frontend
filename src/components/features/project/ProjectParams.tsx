@@ -1,3 +1,4 @@
+import { HeaderThemeObserver } from '@/components/layout/HeaderThemeObserver';
 import {
 	AreaIcon,
 	BathroomIcon,
@@ -31,6 +32,7 @@ export function ProjectParams({ description, specs, features }: Project) {
 
 	return (
 		<section className='py-16 md:py-20 bg-white'>
+			<HeaderThemeObserver theme='light' />
 			<div className='container'>
 				<div className='grid grid-cols-1 xl:grid-cols-5 gap-8 items-center'>
 					<div className='xl:col-span-3'>

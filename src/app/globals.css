@@ -66,3 +66,23 @@ body {
 .gm-style-iw-chr {
 	height: 26px !important;
 }
+
+.lg-backdrop,
+.lg-outer .lg-thumb-outer {
+	background: var(--color-white) !important;
+	opacity: 0.95 !important;
+}
+.lg-next,
+.lg-prev {
+	background-color: transparent !important;
+}
+
+.lg-next:hover,
+.lg-prev:hover,
+.lg-toolbar .lg-icon:hover {
+	color: var(--color-brown) !important;
+}
+.lg-outer .lg-thumb-item.active,
+.lg-outer .lg-thumb-item:hover {
+	border-color: var(--color-beige) !important;
+}

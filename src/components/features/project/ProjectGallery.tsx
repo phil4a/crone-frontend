@@ -8,6 +8,7 @@ import lgZoom from 'lightgallery/plugins/zoom';
 import LightGallery from 'lightgallery/react';
 import Image from 'next/image';
 
+import { HeaderThemeObserver } from '@/components/layout/HeaderThemeObserver';
 import { Title } from '@/components/ui/Title';
 
 import { ProjectImage } from '@/types/project.types';
@@ -17,6 +18,7 @@ export function ProjectGallery({ title, items }: { title: string; items: Project
 
 	return (
 		<section className='py-12 md:py-16'>
+			<HeaderThemeObserver theme='transparent' />
 			<div className='container'>
 				<Title
 					as='h2'
@@ -27,6 +29,7 @@ export function ProjectGallery({ title, items }: { title: string; items: Project
 				</Title>
 				<LightGallery
 					speed={300}
+					download={true}
 					plugins={[lgZoom, lgThumbnail]}
 					selector='.lg-item'
 				>

@@ -69,8 +69,7 @@ body {
 
 .lg-backdrop,
 .lg-outer .lg-thumb-outer {
-	background: var(--color-white) !important;
-	opacity: 0.95 !important;
+	background: #fff !important;
 }
 .lg-next,
 .lg-prev {

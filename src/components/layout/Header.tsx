@@ -23,6 +23,7 @@ export function Header() {
 	const { theme } = useHeaderStore();
 
 	const HEADER_TRANSITION_DURATION = 600;
+	const closeMenu = () => setMenuPath(null);
 
 	useEffect(() => {
 		const handleScroll = () => {
@@ -191,6 +192,7 @@ export function Header() {
 									<li key={item.href}>
 										<Link
 											href={item.href}
+											onClick={closeMenu}
 											className={cn(
 												'relative text-lg font-medium uppercase transition-colors after:absolute after:bottom-0 after:left-0 after:h-px after:w-0 after:bg-beige after:transition-[width] hover:after:w-full xl:text-base text-nowrap',
 												linkColorClass,
@@ -210,6 +212,7 @@ export function Header() {
 					<div className='flex flex-1 flex-col gap-7.5 xl:flex-row xl:items-center 2xl:gap-8 justify-end xl:grow-0'>
 						<Link
 							href={SITE_CONFIG.contacts.email.href}
+							onClick={closeMenu}
 							className={cn(
 								'group flex items-center gap-2.5 transition-colors text-sm font-bold',
 								textColorClass,
@@ -224,6 +227,7 @@ export function Header() {
 
 						<Link
 							href={SITE_CONFIG.contacts.phone.href}
+							onClick={closeMenu}
 							className={cn(
 								'group flex items-center gap-2.5 transition-colors text-sm font-bold',
 								textColorClass,
@@ -239,6 +243,7 @@ export function Header() {
 						<div className='flex items-center gap-6 xl:gap-4'>
 							<Link
 								href={SITE_CONFIG.contacts.socials.telegram}
+								onClick={closeMenu}
 								className={cn('transition-colors', textColorClass, hoverColorClass)}
 								target='_blank'
 							>
@@ -246,6 +251,7 @@ export function Header() {
 							</Link>
 							<Link
 								href={SITE_CONFIG.contacts.socials.whatsapp}
+								onClick={closeMenu}
 								className={cn('transition-colors', textColorClass, hoverColorClass)}
 								target='_blank'
 							>

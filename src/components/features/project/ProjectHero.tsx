@@ -19,7 +19,7 @@ export function ProjectHero({ title, specs, globalId, id, likes }: Project) {
 		{ label: 'Город', value: specs.city || null }
 	].filter(item => item.value);
 	return (
-		<section className='pt-28 md:pt-36 pb-10 bg-light-gray'>
+		<section className='pt-28 md:pt-36 pb-10'>
 			<HeaderThemeObserver theme='light' />
 			<div className='container'>
 				<Breadcrumbs

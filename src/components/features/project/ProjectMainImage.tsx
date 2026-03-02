@@ -6,7 +6,7 @@ import { Project } from '@/types/project.types';
 
 export function ProjectMainImage({ coverImage, videos }: Project) {
 	return (
-		<section className='relative w-full aspect-video landscape:h-full portrait:h-fit bg-light-gray'>
+		<section className='relative w-full aspect-video landscape:h-full portrait:h-fit'>
 			<HeaderThemeObserver theme='transparent' />
 			{videos.main ? (
 				<video

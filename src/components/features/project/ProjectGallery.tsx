@@ -7,14 +7,41 @@ import lgThumbnail from 'lightgallery/plugins/thumbnail';
 import lgZoom from 'lightgallery/plugins/zoom';
 import LightGallery from 'lightgallery/react';
 import Image from 'next/image';
+import { useEffect, useRef } from 'react';
+import { RowsPhotoAlbum } from 'react-photo-album';
+import 'react-photo-album/rows.css';
 
 import { HeaderThemeObserver } from '@/components/layout/HeaderThemeObserver';
 import { Title } from '@/components/ui/Title';
 
 import { ProjectImage } from '@/types/project.types';
 
-export function ProjectGallery({ title, items }: { title: string; items: ProjectImage[] }) {
+export function ProjectGallery({
+	title,
+	projectAlt,
+	items
+}: {
+	title: string;
+	projectAlt: string;
+	items: ProjectImage[];
+}) {
+	const lightboxRef = useRef<any>(null);
+
+	useEffect(() => {
+		if (lightboxRef.current) {
+			lightboxRef.current.refresh();
+		}
+	}, [items]);
+
 	if (!items.length) return null;
+
+	const photos = items.map(item => ({
+		src: item.url,
+		width: item.width || 1200,
+		height: item.height || 900,
+		alt: item.alt || `Изображение проекта ${projectAlt}`,
+		key: item.id.toString()
+	}));
 
 	return (
 		<section className='py-12 md:py-16'>
@@ -28,35 +55,47 @@ export function ProjectGallery({ title, items }: { title: string; items: Project
 					{title}
 				</Title>
 				<LightGallery
+					onInit={ref => {
+						if (ref) {
+							lightboxRef.current = ref.instance;
+							// Force refresh to ensure LightGallery discovers the elements rendered by RowsPhotoAlbum
+							// This is necessary because react-photo-album might render/layout after LightGallery initializes
+							setTimeout(() => {
+								ref.instance.refresh();
+							}, 10);
+						}
+					}}
 					speed={300}
 					download={true}
 					plugins={[lgZoom, lgThumbnail]}
 					selector='.lg-item'
 				>
-					<div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5'>
-						{items.map((item, index) => {
-							const size = item.width && item.height ? `${item.width}-${item.height}` : undefined;
-							return (
+					<RowsPhotoAlbum
+						photos={photos}
+						targetRowHeight={400}
+						spacing={10}
+						render={{
+							image: (props, { photo }) => (
 								<a
-									key={`${item.url}-${index}`}
-									href={item.url}
-									data-src={item.url}
+									href={photo.src}
+									data-src={photo.src}
 									aria-label={`Открыть изображение ${title}`}
-									data-lg-size={size}
-									data-sub-html={item.alt || title}
-									className='lg-item relative w-full aspect-4/3'
+									data-lg-size={`${photo.width}-${photo.height}`}
+									data-sub-html={photo.alt}
+									className='lg-item relative block w-full h-full'
 								>
 									<Image
-										src={item.url}
-										alt={item.alt || title}
-										fill
+										src={photo.src}
+										alt={props.alt || ''}
+										width={photo.width}
+										height={photo.height}
 										className='object-cover rounded-lg'
-										sizes='(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw'
+										sizes='(max-width: 640px) 100vw, 50vw'
 									/>
 								</a>
-							);
-						})}
-					</div>
+							)
+						}}
+					/>
 				</LightGallery>
 			</div>
 		</section>

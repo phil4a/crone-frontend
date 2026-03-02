@@ -24,21 +24,7 @@ fragment ProjectFields on Post {
 		pool
 		fireplace
 		shortDescription
-		plansGallery {
-			nodes {
-				sourceUrl
-			}
-		}
-		processGallery {
-			nodes {
-				sourceUrl
-			}
-		}
-		resultGallery {
-			nodes {
-				sourceUrl
-			}
-		}
+		...Galleries
 	}
 	projectLikes
 	seo {
@@ -49,6 +35,36 @@ fragment ProjectFields on Post {
 		nodes {
 			name
 			slug
+		}
+	}
+}
+
+fragment Galleries on ProjectFields {
+	plansGallery {
+		nodes {
+			sourceUrl
+			mediaDetails {
+				height
+				width
+			}
+		}
+	}
+	processGallery {
+		nodes {
+			sourceUrl
+			mediaDetails {
+				height
+				width
+			}
+		}
+	}
+	resultGallery {
+		nodes {
+			sourceUrl
+			mediaDetails {
+				height
+				width
+			}
 		}
 	}
 }

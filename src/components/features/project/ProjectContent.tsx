@@ -20,6 +20,7 @@ interface ProjectContentProps {
 
 export function ProjectContent({ project, relatedProjects = [] }: ProjectContentProps) {
 	const filteredRelated = relatedProjects.filter(item => item.slug !== project.slug).slice(0, 4);
+	console.log(project.title);
 
 	return (
 		<main className=''>
@@ -28,12 +29,21 @@ export function ProjectContent({ project, relatedProjects = [] }: ProjectContent
 			<ProjectParams {...project} />
 
 			<ProjectGallery
-				title='Результат'
-				items={project.galleries.result}
-			/>
-			<ProjectGallery
 				title='Планировка'
+				projectAlt={project.title}
 				items={project.galleries.plans}
+			/>
+
+			<ProjectGallery
+				title='Процесс'
+				projectAlt={project.title}
+				items={project.galleries.process}
+			/>
+
+			<ProjectGallery
+				title='Результат'
+				projectAlt={project.title}
+				items={project.galleries.result}
 			/>
 
 			<FeedbackForm />

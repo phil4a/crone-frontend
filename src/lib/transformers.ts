@@ -209,8 +209,8 @@ export function transformGraphQLProject(post: GraphQLProject): Project {
 					.map((node, idx) => ({
 						id: idx,
 						url: node.sourceUrl || '',
-						width: 0,
-						height: 0,
+						width: node.mediaDetails?.width || 0,
+						height: node.mediaDetails?.height || 0,
 						alt: ''
 					})) || [],
 			process:
@@ -219,8 +219,8 @@ export function transformGraphQLProject(post: GraphQLProject): Project {
 					.map((node, idx) => ({
 						id: idx,
 						url: node.sourceUrl || '',
-						width: 0,
-						height: 0,
+						width: node.mediaDetails?.width || 0,
+						height: node.mediaDetails?.height || 0,
 						alt: ''
 					})) || [],
 			result:
@@ -229,8 +229,8 @@ export function transformGraphQLProject(post: GraphQLProject): Project {
 					.map((node, idx) => ({
 						id: idx,
 						url: node.sourceUrl || '',
-						width: 0,
-						height: 0,
+						width: node.mediaDetails?.width || 0,
+						height: node.mediaDetails?.height || 0,
 						alt: ''
 					})) || []
 		},

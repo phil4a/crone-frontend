@@ -1,6 +1,7 @@
 import { pluralizeYears } from '@/lib/formatters/pluralize';
 
 const FOUNDING_YEAR = 2009;
+export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || '';
 
 export const SITE_CONFIG = {
 	name: 'Крона Групп',

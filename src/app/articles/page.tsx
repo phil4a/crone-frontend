@@ -5,6 +5,7 @@ import { ArticlesContent } from '@/components/features/articles/ArticlesContent'
 
 import { PAGE } from '@/config/pages.config';
 import { PAGES_SEO } from '@/config/seo.config';
+import { SITE_URL } from '@/config/site.config';
 
 export { ArticlesContent } from '@/components/features/articles/ArticlesContent';
 
@@ -47,7 +48,7 @@ export async function generateMetadata(props: PageProps): Promise<Metadata> {
 	const title = tagMeta ? tagMeta.title : baseTitle;
 	const description = tagMeta ? tagMeta.description : baseDescription;
 
-	const basePath = PAGE.ARTICLES;
+	const basePath = `${SITE_URL}${PAGE.ARTICLES}`;
 	const canonicalPath = tag ? `${basePath}?category=${encodeURIComponent(tag)}` : basePath;
 
 	return {

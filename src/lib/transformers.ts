@@ -158,7 +158,13 @@ export function transformProject(post: WPProject): Project {
 type GraphQLProjectNode = NonNullable<NonNullable<GetProjectsQuery['posts']>['nodes']>[0];
 type GraphQLRelatedProjectNode = NonNullable<NonNullable<GetRelatedProjectsQuery['posts']>['nodes']>[0];
 type GraphQLProjectBySlug = NonNullable<GetProjectBySlugQuery['post']>;
-type GraphQLVideoNode = { mediaItemUrl?: string | null } | null;
+type GraphQLVideoNode = {
+	mediaItemUrl?: string | null;
+	mediaDetails?: {
+		height?: number | null;
+		width?: number | null;
+	} | null;
+} | null;
 
 type GraphQLProjectFields = NonNullable<GraphQLProjectNode['projectFields']> & {
 	projectVideo?: { node?: GraphQLVideoNode } | null;
@@ -244,8 +250,14 @@ export function transformGraphQLProject(post: GraphQLProject): Project {
 			main: fields?.projectVideo?.node?.mediaItemUrl || null,
 			gallery:
 				fields?.videoGallery?.nodes
-					?.map((node: GraphQLVideoNode) => node?.mediaItemUrl)
-					.filter((url): url is string => typeof url === 'string' && url.length > 0) || []
+					?.filter(node => node?.mediaItemUrl)
+					.map((node, idx) => ({
+						id: idx,
+						url: node?.mediaItemUrl || '',
+						width: node?.mediaDetails?.width || 0,
+						height: node?.mediaDetails?.height || 0,
+						alt: ''
+					})) || []
 		},
 		seo: {
 			title: post.title || '',

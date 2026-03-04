@@ -11,13 +11,16 @@ import { ProjectGallery } from './ProjectGallery';
 import { ProjectHero } from './ProjectHero';
 import { ProjectMainImage } from './ProjectMainImage';
 import { ProjectParams } from './ProjectParams';
-import type { Project } from '@/types/project.types';
 import { ProjectRelated } from './ProjectRelated';
+import { VideoGallery } from './VideoGallery';
+
+import type { Project } from '@/types/project.types';
 
 interface ProjectContentProps {
 	project: Project;
 	relatedProjects?: Project[];
 }
+
 
 export function ProjectContent({ project, relatedProjects = [] }: ProjectContentProps) {
 
@@ -43,6 +46,12 @@ export function ProjectContent({ project, relatedProjects = [] }: ProjectContent
 				title='Результат'
 				projectAlt={project.title}
 				items={project.galleries.result}
+			/>
+
+			<VideoGallery
+				title='Видео'
+				projectAlt={project.title}
+				items={project.videos.gallery}
 			/>
 
 			<FeedbackForm />

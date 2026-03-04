@@ -134,6 +134,10 @@ query GetProjectBySlug($slug: ID!) {
 			videoGallery {
 				nodes {
 					mediaItemUrl
+					  mediaDetails {
+              height
+              width
+            }
 				}
 			}
 		}

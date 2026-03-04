@@ -34,7 +34,7 @@ export interface ProjectGalleries {
 
 export interface ProjectVideos {
 	main: string | null;
-	gallery: string[];
+	gallery: ProjectImage[];
 }
 
 export interface Project {

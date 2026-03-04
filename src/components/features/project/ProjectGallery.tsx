@@ -14,14 +14,8 @@ import 'react-photo-album/rows.css';
 import { HeaderThemeObserver } from '@/components/layout/HeaderThemeObserver';
 import { Title } from '@/components/ui/Title';
 
+import { getProxiedUrl } from '@/lib/utils';
 import { ProjectImage } from '@/types/project.types';
-
-function getProxiedUrl(url: string) {
-	if (url.startsWith('https://crone-group.ru/wp-content/')) {
-		return url.replace('https://crone-group.ru', '');
-	}
-	return url;
-}
 
 export function ProjectGallery({
 	title,
@@ -84,6 +78,7 @@ export function ProjectGallery({
 					<RowsPhotoAlbum
 						photos={photos}
 						targetRowHeight={400}
+						rowConstraints={{ singleRowMaxHeight: 600 }}
 						spacing={10}
 						render={{
 							image: (props, { photo }) => {

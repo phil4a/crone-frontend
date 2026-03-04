@@ -16,8 +16,7 @@ export function ArticleDetail({ article }: ArticleDetailProps) {
 		{ label: 'Статьи', href: '/articles' },
 		article.category
 			? { label: article.category.name, href: `/articles?category=${article.category.slug}` }
-			: { label: '', href: '' },
-		{ label: article.title, href: '' }
+			: { label: '', href: '' }
 	].filter(item => item.label);
 
 	return (

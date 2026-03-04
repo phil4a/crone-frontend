@@ -10,6 +10,9 @@ import { SITE_URL } from '@/config/site.config';
 
 import { TAG_SEO_TITLES } from '@/hooks/projects/useProjectTags';
 
+export const revalidate = 100;
+export const dynamic = 'force-static';
+
 interface PageProps {
 	searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
@@ -57,8 +60,7 @@ export async function generateMetadata(props: PageProps): Promise<Metadata> {
 	};
 }
 
-export const revalidate = 100;
-export const dynamic = 'force-static';
+
 
 export default async function ProjectsPage(props: PageProps) {
 	const searchParams = await props.searchParams;

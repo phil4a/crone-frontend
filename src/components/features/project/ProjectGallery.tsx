@@ -16,6 +16,13 @@ import { Title } from '@/components/ui/Title';
 
 import { ProjectImage } from '@/types/project.types';
 
+function getProxiedUrl(url: string) {
+	if (url.startsWith('https://crone-group.ru/wp-content/')) {
+		return url.replace('https://crone-group.ru', '');
+	}
+	return url;
+}
+
 export function ProjectGallery({
 	title,
 	projectAlt,
@@ -76,25 +83,28 @@ export function ProjectGallery({
 						targetRowHeight={400}
 						spacing={10}
 						render={{
-							image: (props, { photo }) => (
-								<a
-									href={photo.src}
-									data-src={photo.src}
-									aria-label={`Открыть изображение ${title}`}
-									data-lg-size={`${photo.width}-${photo.height}`}
-									data-sub-html={`Проект «${projectAlt}» (${title})`}
-									className='lg-item relative block w-full h-full'
-								>
-									<Image
-										src={photo.src}
-										alt={props.alt || ''}
-										width={photo.width}
-										height={photo.height}
-										className='object-cover rounded-lg'
-										sizes='(max-width: 640px) 100vw, 50vw'
-									/>
-								</a>
-							)
+							image: (props, { photo }) => {
+								const proxiedSrc = getProxiedUrl(photo.src);
+								return (
+									<a
+										href={proxiedSrc}
+										data-src={proxiedSrc}
+										aria-label={`Открыть изображение ${title}`}
+										data-lg-size={`${photo.width}-${photo.height}`}
+										data-sub-html={`Проект «${projectAlt}» (${title})`}
+										className='lg-item relative block w-full h-full'
+									>
+										<Image
+											src={photo.src}
+											alt={props.alt || ''}
+											width={photo.width}
+											height={photo.height}
+											className='object-cover rounded-lg'
+											sizes='(max-width: 640px) 100vw, 50vw'
+										/>
+									</a>
+								);
+							}
 						}}
 					/>
 				</LightGallery>

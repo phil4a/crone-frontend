@@ -11,6 +11,14 @@ const nextConfig: NextConfig = {
 				hostname: 'crone-group.ru'
 			}
 		]
+	},
+	async rewrites() {
+		return [
+			{
+				source: '/wp-content/:path*',
+				destination: 'https://crone-group.ru/wp-content/:path*'
+			}
+		];
 	}
 };
 

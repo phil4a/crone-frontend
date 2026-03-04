@@ -4,7 +4,6 @@ import 'lightgallery/css/lg-video.css';
 import 'lightgallery/css/lg-zoom.css';
 import 'lightgallery/css/lightgallery.css';
 import lgVideo from 'lightgallery/plugins/video';
-import lgZoom from 'lightgallery/plugins/zoom';
 import LightGallery from 'lightgallery/react';
 import { useEffect, useRef } from 'react';
 import { RowsPhotoAlbum } from 'react-photo-album';
@@ -69,7 +68,7 @@ export function VideoGallery({
 						showCloseIcon: true
 					}}
 					download={false}
-					plugins={[lgZoom, lgVideo]}
+					plugins={[lgVideo]}
 					selector='.lg-item'
 				>
 					<RowsPhotoAlbum

@@ -15,6 +15,7 @@ import { ProjectRelated } from './ProjectRelated';
 import { VideoGallery } from './VideoGallery';
 
 import type { Project } from '@/types/project.types';
+import { ProjectBackButton } from './ProjectBackButton';
 
 interface ProjectContentProps {
 	project: Project;
@@ -60,40 +61,7 @@ export function ProjectContent({ project, relatedProjects = [] }: ProjectContent
 				<ProjectRelated relatedProjects={relatedProjects} />
 			)}
 
-			<section className='py-10 md:py-12 bg-white'>
-				<div className='container'>
-					<Button
-						as={Link}
-						href={PAGE.OBJECTS}
-						variant='outline'
-						className='gap-2'
-					>
-						<span className='flex items-center'>
-							<svg
-								width='24'
-								height='24'
-								viewBox='0 0 24 24'
-								fill='none'
-								xmlns='http://www.w3.org/2000/svg'
-							>
-								<path
-									d='M19 12L5 12'
-									stroke='currentColor'
-									strokeLinecap='round'
-									strokeLinejoin='round'
-								/>
-								<path
-									d='M11 18L5 12L11 6'
-									stroke='currentColor'
-									strokeLinecap='round'
-									strokeLinejoin='round'
-								/>
-							</svg>
-						</span>
-						К проектам
-					</Button>
-				</div>
-			</section>
+			<ProjectBackButton />
 		</main>
 	);
 }

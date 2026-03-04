@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import { Suspense } from 'react';
 
 import { ArticlesContent } from '@/components/features/articles/ArticlesContent';
 
@@ -61,9 +60,5 @@ export async function generateMetadata(props: PageProps): Promise<Metadata> {
 }
 
 export default async function ArticlesPage() {
-	return (
-		<Suspense fallback={<div className='h-screen' />}>
-			<ArticlesContent />
-		</Suspense>
-	);
+	return <ArticlesContent />;
 }

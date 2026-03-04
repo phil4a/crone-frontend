@@ -43,3 +43,11 @@ query GetArticleBySlug($slug: ID!) {
 		content
 	}
 }
+
+query GetAllArticleSlugs {
+	posts(first: 1000, where: { categoryName: "articles" }) {
+		nodes {
+			slug
+		}
+	}
+}

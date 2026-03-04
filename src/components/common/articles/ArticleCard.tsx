@@ -12,10 +12,14 @@ interface ArticleCardProps {
 }
 
 export function ArticleCard({ article }: ArticleCardProps) {
+	const articleUrl = `/articles/${article.slug}${
+		article.category ? `?category=${article.category.slug}` : ''
+	}`;
+
 	return (
 		<article className='flex flex-col h-full bg-white rounded-lg border border-brown/20 overflow-hidden group'>
 			<Link
-				href={`/articles/${article.slug}`}
+				href={articleUrl}
 				className='relative w-full aspect-4/3 overflow-hidden'
 			>
 				{article.coverImage ? (
@@ -50,7 +54,7 @@ export function ArticleCard({ article }: ArticleCardProps) {
 				</div>
 
 				<h3 className='text-2xl font-normal mb-3 group-hover:text-brown transition-colors'>
-					<Link href={`/articles/${article.slug}`}>{article.title}</Link>
+					<Link href={articleUrl}>{article.title}</Link>
 				</h3>
 
 				<div
@@ -60,7 +64,7 @@ export function ArticleCard({ article }: ArticleCardProps) {
 
 				<Button
 					as={Link}
-					href={`/articles/${article.slug}`}
+					href={articleUrl}
 					variant='default'
 					size='lg'
 					className='w-full mt-auto'

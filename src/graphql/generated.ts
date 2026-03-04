@@ -10568,6 +10568,11 @@ export type GetArticleBySlugQueryVariables = Exact<{
 
 export type GetArticleBySlugQuery = { __typename?: 'RootQuery', post?: { __typename?: 'Post', content?: string | null, id: string, databaseId: number, title?: string | null, slug?: string | null, date?: string | null, categories?: { __typename?: 'PostToCategoryConnection', nodes: Array<{ __typename?: 'Category', name?: string | null, slug?: string | null }> } | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node: { __typename?: 'MediaItem', sourceUrl?: string | null } } | null, articlesField?: { __typename?: 'ArticlesField', shortDescription?: string | null } | null, seo?: { __typename?: 'PostTypeSEO', title?: string | null, metaDesc?: string | null } | null } | null };
 
+export type GetAllArticleSlugsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetAllArticleSlugsQuery = { __typename?: 'RootQuery', posts?: { __typename?: 'RootQueryToPostConnection', nodes: Array<{ __typename?: 'Post', slug?: string | null }> } | null };
+
 export type GetChildCategoriesQueryVariables = Exact<{
   slug: Scalars['ID']['input'];
 }>;
@@ -10863,6 +10868,55 @@ export const useInfiniteGetArticleBySlugQuery = <
     )};
 
 useInfiniteGetArticleBySlugQuery.getKey = (variables: GetArticleBySlugQueryVariables) => ['GetArticleBySlug.infinite', variables];
+
+export const GetAllArticleSlugsDocument = `
+    query GetAllArticleSlugs {
+  posts(first: 1000, where: {categoryName: "articles"}) {
+    nodes {
+      slug
+    }
+  }
+}
+    `;
+
+export const useGetAllArticleSlugsQuery = <
+      TData = GetAllArticleSlugsQuery,
+      TError = unknown
+    >(
+      variables?: GetAllArticleSlugsQueryVariables,
+      options?: Omit<UseQueryOptions<GetAllArticleSlugsQuery, TError, TData>, 'queryKey'> & { queryKey?: UseQueryOptions<GetAllArticleSlugsQuery, TError, TData>['queryKey'] }
+    ) => {
+    
+    return useQuery<GetAllArticleSlugsQuery, TError, TData>(
+      {
+    queryKey: variables === undefined ? ['GetAllArticleSlugs'] : ['GetAllArticleSlugs', variables],
+    queryFn: fetcher<GetAllArticleSlugsQuery, GetAllArticleSlugsQueryVariables>(GetAllArticleSlugsDocument, variables),
+    ...options
+  }
+    )};
+
+useGetAllArticleSlugsQuery.getKey = (variables?: GetAllArticleSlugsQueryVariables) => variables === undefined ? ['GetAllArticleSlugs'] : ['GetAllArticleSlugs', variables];
+
+export const useInfiniteGetAllArticleSlugsQuery = <
+      TData = InfiniteData<GetAllArticleSlugsQuery>,
+      TError = unknown
+    >(
+      variables: GetAllArticleSlugsQueryVariables,
+      options: Omit<UseInfiniteQueryOptions<GetAllArticleSlugsQuery, TError, TData>, 'queryKey'> & { queryKey?: UseInfiniteQueryOptions<GetAllArticleSlugsQuery, TError, TData>['queryKey'] }
+    ) => {
+    
+    return useInfiniteQuery<GetAllArticleSlugsQuery, TError, TData>(
+      (() => {
+    const { queryKey: optionsQueryKey, ...restOptions } = options;
+    return {
+      queryKey: optionsQueryKey ?? variables === undefined ? ['GetAllArticleSlugs.infinite'] : ['GetAllArticleSlugs.infinite', variables],
+      queryFn: (metaData) => fetcher<GetAllArticleSlugsQuery, GetAllArticleSlugsQueryVariables>(GetAllArticleSlugsDocument, {...variables, ...(metaData.pageParam ?? {})})(),
+      ...restOptions
+    }
+  })()
+    )};
+
+useInfiniteGetAllArticleSlugsQuery.getKey = (variables?: GetAllArticleSlugsQueryVariables) => variables === undefined ? ['GetAllArticleSlugs.infinite'] : ['GetAllArticleSlugs.infinite', variables];
 
 export const GetChildCategoriesDocument = `
     query GetChildCategories($slug: ID!) {

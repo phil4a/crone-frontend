@@ -3,8 +3,6 @@
 import { useRouter, useSearchParams } from 'next/navigation';
 
 import { ArticleCard } from '@/components/common/articles/ArticleCard';
-import { ArticlesSidebar } from '@/components/features/articles/ArticlesSidebar';
-import { HeaderThemeObserver } from '@/components/layout/HeaderThemeObserver';
 import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
 import { Pagination } from '@/components/ui/Pagination';
 import { SkeletonLoader } from '@/components/ui/SkeletonLoader';
@@ -45,56 +43,42 @@ export function ArticlesContent() {
 	].filter(item => item.label);
 
 	return (
-		<main className='pt-38 pb-27 container bg-light-gray min-h-screen'>
-			<HeaderThemeObserver theme='light' />
-
+		<>
 			<Breadcrumbs items={breadcrumbs} />
 
-			<div className='grid grid-cols-1 lg:grid-cols-5 gap-8'>
-				{/* Sidebar */}
-				<div className='lg:block lg:col-span-1'>
-					<ArticlesSidebar className='sticky top-26' />
+			<Title
+				as='h1'
+				className='mb-8'
+			>
+				{getTitle()}
+			</Title>
+			{isLoading ? (
+				<div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-y-12 gap-x-6 mb-12'>
+					<SkeletonLoader
+						count={6}
+						className='w-full relative h-full aspect-12/16 rounded-lg'
+					/>
 				</div>
-
-				{/* Content */}
-				<div className='lg:col-span-4'>
-					<Title
-						as='h1'
-						className='mb-8'
-					>
-						{getTitle()}
-					</Title>
-					{isLoading ? (
-						<div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-y-12 gap-x-6 mb-12'>
-							<SkeletonLoader
-								count={6}
-								className='w-full relative h-full aspect-12/16 rounded-lg'
+			) : articles.length > 0 ? (
+				<>
+					<div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-y-12 gap-x-6 mb-12'>
+						{articles.map(article => (
+							<ArticleCard
+								key={article.id}
+								article={article}
 							/>
-						</div>
-					) : articles.length > 0 ? (
-						<>
-							<div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-y-12 gap-x-6 mb-12'>
-								{articles.map(article => (
-									<ArticleCard
-										key={article.id}
-										article={article}
-									/>
-								))}
-							</div>
+						))}
+					</div>
 
-							<Pagination
-								currentPage={page}
-								totalPages={totalPages}
-								onPageChange={handlePageChange}
-							/>
-						</>
-					) : (
-						<div className='text-center py-20 text-gray-500'>
-							Статей в данной категории пока нет.
-						</div>
-					)}
-				</div>
-			</div>
-		</main>
+					<Pagination
+						currentPage={page}
+						totalPages={totalPages}
+						onPageChange={handlePageChange}
+					/>
+				</>
+			) : (
+				<div className='text-center py-20 text-gray-500'>Статей в данной категории пока нет.</div>
+			)}
+		</>
 	);
 }

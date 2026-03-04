@@ -20,7 +20,6 @@ interface ProjectContentProps {
 
 export function ProjectContent({ project, relatedProjects = [] }: ProjectContentProps) {
 	const filteredRelated = relatedProjects.filter(item => item.slug !== project.slug).slice(0, 4);
-	console.log(project.title);
 
 	return (
 		<main className=''>

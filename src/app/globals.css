@@ -85,3 +85,7 @@ body {
 .lg-outer .lg-thumb-item:hover {
 	border-color: var(--color-beige) !important;
 }
+
+.lg-sub-html {
+	color: var(--color-brown) !important;
+}

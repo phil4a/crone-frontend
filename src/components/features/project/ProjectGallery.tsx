@@ -81,7 +81,7 @@ export function ProjectGallery({
 									data-src={photo.src}
 									aria-label={`Открыть изображение ${title}`}
 									data-lg-size={`${photo.width}-${photo.height}`}
-									data-sub-html={photo.alt}
+									data-sub-html={`Проект ${projectAlt} (${title})`}
 									className='lg-item relative block w-full h-full'
 								>
 									<Image

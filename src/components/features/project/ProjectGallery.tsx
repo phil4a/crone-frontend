@@ -65,6 +65,7 @@ export function ProjectGallery({
 							}, 10);
 						}
 					}}
+					licenseKey={process.env.NEXT_PUBLIC_LIGHT_GALLERY_LICENSE_KEY}
 					speed={300}
 					download={true}
 					plugins={[lgZoom, lgThumbnail]}
@@ -81,7 +82,7 @@ export function ProjectGallery({
 									data-src={photo.src}
 									aria-label={`Открыть изображение ${title}`}
 									data-lg-size={`${photo.width}-${photo.height}`}
-									data-sub-html={`Проект ${projectAlt} (${title})`}
+									data-sub-html={`Проект «${projectAlt}» (${title})`}
 									className='lg-item relative block w-full h-full'
 								>
 									<Image

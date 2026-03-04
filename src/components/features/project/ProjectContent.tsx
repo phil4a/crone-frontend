@@ -12,6 +12,7 @@ import { ProjectHero } from './ProjectHero';
 import { ProjectMainImage } from './ProjectMainImage';
 import { ProjectParams } from './ProjectParams';
 import type { Project } from '@/types/project.types';
+import { ProjectRelated } from './ProjectRelated';
 
 interface ProjectContentProps {
 	project: Project;
@@ -19,7 +20,6 @@ interface ProjectContentProps {
 }
 
 export function ProjectContent({ project, relatedProjects = [] }: ProjectContentProps) {
-	const filteredRelated = relatedProjects.filter(item => item.slug !== project.slug).slice(0, 4);
 
 	return (
 		<main className=''>
@@ -47,26 +47,8 @@ export function ProjectContent({ project, relatedProjects = [] }: ProjectContent
 
 			<FeedbackForm />
 
-			{filteredRelated.length > 0 && (
-				<section className='py-16 md:py-20 bg-light-gray'>
-					<div className='container'>
-						<Title
-							as='h2'
-							variant='h3'
-							className='mb-8'
-						>
-							Похожие проекты
-						</Title>
-						<ul className='grid grid-cols-1 md:grid-cols-2 gap-5'>
-							{filteredRelated.map(item => (
-								<ProjectCardDetailed
-									key={item.id}
-									project={item}
-								/>
-							))}
-						</ul>
-					</div>
-				</section>
+			{relatedProjects.length > 0 && (
+				<ProjectRelated relatedProjects={relatedProjects} />
 			)}
 
 			<section className='py-10 md:py-12 bg-white'>

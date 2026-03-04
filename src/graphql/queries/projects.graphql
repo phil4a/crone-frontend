@@ -69,6 +69,14 @@ fragment Galleries on ProjectFields {
 	}
 }
 
+query GetRelatedProjects($tag: String, $notIn: [ID]) {
+	posts(first: 30, where: { categoryName: "project", tag: $tag, notIn: $notIn }) {
+		nodes {
+			...ProjectFields
+		}
+	}
+}
+
 query GetProjects(
 	$first: Int
 	$after: String

@@ -11,14 +11,15 @@ import {
 	GetProjectBySlugDocument,
 	GetProjectBySlugQuery,
 	GetProjectBySlugQueryVariables,
-	GetProjectsDocument,
-	GetProjectsQuery,
-	GetProjectsQueryVariables
+	GetRelatedProjectsDocument,
+	GetRelatedProjectsQuery,
+	GetRelatedProjectsQueryVariables
 } from '@/graphql/generated';
+import { getRandomProjects } from '@/lib/projects/utils';
 import { transformGraphQLProject } from '@/lib/transformers';
 import { TPageSlugProp } from '@/types/page.types';
 
-export const revalidate = 100;
+export const revalidate = 86400;
 export const dynamic = 'force-static';
 
 export async function generateStaticParams() {
@@ -64,14 +65,18 @@ export default async function ObjectPage({ params }: TPageSlugProp) {
 	}
 
 	const project = transformGraphQLProject(post);
-	const relatedData = await client.request<GetProjectsQuery, GetProjectsQueryVariables>(
-		GetProjectsDocument,
+
+	// Fetch related projects (random 3 with same tag)
+	const relatedData = await client.request<GetRelatedProjectsQuery, GetRelatedProjectsQueryVariables>(
+		GetRelatedProjectsDocument,
 		{
-			first: 4,
-			tag: project.tags[0] || undefined
+			tag: project.tags[0] || undefined,
+			notIn: [project.globalId || '']
 		}
 	);
-	const relatedProjects = relatedData?.posts?.nodes?.map(transformGraphQLProject) || [];
+
+	const relatedNodes = relatedData?.posts?.nodes || [];
+	const relatedProjects = getRandomProjects(relatedNodes, 3);
 
 	return (
 		<ProjectContent

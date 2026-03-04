@@ -25,6 +25,7 @@ export function ProjectMainImage({ coverImage, videos }: Project) {
 					className='w-full h-full object-cover'
 					sizes='100vw'
 					priority
+					loading='eager'
 				/>
 			) : (
 				<div className='w-full flex items-center justify-center text-dark-gray'>Нет фото</div>

@@ -1,4 +1,9 @@
-import { GetArticlesQuery, GetProjectBySlugQuery, GetProjectsQuery } from '@/graphql/generated';
+import {
+	GetArticlesQuery,
+	GetProjectBySlugQuery,
+	GetProjectsQuery,
+	GetRelatedProjectsQuery
+} from '@/graphql/generated';
 import { Article } from '@/types/article.types';
 import { Project, ProjectImage } from '@/types/project.types';
 import { WPEmbedded, WPEmbeddedMedia, WPProject } from '@/types/wp.types';
@@ -151,6 +156,7 @@ export function transformProject(post: WPProject): Project {
 }
 
 type GraphQLProjectNode = NonNullable<NonNullable<GetProjectsQuery['posts']>['nodes']>[0];
+type GraphQLRelatedProjectNode = NonNullable<NonNullable<GetRelatedProjectsQuery['posts']>['nodes']>[0];
 type GraphQLProjectBySlug = NonNullable<GetProjectBySlugQuery['post']>;
 type GraphQLVideoNode = { mediaItemUrl?: string | null } | null;
 
@@ -159,7 +165,7 @@ type GraphQLProjectFields = NonNullable<GraphQLProjectNode['projectFields']> & {
 	videoGallery?: { nodes?: GraphQLVideoNode[] | null } | null;
 };
 
-type GraphQLProject = (GraphQLProjectNode | GraphQLProjectBySlug) & {
+type GraphQLProject = (GraphQLProjectNode | GraphQLRelatedProjectNode | GraphQLProjectBySlug) & {
 	content?: string | null;
 	projectFields?: GraphQLProjectFields | null;
 };

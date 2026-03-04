@@ -57,6 +57,9 @@ export async function generateMetadata(props: PageProps): Promise<Metadata> {
 	};
 }
 
+export const revalidate = 100;
+export const dynamic = 'force-static';
+
 export default async function ProjectsPage(props: PageProps) {
 	const searchParams = await props.searchParams;
 	const tag = typeof searchParams.tag === 'string' ? searchParams.tag : undefined;

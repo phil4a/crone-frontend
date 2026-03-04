@@ -10579,6 +10579,14 @@ export type ProjectFieldsFragment = { __typename?: 'Post', id: string, databaseI
 
 export type GalleriesFragment = { __typename?: 'ProjectFields', plansGallery?: { __typename?: 'AcfMediaItemConnection', nodes: Array<{ __typename?: 'MediaItem', sourceUrl?: string | null, mediaDetails?: { __typename?: 'MediaDetails', height?: number | null, width?: number | null } | null }> } | null, processGallery?: { __typename?: 'AcfMediaItemConnection', nodes: Array<{ __typename?: 'MediaItem', sourceUrl?: string | null, mediaDetails?: { __typename?: 'MediaDetails', height?: number | null, width?: number | null } | null }> } | null, resultGallery?: { __typename?: 'AcfMediaItemConnection', nodes: Array<{ __typename?: 'MediaItem', sourceUrl?: string | null, mediaDetails?: { __typename?: 'MediaDetails', height?: number | null, width?: number | null } | null }> } | null };
 
+export type GetRelatedProjectsQueryVariables = Exact<{
+  tag?: InputMaybe<Scalars['String']['input']>;
+  notIn?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>> | InputMaybe<Scalars['ID']['input']>>;
+}>;
+
+
+export type GetRelatedProjectsQuery = { __typename?: 'RootQuery', posts?: { __typename?: 'RootQueryToPostConnection', nodes: Array<{ __typename?: 'Post', id: string, databaseId: number, title?: string | null, slug?: string | null, projectLikes?: number | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node: { __typename?: 'MediaItem', sourceUrl?: string | null } } | null, projectFields?: { __typename?: 'ProjectFields', area?: string | null, rooms?: string | null, floor?: string | null, bedrooms?: string | null, bathrooms?: string | null, status?: Array<string | null> | null, year?: number | null, city?: string | null, type?: Array<string | null> | null, terrace?: boolean | null, garage?: boolean | null, sauna?: boolean | null, pool?: boolean | null, fireplace?: boolean | null, shortDescription?: string | null, plansGallery?: { __typename?: 'AcfMediaItemConnection', nodes: Array<{ __typename?: 'MediaItem', sourceUrl?: string | null, mediaDetails?: { __typename?: 'MediaDetails', height?: number | null, width?: number | null } | null }> } | null, processGallery?: { __typename?: 'AcfMediaItemConnection', nodes: Array<{ __typename?: 'MediaItem', sourceUrl?: string | null, mediaDetails?: { __typename?: 'MediaDetails', height?: number | null, width?: number | null } | null }> } | null, resultGallery?: { __typename?: 'AcfMediaItemConnection', nodes: Array<{ __typename?: 'MediaItem', sourceUrl?: string | null, mediaDetails?: { __typename?: 'MediaDetails', height?: number | null, width?: number | null } | null }> } | null } | null, seo?: { __typename?: 'PostTypeSEO', title?: string | null, metaDesc?: string | null } | null, tags?: { __typename?: 'PostToTagConnection', nodes: Array<{ __typename?: 'Tag', name?: string | null, slug?: string | null }> } | null }> } | null };
+
 export type GetProjectsQueryVariables = Exact<{
   first?: InputMaybe<Scalars['Int']['input']>;
   after?: InputMaybe<Scalars['String']['input']>;
@@ -10913,6 +10921,55 @@ export const useInfiniteGetChildCategoriesQuery = <
     )};
 
 useInfiniteGetChildCategoriesQuery.getKey = (variables: GetChildCategoriesQueryVariables) => ['GetChildCategories.infinite', variables];
+
+export const GetRelatedProjectsDocument = `
+    query GetRelatedProjects($tag: String, $notIn: [ID]) {
+  posts(first: 30, where: {categoryName: "project", tag: $tag, notIn: $notIn}) {
+    nodes {
+      ...ProjectFields
+    }
+  }
+}
+    ${ProjectFieldsFragmentDoc}`;
+
+export const useGetRelatedProjectsQuery = <
+      TData = GetRelatedProjectsQuery,
+      TError = unknown
+    >(
+      variables?: GetRelatedProjectsQueryVariables,
+      options?: Omit<UseQueryOptions<GetRelatedProjectsQuery, TError, TData>, 'queryKey'> & { queryKey?: UseQueryOptions<GetRelatedProjectsQuery, TError, TData>['queryKey'] }
+    ) => {
+    
+    return useQuery<GetRelatedProjectsQuery, TError, TData>(
+      {
+    queryKey: variables === undefined ? ['GetRelatedProjects'] : ['GetRelatedProjects', variables],
+    queryFn: fetcher<GetRelatedProjectsQuery, GetRelatedProjectsQueryVariables>(GetRelatedProjectsDocument, variables),
+    ...options
+  }
+    )};
+
+useGetRelatedProjectsQuery.getKey = (variables?: GetRelatedProjectsQueryVariables) => variables === undefined ? ['GetRelatedProjects'] : ['GetRelatedProjects', variables];
+
+export const useInfiniteGetRelatedProjectsQuery = <
+      TData = InfiniteData<GetRelatedProjectsQuery>,
+      TError = unknown
+    >(
+      variables: GetRelatedProjectsQueryVariables,
+      options: Omit<UseInfiniteQueryOptions<GetRelatedProjectsQuery, TError, TData>, 'queryKey'> & { queryKey?: UseInfiniteQueryOptions<GetRelatedProjectsQuery, TError, TData>['queryKey'] }
+    ) => {
+    
+    return useInfiniteQuery<GetRelatedProjectsQuery, TError, TData>(
+      (() => {
+    const { queryKey: optionsQueryKey, ...restOptions } = options;
+    return {
+      queryKey: optionsQueryKey ?? variables === undefined ? ['GetRelatedProjects.infinite'] : ['GetRelatedProjects.infinite', variables],
+      queryFn: (metaData) => fetcher<GetRelatedProjectsQuery, GetRelatedProjectsQueryVariables>(GetRelatedProjectsDocument, {...variables, ...(metaData.pageParam ?? {})})(),
+      ...restOptions
+    }
+  })()
+    )};
+
+useInfiniteGetRelatedProjectsQuery.getKey = (variables?: GetRelatedProjectsQueryVariables) => variables === undefined ? ['GetRelatedProjects.infinite'] : ['GetRelatedProjects.infinite', variables];
 
 export const GetProjectsDocument = `
     query GetProjects($first: Int, $after: String, $tag: String, $minArea: Float, $maxArea: Float, $floor: Float, $floors: [Float], $minBedrooms: Float, $maxBedrooms: Float, $projectStatus: String, $projectStatuses: [String], $sort: String, $offset: Int) {

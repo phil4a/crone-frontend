@@ -74,6 +74,9 @@ export function ProjectGallery({
 					}}
 					licenseKey={process.env.NEXT_PUBLIC_LIGHT_GALLERY_LICENSE_KEY}
 					speed={300}
+					mobileSettings={{
+						showCloseIcon: true
+					}}
 					download={true}
 					plugins={[lgZoom, lgThumbnail]}
 					selector='.lg-item'

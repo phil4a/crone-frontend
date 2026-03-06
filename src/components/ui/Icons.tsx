@@ -85,15 +85,16 @@ export const WhatsappIcon = ({ className }: { className?: string }) => (
 		/>
 	</svg>
 );
+
 export const MaxIcon = ({ className }: { className?: string }) => (
 	<svg
 		xmlns='http://www.w3.org/2000/svg'
 		className={cn('h-4.75 w-4.75', className)}
-		fill-rule='evenodd'
-		clip-rule='evenodd'
-		image-rendering='optimizeQuality'
-		shape-rendering='geometricPrecision'
-		text-rendering='geometricPrecision'
+		fillRule='evenodd'
+		clipRule='evenodd'
+		imageRendering='optimizeQuality'
+		shapeRendering='geometricPrecision'
+		textRendering='geometricPrecision'
 		viewBox='0 0 100 99.57'
 	>
 		<path

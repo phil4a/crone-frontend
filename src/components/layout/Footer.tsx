@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
-import { EmailIcon, InstagramIcon, PhoneIcon, TelegramIcon } from '@/components/ui/Icons';
+import { EmailIcon, InstagramIcon, MaxIcon, PhoneIcon, TelegramIcon } from '@/components/ui/Icons';
 import { Logo } from '@/components/ui/Logo';
 
 import { FOOTER_MENU } from '@/config/navigation.config';
@@ -104,30 +104,39 @@ function FooterContacts() {
 	return (
 		<div className='flex flex-col gap-6'>
 			<div className='flex flex-col gap-4 items-start'>
-				<a
+				<Link
 					href={SITE_CONFIG.contacts.socials.telegramGroup}
 					target='_blank'
 					rel='noopener noreferrer'
 					className='flex items-center gap-3 text-white hover:text-beige transition-colors'
 				>
 					<TelegramIcon className='w-4.5 h-4.5' />
-					<span>Наш телеграм-канал</span>
-				</a>
-				<a
+					<span>Телеграм-канал</span>
+				</Link>
+				<Link
+					href={SITE_CONFIG.contacts.socials.maxGroup}
+					target='_blank'
+					rel='noopener noreferrer'
+					className='flex items-center gap-3 text-white hover:text-beige transition-colors'
+				>
+					<MaxIcon className='w-4.5 h-4.5' />
+					<span>Канал в MAX</span>
+				</Link>
+				<Link
 					href={SITE_CONFIG.contacts.email.href}
 					className='flex items-center gap-3 text-white hover:text-beige transition-colors'
 				>
 					<EmailIcon className='w-4.5 h-3.75' />
 					<span>{SITE_CONFIG.contacts.email.label}</span>
-				</a>
-				<a
+				</Link>
+				<Link
 					href={SITE_CONFIG.contacts.phone.href}
 					className='flex items-center gap-3 text-white hover:text-beige transition-colors'
 				>
 					<PhoneIcon className='w-4.5 h-4.75' />
 					<span>{SITE_CONFIG.contacts.phone.label}</span>
-				</a>
-				<a
+				</Link>
+				<Link
 					href={SITE_CONFIG.contacts.socials.instagram}
 					target='_blank'
 					rel='noopener noreferrer'
@@ -142,15 +151,15 @@ function FooterContacts() {
 						className='w-40 h-40'
 					/>
 					{/* <span className='text-lg'>@cronegroupnsk</span> */}
-				</a>
-				<a
+				</Link>
+				<Link
 					href={SITE_CONFIG.contacts.socials.instagram}
 					target='_blank'
 					rel='noopener noreferrer'
 					className='xl:hidden flex items-center gap-3 text-white hover:text-beige transition-colors'
 				>
 					<InstagramIcon className='w-8 h-8' />
-				</a>
+				</Link>
 			</div>
 		</div>
 	);

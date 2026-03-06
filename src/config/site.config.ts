@@ -46,7 +46,8 @@ export const SITE_CONFIG = {
 			telegram: 'https://t.me/crone_group',
 			instagram: 'https://www.instagram.com/cronegroupnsk',
 			max: 'https://max.ru/u/f9LHodD0cOKuqj4BXdzJ278LmHK2J0JQLyCNmOrUQnvV6wSw0POm-eLj5cE',
-			telegramGroup: 'https://t.me/cronegroupnsk'
+			telegramGroup: 'https://t.me/cronegroupnsk',
+			maxGroup: 'https://max.ru/join/LATciHXdZ4YLI-Npp6ZfHD7l_O9qX6wJhesc3TLBxkA'
 		}
 	}
 };

@@ -205,3 +205,19 @@ export const SortIcon = ({ className }: { className?: string }) => (
 		/>
 	</svg>
 );
+
+export const MarkerIcon = ({ className }: { className?: string }) => (
+	<svg
+		className={cn('h-4.5 w-4.5', className)}
+		viewBox='0 0 14 18'
+		fill='none'
+		xmlns='http://www.w3.org/2000/svg'
+	>
+		<path
+			fillRule='evenodd'
+			clipRule='evenodd'
+			d='M14 6.92308C14 13.1538 7 18 7 18C7 18 0 13.1538 0 6.92308C0 5.08696 0.737498 3.32605 2.05025 2.02772C3.36301 0.729394 5.14348 0 7 0C8.85652 0 10.637 0.729394 11.9497 2.02772C13.2625 3.32605 14 5.08696 14 6.92308ZM9 6C9 7.10457 8.10457 8 7 8C5.89543 8 5 7.10457 5 6C5 4.89543 5.89543 4 7 4C8.10457 4 9 4.89543 9 6Z'
+			fill='currentColor'
+		/>
+	</svg>
+);

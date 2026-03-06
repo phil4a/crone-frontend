@@ -85,6 +85,23 @@ export const WhatsappIcon = ({ className }: { className?: string }) => (
 		/>
 	</svg>
 );
+export const MaxIcon = ({ className }: { className?: string }) => (
+	<svg
+		xmlns='http://www.w3.org/2000/svg'
+		className={cn('h-4.75 w-4.75', className)}
+		fill-rule='evenodd'
+		clip-rule='evenodd'
+		image-rendering='optimizeQuality'
+		shape-rendering='geometricPrecision'
+		text-rendering='geometricPrecision'
+		viewBox='0 0 100 99.57'
+	>
+		<path
+			d='M51.07 99.28c-9.81 0-14.37-1.43-22.3-7.16-5.01 6.45-20.89 11.49-21.58 2.87 0-6.48-1.44-11.94-3.06-17.91C2.2 69.72 0 61.53 0 49.67 0 21.32 23.26 0 50.81 0 78.39 0 100 22.37 100 49.93c.09 27.13-21.8 49.21-48.93 49.35m.41-74.78c-13.42-.69-23.88 8.59-26.19 23.16-1.91 12.06 1.48 26.74 4.37 27.51 1.38.33 4.87-2.49 7.04-4.66 3.59 2.48 7.78 3.97 12.13 4.32 13.9.67 25.78-9.91 26.72-23.8.54-13.92-10.16-25.71-24.07-26.51z'
+			fill='currentColor'
+		/>
+	</svg>
+);
 
 export const FiltersIcon = ({ className }: { className?: string }) => (
 	<svg

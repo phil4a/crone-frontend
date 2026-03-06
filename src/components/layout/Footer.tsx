@@ -17,7 +17,7 @@ export async function Footer() {
 		tags.length > 0
 			? tags.map(tag => ({
 					label: tag.name,
-					href: `/projects/?tags=${tag.slug}`
+					href: `/projects/?tag=${tag.slug}`
 				}))
 			: []; // Or fallback to static menu if needed
 
@@ -111,7 +111,7 @@ function FooterContacts() {
 					className='flex items-center gap-3 text-white hover:text-beige transition-colors'
 				>
 					<TelegramIcon className='w-4.5 h-4.5' />
-					<span>Наш telegram-канал</span>
+					<span>Наш телеграм-канал</span>
 				</a>
 				<a
 					href={SITE_CONFIG.contacts.email.href}
@@ -141,7 +141,7 @@ function FooterContacts() {
 						height={160}
 						className='w-40 h-40'
 					/>
-					<span className='text-lg'>@cronegroupnsk</span>
+					{/* <span className='text-lg'>@cronegroupnsk</span> */}
 				</a>
 				<a
 					href={SITE_CONFIG.contacts.socials.instagram}

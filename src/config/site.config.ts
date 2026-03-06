@@ -45,6 +45,7 @@ export const SITE_CONFIG = {
 			whatsapp: 'https://wa.me/79139259299',
 			telegram: 'https://t.me/crone_group',
 			instagram: 'https://www.instagram.com/cronegroupnsk',
+			max: 'https://max.ru/u/f9LHodD0cOKuqj4BXdzJ278LmHK2J0JQLyCNmOrUQnvV6wSw0POm-eLj5cE',
 			telegramGroup: 'https://t.me/cronegroupnsk'
 		}
 	}

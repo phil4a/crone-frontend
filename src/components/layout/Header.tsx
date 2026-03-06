@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
 import { Button } from '@/components/ui/Button';
-import { EmailIcon, PhoneIcon, TelegramIcon, WhatsappIcon } from '@/components/ui/Icons';
+import { EmailIcon, MaxIcon, PhoneIcon, TelegramIcon, WhatsappIcon } from '@/components/ui/Icons';
 import { Logo } from '@/components/ui/Logo';
 
 import { MAIN_MENU } from '@/config/navigation.config';
@@ -149,6 +149,13 @@ export function Header() {
 					>
 						<WhatsappIcon />
 					</Link>
+					<Link
+						href={SITE_CONFIG.contacts.socials.max}
+						className={cn('transition-colors', textColorClass, hoverColorClass)}
+						target='_blank'
+					>
+						<MaxIcon />
+					</Link>
 				</div>
 				<button
 					type='button'
@@ -256,6 +263,14 @@ export function Header() {
 								target='_blank'
 							>
 								<WhatsappIcon />
+							</Link>
+							<Link
+								href={SITE_CONFIG.contacts.socials.max}
+								onClick={closeMenu}
+								className={cn('transition-colors', textColorClass, hoverColorClass)}
+								target='_blank'
+							>
+								<MaxIcon />
 							</Link>
 						</div>
 

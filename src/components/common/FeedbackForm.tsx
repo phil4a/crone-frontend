@@ -114,8 +114,8 @@ export function FeedbackForm({ className }: { className?: string }) {
 
 						<div>
 							<Input
-								label='E-mail'
-								placeholder='E-mail'
+								label='Электронная почта'
+								placeholder='Электронная почта'
 								type='email'
 								{...register('email')}
 								className={cn(errors.email && 'border-red-500')}

@@ -1,9 +1,11 @@
 'use client';
 
-import { importLibrary, setOptions } from '@googlemaps/js-api-loader';
+import { importLibrary } from '@googlemaps/js-api-loader';
 import { useEffect, useRef } from 'react';
 
 import { HeaderThemeObserver } from '@/components/layout/HeaderThemeObserver';
+
+import { initGoogleMaps } from '@/lib/google-maps';
 
 const MAP_OPTIONS = {
 	center: {
@@ -27,10 +29,8 @@ export function ContactsMap() {
 
 	useEffect(() => {
 		const initMap = async () => {
-			setOptions({
-				key: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string,
-				v: 'weekly'
-			});
+			// Initialize Google Maps options (only once)
+			initGoogleMaps();
 
 			try {
 				const { Map, InfoWindow } = (await importLibrary('maps')) as google.maps.MapsLibrary;

@@ -1,8 +1,11 @@
 'use client';
 
+import { importLibrary } from '@googlemaps/js-api-loader';
 import { useEffect, useRef } from 'react';
-import { setOptions, importLibrary } from '@googlemaps/js-api-loader';
+
 import { GEOGRAPHY_MARKERS } from '@/config/geography.data';
+
+import { initGoogleMaps } from '@/lib/google-maps';
 
 const MAP_OPTIONS = {
 	center: { lat: 51.707835, lng: 81.504703 },
@@ -14,7 +17,7 @@ const MAP_OPTIONS = {
 	scaleControl: false,
 	streetViewControl: false,
 	rotateControl: false,
-	fullscreenControl: false,
+	fullscreenControl: false
 };
 
 export function GeographyMap() {
@@ -23,15 +26,13 @@ export function GeographyMap() {
 
 	useEffect(() => {
 		const initMap = async () => {
-			setOptions({
-				key: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string,
-				v: 'weekly',
-			});
+			// Initialize Google Maps options (only once)
+			initGoogleMaps();
 
 			try {
 				const { Map, InfoWindow } = (await importLibrary('maps')) as google.maps.MapsLibrary;
 				const { AdvancedMarkerElement } = (await importLibrary(
-					'marker',
+					'marker'
 				)) as google.maps.MarkerLibrary;
 
 				if (mapRef.current && !mapInstanceRef.current) {
@@ -47,7 +48,7 @@ export function GeographyMap() {
 
 					let openInfoWindow: google.maps.InfoWindow | null = null;
 
-					GEOGRAPHY_MARKERS.forEach((m) => {
+					GEOGRAPHY_MARKERS.forEach(m => {
 						const markerImg = document.createElement('img');
 						markerImg.src = '/images/marker.svg';
 						markerImg.style.width = '37px';
@@ -57,7 +58,7 @@ export function GeographyMap() {
 							position: { lat: m.lat, lng: m.lng },
 							content: markerImg,
 							map: map,
-							title: m.title,
+							title: m.title
 						});
 
 						const infoWindow = new InfoWindow({
@@ -66,7 +67,7 @@ export function GeographyMap() {
 									<h5 class="h5 text-lg font-semibold mb-2">${m.title}</h5>
 								</div>
 							`,
-							minWidth: 150,
+							minWidth: 150
 						});
 
 						marker.addListener('gmp-click', () => {
@@ -89,7 +90,7 @@ export function GeographyMap() {
 	return (
 		<div
 			ref={mapRef}
-			className="w-full h-87.5 md:h-125 rounded-[20px] overflow-hidden bg-gray-100"
+			className='w-full h-87.5 md:h-125 rounded-[20px] overflow-hidden bg-gray-100'
 		/>
 	);
 }

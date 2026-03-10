@@ -9,7 +9,7 @@ import { PAGE } from '@/config/pages.config';
 
 export function AboutHero() {
 	return (
-		<section className='pt-32 pb-10 md:pt-40 md:pb-20 lg:pt-50 lg:pb-25 '>
+		<section className='pt-32 md:pt-40 lg:pt-50'>
 			<HeaderThemeObserver theme='light' />
 			<div className='container'>
 				<div className='flex flex-col lg:flex-row lg:items-center lg:gap-10 xl:gap-20'>

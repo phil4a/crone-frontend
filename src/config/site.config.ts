@@ -32,6 +32,20 @@ export const SITE_CONFIG = {
 			label: 'гарантия на работы по проекту'
 		}
 	],
+	achievements: [
+		{
+			number: '200+',
+			text: 'количество проектов'
+		},
+		{
+			number: '150 000 м²',
+			text: 'общая площадь построенных объектов'
+		},
+		{
+			number: pluralizeYears(new Date().getFullYear() - FOUNDING_YEAR),
+			text: 'проектируем и строим'
+		}
+	],
 	contacts: {
 		address: 'Новосибирск, ул. Кубановская, 1/1, офис 206',
 		phone: {

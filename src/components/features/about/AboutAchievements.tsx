@@ -6,9 +6,9 @@ import { SITE_CONFIG } from '@/config/site.config';
 
 export function AboutAchievements() {
 	return (
-		<section className='py-0 md:py-25'>
+		<section className='py-0 md:pt-25'>
 			<div className='container px-0 lg:px-10'>
-				<div className='relative bg-light-beige pt-21 pb-35 px-5 md:p-10 lg:rounded-lg'>
+				<div className='relative overflow-hidden bg-light-beige pt-21 pb-35 px-5 md:p-10 lg:rounded-lg'>
 					<Title
 						as='h2'
 						variant='h3'

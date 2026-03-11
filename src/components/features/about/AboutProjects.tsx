@@ -25,7 +25,7 @@ export function AboutProjects() {
 	);
 
 	return (
-		<section className='py-20 md:py-30 lg:py-40 bg-white'>
+		<section className='py-16 md:py-20 lg:py-25'>
 			<div className='container'>
 				<Title
 					as='h2'

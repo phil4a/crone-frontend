@@ -66,14 +66,13 @@ export default async function ObjectPage({ params }: TPageSlugProp) {
 
 	const project = transformGraphQLProject(post);
 
-	// Fetch related projects (random 3 with same tag)
-	const relatedData = await client.request<GetRelatedProjectsQuery, GetRelatedProjectsQueryVariables>(
-		GetRelatedProjectsDocument,
-		{
-			tag: project.tags[0] || undefined,
-			notIn: [project.globalId || '']
-		}
-	);
+	const relatedData = await client.request<
+		GetRelatedProjectsQuery,
+		GetRelatedProjectsQueryVariables
+	>(GetRelatedProjectsDocument, {
+		tag: project.tags[0] || undefined,
+		notIn: [project.globalId || '']
+	});
 
 	const relatedNodes = relatedData?.posts?.nodes || [];
 	const relatedProjects = getRandomProjects(relatedNodes, 3);

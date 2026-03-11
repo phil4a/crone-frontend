@@ -10671,7 +10671,7 @@ export const ArticleFieldsFragmentDoc = `
     `;
 export const GalleriesFragmentDoc = `
     fragment Galleries on ProjectFields {
-  plansGallery {
+  plansGallery(first: 100) {
     nodes {
       sourceUrl
       mediaDetails {
@@ -10680,7 +10680,7 @@ export const GalleriesFragmentDoc = `
       }
     }
   }
-  processGallery {
+  processGallery(first: 100) {
     nodes {
       sourceUrl
       mediaDetails {
@@ -10689,7 +10689,7 @@ export const GalleriesFragmentDoc = `
       }
     }
   }
-  resultGallery {
+  resultGallery(first: 100) {
     nodes {
       sourceUrl
       mediaDetails {
@@ -11094,7 +11094,7 @@ export const GetProjectBySlugDocument = `
           mediaItemUrl
         }
       }
-      videoGallery {
+      videoGallery(first: 100) {
         nodes {
           mediaItemUrl
           mediaDetails {

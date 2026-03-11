@@ -40,7 +40,7 @@ fragment ProjectFields on Post {
 }
 
 fragment Galleries on ProjectFields {
-	plansGallery {
+	plansGallery(first: 100) {
 		nodes {
 			sourceUrl
 			mediaDetails {
@@ -49,7 +49,7 @@ fragment Galleries on ProjectFields {
 			}
 		}
 	}
-	processGallery {
+	processGallery(first: 100) {
 		nodes {
 			sourceUrl
 			mediaDetails {
@@ -58,7 +58,7 @@ fragment Galleries on ProjectFields {
 			}
 		}
 	}
-	resultGallery {
+	resultGallery(first: 100) {
 		nodes {
 			sourceUrl
 			mediaDetails {
@@ -131,13 +131,13 @@ query GetProjectBySlug($slug: ID!) {
 					mediaItemUrl
 				}
 			}
-			videoGallery {
+			videoGallery(first: 100) {
 				nodes {
 					mediaItemUrl
-					  mediaDetails {
-              height
-              width
-            }
+					mediaDetails {
+						height
+						width
+					}
 				}
 			}
 		}

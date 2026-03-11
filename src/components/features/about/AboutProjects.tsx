@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { useMemo } from 'react';
 
 import { ProjectCardDetailed } from '@/components/common/projects/ProjectCardDetailed';
 import { Button } from '@/components/ui/Button';
@@ -9,11 +10,19 @@ import { Title } from '@/components/ui/Title';
 import { PAGE } from '@/config/pages.config';
 
 import { useProjects } from '@/hooks/projects/useProjects';
+import { useMediaQuery } from '@/hooks/useMediaQuery';
 
 import { ProjectSkeletonLoader } from '../projects/ProjectSkeletonLoader';
 
 export function AboutProjects() {
 	const { projects, isLoading, error } = useProjects(1, 3);
+	const isTablet = useMediaQuery('(min-width: 1023px) and (max-width: 1279px)');
+
+	const visibleCount = isTablet ? 2 : 3;
+	const visibleProjects = useMemo(
+		() => (isTablet ? projects.slice(0, 2) : projects),
+		[isTablet, projects]
+	);
 
 	return (
 		<section className='py-20 md:py-30 lg:py-40 bg-white'>
@@ -37,17 +46,19 @@ export function AboutProjects() {
 
 				<div className='grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-5'>
 					{isLoading ? (
-						Array.from({ length: 3 }).map((_, idx) => <ProjectSkeletonLoader key={idx} />)
+						Array.from({ length: visibleCount }).map((_, idx) => (
+							<ProjectSkeletonLoader key={idx} />
+						))
 					) : error ? (
 						<div className='p-8 text-center text-red-500'>
 							Произошла ошибка при загрузке проектов. Пожалуйста, попробуйте позже.
 						</div>
-					) : projects.length === 0 ? (
+					) : visibleProjects.length === 0 ? (
 						<div className='p-12 text-center text-dark-gray bg-white rounded-2xl'>
 							Проектов по выбранным критериям не найдено.
 						</div>
 					) : (
-						projects.map(project => (
+						visibleProjects.map(project => (
 							<ProjectCardDetailed
 								key={project.id}
 								project={project}

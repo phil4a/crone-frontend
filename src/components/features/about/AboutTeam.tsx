@@ -9,7 +9,7 @@ const TEAM = [
 		position: 'Генеральный директор ООО “Крона Групп”',
 		quote:
 			'В каждом проекте мы создаем не просто дом, а пространство, где рождаются самые ценные моменты жизни.',
-		image: '/images/about/Sergey_N.jpg'
+		image: '/images/about/Sergey_N2.jpg'
 	},
 	{
 		name: 'Прокофьев Сергей',
@@ -51,7 +51,7 @@ export function AboutTeam() {
 							key={index}
 							className='flex flex-col md:flex-row gap-6 md:gap-8 bg-white rounded-2xl p-6 md:p-8 hover:shadow-lg transition-shadow duration-300'
 						>
-							<div className='relative w-32 h-32 md:w-40 md:h-40 flex-shrink-0 rounded-full overflow-hidden mx-auto md:mx-0'>
+							<div className='relative w-32 h-32 md:w-40 md:h-40 shrink-0 rounded-full overflow-hidden mx-auto md:mx-0'>
 								<Image
 									src={member.image}
 									alt={member.name}
@@ -91,7 +91,7 @@ export function AboutTeam() {
 								гарантию на все выполненные работы.
 							</p>
 						</div>
-						<div className='flex-shrink-0'>
+						<div className='shrink-0'>
 							<Button
 								variant='outline'
 								className='bg-transparent text-white border-white hover:bg-white hover:text-main'

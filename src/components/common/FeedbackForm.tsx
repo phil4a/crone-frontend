@@ -35,7 +35,17 @@ const formSchema = z.object({
 
 type FormValues = z.infer<typeof formSchema>;
 
-export function FeedbackForm({ className }: { className?: string }) {
+interface FeedbackFormProps {
+	title?: string;
+	text?: string;
+	className?: string;
+}
+
+export function FeedbackForm({
+	className,
+	title = 'Остались вопросы?',
+	text = 'Заполните форму заявки, и наш специалист свяжется с вами в ближайшее время'
+}: FeedbackFormProps) {
 	const {
 		register,
 		handleSubmit,
@@ -72,11 +82,9 @@ export function FeedbackForm({ className }: { className?: string }) {
 							variant='h2'
 							className='mb-6 md:mb-7.5'
 						>
-							Остались вопросы?
+							{title}
 						</Title>
-						<p className='text-base md:text-lg text-brown max-w-125'>
-							Заполните форму заявки, и наш специалист свяжется с вами в ближайшее время
-						</p>
+						<p className='text-base md:text-lg text-brown max-w-125'>{text}</p>
 					</div>
 
 					<form

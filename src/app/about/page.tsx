@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 
+import { FeedbackForm } from '@/components/common/FeedbackForm';
 import { AboutAchievements } from '@/components/features/about/AboutAchievements';
-import { AboutForm } from '@/components/features/about/AboutForm';
 import { AboutHero } from '@/components/features/about/AboutHero';
 import { AboutProjects } from '@/components/features/about/AboutProjects';
 import { AboutTeam } from '@/components/features/about/AboutTeam';
@@ -19,7 +19,10 @@ export default function AboutPage() {
 			<AboutAchievements />
 			<AboutProjects />
 			<AboutTeam />
-			<AboutForm />
+			<FeedbackForm
+				title='Закажите проект у нас!'
+				text='Заполните форму заявки, и мы вышлем вам презентацию наших проектов'
+			/>
 		</main>
 	);
 }

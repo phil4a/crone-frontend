@@ -8,15 +8,15 @@ import { PAGE } from '@/config/pages.config';
 
 export function ServicesHero() {
 	return (
-		<section className='pt-32 md:pt-40 lg:pt-50 pb-16 md:pb-20 lg:pb-25 bg-white'>
+		<section className='pt-32 md:pt-40 lg:pt-50 xl:pt-52 pb-16 md:pb-20 lg:pb-25 bg-white'>
 			<HeaderThemeObserver theme='light' />
 			<div className='container'>
-				<div className='flex flex-col lg:flex-row lg:items-center lg:gap-10 xl:gap-20'>
-					<div className='lg:basis-1/2 mb-10 lg:mb-0'>
+				<div className='flex flex-col xl:flex-row xl:items-center gap-10 xl:gap-5'>
+					<div className='xl:basis-1/3'>
 						<Title
 							as='h1'
 							variant='h2'
-							className='mb-6 md:mb-10'
+							className='mb-6 md:mb-10 text-[clamp(28px,4vw,40px)] xl:text-[clamp(30px,2vw,40px)]'
 						>
 							Услуги строительства домов из клееного бруса — проектирование, сборка, отделка
 						</Title>
@@ -28,14 +28,16 @@ export function ServicesHero() {
 									клееного бруса в Новосибирске и других регионах.
 								</b>
 							</p>
-							<p>
-								Мы сопровождаем проект на всех этапах: от архитектурного проектирования до
-								внутренней отделки и ввода в эксплуатацию.
-							</p>
-							<p>
-								Работаем только с высококачественным клееным брусом, что гарантирует долговечность,
-								экологичность и эстетичность вашего будущего дома.
-							</p>
+							<div>
+								<p>
+									Мы сопровождаем проект на всех этапах: от архитектурного проектирования до
+									внутренней отделки и ввода в эксплуатацию.
+								</p>
+								<p>
+									Работаем только с высококачественным клееным брусом, что гарантирует
+									долговечность, экологичность и эстетичность вашего будущего дома.
+								</p>
+							</div>
 						</div>
 
 						<Button
@@ -47,23 +49,18 @@ export function ServicesHero() {
 						</Button>
 					</div>
 
-					<div className='grow shrink-0 -mx-5 lg:mx-0 lg:basis-1/2'>
-						<div className='relative w-full aspect-video md:rounded-2xl overflow-hidden bg-black'>
+					<div className='grow shrink-0 -mx-5 lg:mx-0 xl:basis-2/3'>
+						<div className='relative w-full aspect-video md:rounded-2xl overflow-hidden'>
 							<video
 								autoPlay
 								muted
 								loop
 								playsInline
-								poster='/video/hero-desktop-poster.webp'
+								poster='/video/services/services.webp'
 								className='absolute inset-0 h-full w-full object-cover'
 							>
 								<source
-									src='/video/hero-mobile-2.mp4'
-									type='video/mp4'
-									media='(max-width: 767px), (orientation: portrait)'
-								/>
-								<source
-									src='/video/hero-desktop.mp4'
+									src='/video/services/services.mp4'
 									type='video/mp4'
 								/>
 							</video>

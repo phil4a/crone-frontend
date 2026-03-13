@@ -1,6 +1,7 @@
-import { cva, type VariantProps } from 'class-variance-authority';
+import { type VariantProps, cva } from 'class-variance-authority';
+import { ElementType, HTMLAttributes } from 'react';
+
 import { cn } from '@/lib/utils';
-import { HTMLAttributes, ElementType } from 'react';
 
 const titleVariants = cva('font-bold transition-colors', {
 	variants: {
@@ -9,18 +10,18 @@ const titleVariants = cva('font-bold transition-colors', {
 			h2: 'text-[28px] leading-[1.4] md:text-[40px]',
 			h3: 'text-2xl font-bold leading-tight md:text-3xl',
 			h4: 'text-xl font-bold leading-tight md:text-2xl',
-			h5: 'text-lg font-bold leading-tight md:text-xl',
+			h5: 'text-lg font-bold leading-tight md:text-xl'
 		},
 		color: {
 			default: 'text-main',
 			white: 'text-white',
-			brown: 'text-brown',
-		},
+			brown: 'text-brown'
+		}
 	},
 	defaultVariants: {
 		variant: 'h2',
-		color: 'default',
-	},
+		color: 'default'
+	}
 });
 
 export interface TitleProps
@@ -29,7 +30,12 @@ export interface TitleProps
 }
 
 function Title({ className, variant, color, as: Component = 'h2', ...props }: TitleProps) {
-	return <Component className={cn(titleVariants({ variant, color }), className)} {...props} />;
+	return (
+		<Component
+			className={cn(titleVariants({ variant, color }), className)}
+			{...props}
+		/>
+	);
 }
 
 export { Title, titleVariants };

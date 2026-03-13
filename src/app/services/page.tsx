@@ -10,7 +10,7 @@ import { ServicesWhyUs } from '@/components/features/services/ServicesWhyUs';
 export const metadata: Metadata = {
 	title: 'Услуги | Крона Групп',
 	description:
-		'Услуги строительства домов из клееного бруса: проектирование, фундамент, сборка, кровля, инженерные коммуникации и отделка.'
+		'Строительная компания Крона Групп осуществляет услуги по проектированию и строительству домов из клееного бруса в Новосибирске. Звоните: +7 (913) 925-92-99'
 };
 
 export default function ServicesPage() {

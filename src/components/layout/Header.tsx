@@ -66,8 +66,9 @@ export function Header() {
 	const isMenuOpen = menuPath === pathname;
 	const bgClass = (() => {
 		if (isMenuOpen) return 'bg-white';
-		if (isLightTheme) return 'bg-white shadow-[0px_5px_16px_0px_rgba(241,236,231,0.4)]';
-		if (isScrolled) return 'bg-black/15 backdrop-blur-[4px]';
+		if (isLightTheme)
+			return 'bg-white/80 backdrop-blur-sm shadow-[0px_5px_16px_0px_rgba(241,236,231,0.4)]';
+		if (isScrolled) return 'bg-black/15 backdrop-blur-sm';
 		return 'bg-transparent';
 	})();
 

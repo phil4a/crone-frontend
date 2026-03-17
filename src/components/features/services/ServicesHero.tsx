@@ -49,8 +49,8 @@ export function ServicesHero() {
 						</Button>
 					</div>
 
-					<div className='grow shrink-0 -mx-5 lg:mx-0 xl:basis-2/3'>
-						<div className='relative w-full aspect-video md:rounded-2xl overflow-hidden'>
+					<div className='grow shrink-0 -mx-5 md:-mx-(--spacing-container-padding) xl:mx-0 xl:basis-2/3'>
+						<div className='relative w-full aspect-video overflow-hidden xl:rounded-lg'>
 							<video
 								autoPlay
 								muted

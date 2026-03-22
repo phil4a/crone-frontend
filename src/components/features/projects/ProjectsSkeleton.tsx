@@ -8,7 +8,7 @@ interface ProjectsSkeletonProps {
 
 export function ProjectsSkeleton({ title = 'Дома из клееного бруса' }: ProjectsSkeletonProps) {
 	return (
-		<main className='pt-38 pb-27 container bg-light-gray min-h-screen'>
+		<main className='pt-38 pb-27 container  min-h-screen'>
 			<HeaderThemeObserver theme='light' />
 
 			<Title as='h1'>{title}</Title>

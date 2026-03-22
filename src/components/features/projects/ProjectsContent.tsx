@@ -46,7 +46,7 @@ export function ProjectsContent() {
 	const sidebarKey = JSON.stringify(filters);
 
 	return (
-		<main className='pt-38 pb-27 container bg-light-gray min-h-screen'>
+		<main className='pt-38 pb-27 container  min-h-screen'>
 			<HeaderThemeObserver theme='light' />
 			<Title as='h1'>{getPageTitle(tag)}</Title>
 

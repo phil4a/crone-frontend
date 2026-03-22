@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 
+import { ProjectCard } from '@/components/common/projects/ProjectCard';
 import { Button } from '@/components/ui/Button';
 import { SkeletonLoader } from '@/components/ui/SkeletonLoader';
 import { Title } from '@/components/ui/Title';
@@ -9,8 +10,6 @@ import { Title } from '@/components/ui/Title';
 import { PAGE } from '@/config/pages.config';
 
 import { useProjects } from '@/hooks/projects/useProjects';
-
-import { ProjectCard } from '@/components/common/projects/ProjectCard';
 
 export function ServicesProjects() {
 	const { projects, isLoading, error } = useProjects(1, 6);
@@ -23,7 +22,7 @@ export function ServicesProjects() {
 						as='h2'
 						variant='h3'
 					>
-						Наши проекты
+						Проекты наших домов
 					</Title>
 					<Button
 						as={Link}

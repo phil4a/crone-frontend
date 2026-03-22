@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useCallback, useEffect, useId, useLayoutEffect, useMemo, useRef, useState } from 'react';
 
+import { Button } from '@/components/ui/Button';
 import { Title } from '@/components/ui/Title';
 
 import { cn } from '@/lib/utils';
@@ -34,7 +35,8 @@ const SERVICES: ServiceItem[] = [
 			{ label: 'Деревянные конструкции', value: '350 руб/м²' },
 			{ label: 'Дизайн проект', value: 'от 5500 руб/м²' },
 			{ label: 'Генеральный подряд', value: 'в зависимости от задач' }
-		]
+		],
+		buttonText: 'Заказать проектирование'
 	},
 	{
 		title: 'Эскизный и рабочий проект строительства',
@@ -233,7 +235,7 @@ export function ServicesIncluded() {
 										contentRefs.current[index] = el;
 									}}
 								>
-									<div className='pt-4 md:pt-5 space-y-4 text-base text-main'>
+									<div className='py-4 md:py-5 space-y-4 text-base text-main'>
 										{item.text && <p className='leading-relaxed'>{item.text}</p>}
 										{item.link && (
 											<Link
@@ -262,6 +264,7 @@ export function ServicesIncluded() {
 												</div>
 											</div>
 										)}
+										{item.buttonText && <Button variant='outline'>{item.buttonText}</Button>}
 
 										{item.bullets && (
 											<ul className='list-disc pl-5 space-y-2'>

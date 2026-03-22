@@ -11,7 +11,7 @@ export function ServicesHero() {
 		<section className='pt-32 md:pt-40 lg:pt-50 xl:pt-52 pb-16 md:pb-20 lg:pb-25 bg-white'>
 			<HeaderThemeObserver theme='light' />
 			<div className='container'>
-				<div className='flex flex-col xl:flex-row xl:items-center gap-10 xl:gap-5'>
+				<div className='flex flex-col xl:flex-row xl:items-center gap-10 xl:gap-7'>
 					<div className='xl:basis-1/3'>
 						<Title
 							as='h1'

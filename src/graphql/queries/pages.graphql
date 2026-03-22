@@ -1,0 +1,17 @@
+fragment PageFields on Page {
+	id
+	databaseId
+	title
+	slug
+	content
+	seo {
+		title
+		metaDesc
+	}
+}
+
+query GetPageByUri($uri: ID!) {
+	page(id: $uri, idType: URI) {
+		...PageFields
+	}
+}

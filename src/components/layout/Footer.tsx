@@ -175,10 +175,16 @@ function FooterInfo({ year }: { year: number }) {
 				<p>© {year} ООО «Крона Групп»</p>
 			</div>
 			<Link
-				href='#'
-				className='hover:text-white transition-colors mt-4'
+				href='/privacy-policy'
+				className='hover:text-white text-sm transition-colors mt-4'
 			>
 				Политика конфиденциальности
+			</Link>
+			<Link
+				href='/user-agreement'
+				className='hover:text-white text-sm transition-colors mt-2'
+			>
+				Пользовательское соглашение
 			</Link>
 		</div>
 	);

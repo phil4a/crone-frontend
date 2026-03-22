@@ -10580,6 +10580,15 @@ export type GetChildCategoriesQueryVariables = Exact<{
 
 export type GetChildCategoriesQuery = { __typename?: 'RootQuery', category?: { __typename?: 'Category', databaseId: number, name?: string | null, slug?: string | null, children?: { __typename?: 'CategoryToCategoryConnection', nodes: Array<{ __typename?: 'Category', id: string, databaseId: number, name?: string | null, slug?: string | null, count?: number | null }> } | null } | null };
 
+export type PageFieldsFragment = { __typename?: 'Page', id: string, databaseId: number, title?: string | null, slug?: string | null, content?: string | null, seo?: { __typename?: 'PostTypeSEO', title?: string | null, metaDesc?: string | null } | null };
+
+export type GetPageByUriQueryVariables = Exact<{
+  uri: Scalars['ID']['input'];
+}>;
+
+
+export type GetPageByUriQuery = { __typename?: 'RootQuery', page?: { __typename?: 'Page', id: string, databaseId: number, title?: string | null, slug?: string | null, content?: string | null, seo?: { __typename?: 'PostTypeSEO', title?: string | null, metaDesc?: string | null } | null } | null };
+
 export type ProjectFieldsFragment = { __typename?: 'Post', id: string, databaseId: number, title?: string | null, slug?: string | null, projectLikes?: number | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node: { __typename?: 'MediaItem', sourceUrl?: string | null } } | null, projectFields?: { __typename?: 'ProjectFields', area?: string | null, rooms?: string | null, floor?: string | null, bedrooms?: string | null, bathrooms?: string | null, status?: Array<string | null> | null, year?: number | null, city?: string | null, type?: Array<string | null> | null, terrace?: boolean | null, garage?: boolean | null, sauna?: boolean | null, pool?: boolean | null, fireplace?: boolean | null, shortDescription?: string | null, plansGallery?: { __typename?: 'AcfMediaItemConnection', nodes: Array<{ __typename?: 'MediaItem', sourceUrl?: string | null, mediaDetails?: { __typename?: 'MediaDetails', height?: number | null, width?: number | null } | null }> } | null, processGallery?: { __typename?: 'AcfMediaItemConnection', nodes: Array<{ __typename?: 'MediaItem', sourceUrl?: string | null, mediaDetails?: { __typename?: 'MediaDetails', height?: number | null, width?: number | null } | null }> } | null, resultGallery?: { __typename?: 'AcfMediaItemConnection', nodes: Array<{ __typename?: 'MediaItem', sourceUrl?: string | null, mediaDetails?: { __typename?: 'MediaDetails', height?: number | null, width?: number | null } | null }> } | null } | null, seo?: { __typename?: 'PostTypeSEO', title?: string | null, metaDesc?: string | null } | null, tags?: { __typename?: 'PostToTagConnection', nodes: Array<{ __typename?: 'Tag', name?: string | null, slug?: string | null }> } | null };
 
 export type GalleriesFragment = { __typename?: 'ProjectFields', plansGallery?: { __typename?: 'AcfMediaItemConnection', nodes: Array<{ __typename?: 'MediaItem', sourceUrl?: string | null, mediaDetails?: { __typename?: 'MediaDetails', height?: number | null, width?: number | null } | null }> } | null, processGallery?: { __typename?: 'AcfMediaItemConnection', nodes: Array<{ __typename?: 'MediaItem', sourceUrl?: string | null, mediaDetails?: { __typename?: 'MediaDetails', height?: number | null, width?: number | null } | null }> } | null, resultGallery?: { __typename?: 'AcfMediaItemConnection', nodes: Array<{ __typename?: 'MediaItem', sourceUrl?: string | null, mediaDetails?: { __typename?: 'MediaDetails', height?: number | null, width?: number | null } | null }> } | null };
@@ -10663,6 +10672,19 @@ export const ArticleFieldsFragmentDoc = `
   articlesField {
     shortDescription
   }
+  seo {
+    title
+    metaDesc
+  }
+}
+    `;
+export const PageFieldsFragmentDoc = `
+    fragment PageFields on Page {
+  id
+  databaseId
+  title
+  slug
+  content
   seo {
     title
     metaDesc
@@ -10975,6 +10997,53 @@ export const useInfiniteGetChildCategoriesQuery = <
     )};
 
 useInfiniteGetChildCategoriesQuery.getKey = (variables: GetChildCategoriesQueryVariables) => ['GetChildCategories.infinite', variables];
+
+export const GetPageByUriDocument = `
+    query GetPageByUri($uri: ID!) {
+  page(id: $uri, idType: URI) {
+    ...PageFields
+  }
+}
+    ${PageFieldsFragmentDoc}`;
+
+export const useGetPageByUriQuery = <
+      TData = GetPageByUriQuery,
+      TError = unknown
+    >(
+      variables: GetPageByUriQueryVariables,
+      options?: Omit<UseQueryOptions<GetPageByUriQuery, TError, TData>, 'queryKey'> & { queryKey?: UseQueryOptions<GetPageByUriQuery, TError, TData>['queryKey'] }
+    ) => {
+    
+    return useQuery<GetPageByUriQuery, TError, TData>(
+      {
+    queryKey: ['GetPageByUri', variables],
+    queryFn: fetcher<GetPageByUriQuery, GetPageByUriQueryVariables>(GetPageByUriDocument, variables),
+    ...options
+  }
+    )};
+
+useGetPageByUriQuery.getKey = (variables: GetPageByUriQueryVariables) => ['GetPageByUri', variables];
+
+export const useInfiniteGetPageByUriQuery = <
+      TData = InfiniteData<GetPageByUriQuery>,
+      TError = unknown
+    >(
+      variables: GetPageByUriQueryVariables,
+      options: Omit<UseInfiniteQueryOptions<GetPageByUriQuery, TError, TData>, 'queryKey'> & { queryKey?: UseInfiniteQueryOptions<GetPageByUriQuery, TError, TData>['queryKey'] }
+    ) => {
+    
+    return useInfiniteQuery<GetPageByUriQuery, TError, TData>(
+      (() => {
+    const { queryKey: optionsQueryKey, ...restOptions } = options;
+    return {
+      queryKey: optionsQueryKey ?? ['GetPageByUri.infinite', variables],
+      queryFn: (metaData) => fetcher<GetPageByUriQuery, GetPageByUriQueryVariables>(GetPageByUriDocument, {...variables, ...(metaData.pageParam ?? {})})(),
+      ...restOptions
+    }
+  })()
+    )};
+
+useInfiniteGetPageByUriQuery.getKey = (variables: GetPageByUriQueryVariables) => ['GetPageByUri.infinite', variables];
 
 export const GetRelatedProjectsDocument = `
     query GetRelatedProjects($tag: String, $notIn: [ID]) {

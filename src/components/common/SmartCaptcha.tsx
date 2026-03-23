@@ -12,6 +12,7 @@ interface SmartCaptchaWrapperProps {
 	onTokenChange: (token: string | null) => void;
 	visible: boolean;
 	onChallengeHidden?: SmartCaptchaProps['onChallengeHidden'];
+	hideShield?: boolean;
 	language?: NonNullable<SmartCaptchaProps['language']>;
 	test?: SmartCaptchaProps['test'];
 	webview?: SmartCaptchaProps['webview'];
@@ -24,6 +25,7 @@ export function SmartCaptcha({
 	onTokenChange,
 	visible,
 	onChallengeHidden,
+	hideShield = true,
 	language = 'ru',
 	test,
 	webview,
@@ -41,6 +43,7 @@ export function SmartCaptcha({
 			<YandexInvisibleSmartCaptcha
 				sitekey={siteKey}
 				visible={visible}
+				hideShield={hideShield}
 				language={language}
 				test={test}
 				webview={webview}

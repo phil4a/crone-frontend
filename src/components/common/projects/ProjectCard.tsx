@@ -15,7 +15,8 @@ export function ProjectCard({ project }: ProjectCardProps) {
 	const area = project.specs.area;
 
 	const floorText = floors === 1 ? 'этаж' : floors >= 2 && floors <= 4 ? 'этажа' : 'этажей';
-	const specs = `${floors} ${floorText}, ${area} м²`;
+	const specs =
+		area != null && area !== 0 ? `${floors} ${floorText}, ${area} м²` : `${floors} ${floorText}`;
 
 	return (
 		<li className='relative group flex flex-col w-full'>

@@ -1,6 +1,7 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
+import Link from 'next/link';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -225,6 +226,41 @@ export function FeedbackForm({
 						>
 							{isSubmitting || isPending ? 'Отправка...' : 'Оставить заявку'}
 						</Button>
+
+						<p className='mt-3 text-xs font-light text-main leading-normal'>
+							Нажимая кнопку «Оставить заявку», вы даете согласие на обработку персональных данных и
+							соглашаетесь с{' '}
+							<Link
+								target='_blank'
+								rel='noopener noreferrer'
+								href='/privacy-policy/'
+								className='underline underline-offset-2 hover:no-underline transition-all duration-300'
+							>
+								политикой конфиденциальности
+							</Link>{' '}
+							и{' '}
+							<Link
+								target='_blank'
+								rel='noopener noreferrer'
+								href='/user-agreement/'
+								className='underline underline-offset-2 hover:no-underline transition-all duration-300'
+							>
+								пользовательским соглашением
+							</Link>
+							.
+							<br />
+							<br />
+							Сайт защищен Yandex SmartCaptcha, к нему применяются{' '}
+							<Link
+								href='https://yandex.ru/legal/smartcaptcha_notice/ru/'
+								target='_blank'
+								rel='noopener noreferrer'
+								className='underline underline-offset-2 hover:no-underline'
+							>
+								Политика конфиденциальности Яндекс
+							</Link>
+							.
+						</p>
 					</form>
 				</div>
 			</div>

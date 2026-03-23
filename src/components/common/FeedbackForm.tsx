@@ -234,7 +234,7 @@ export function FeedbackForm({
 								target='_blank'
 								rel='noopener noreferrer'
 								href='/privacy-policy/'
-								className='underline underline-offset-2 hover:no-underline transition-all duration-300'
+								className='underline underline-offset-2 text-brown hover:text-beige transition-colors'
 							>
 								политикой конфиденциальности
 							</Link>{' '}
@@ -243,11 +243,12 @@ export function FeedbackForm({
 								target='_blank'
 								rel='noopener noreferrer'
 								href='/user-agreement/'
-								className='underline underline-offset-2 hover:no-underline transition-all duration-300'
+								className='underline underline-offset-2 text-brown hover:text-beige transition-colors'
 							>
 								пользовательским соглашением
 							</Link>
 							.
+							<br />
 							<br />
 							<br />
 							Сайт защищен Yandex SmartCaptcha, к нему применяются{' '}
@@ -255,7 +256,7 @@ export function FeedbackForm({
 								href='https://yandex.ru/legal/smartcaptcha_notice/ru/'
 								target='_blank'
 								rel='noopener noreferrer'
-								className='underline underline-offset-2 hover:no-underline'
+								className='underline underline-offset-2 text-brown hover:text-beige transition-colors'
 							>
 								Политика конфиденциальности Яндекс
 							</Link>

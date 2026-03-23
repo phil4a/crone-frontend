@@ -1,14 +1,18 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import * as z from 'zod';
 
+import { SmartCaptcha } from '@/components/common/SmartCaptcha';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Textarea } from '@/components/ui/Textarea';
 import { Title } from '@/components/ui/Title';
+
+import { useFeedbackFormSubmit } from '@/hooks/useFeedbackFormSubmit';
 
 import { HeaderThemeObserver } from '../layout/HeaderThemeObserver';
 
@@ -39,13 +43,21 @@ interface FeedbackFormProps {
 	title?: string;
 	text?: string;
 	className?: string;
+	formId?: number;
 }
 
 export function FeedbackForm({
 	className,
 	title = 'Остались вопросы?',
-	text = 'Заполните форму заявки, и наш специалист свяжется с вами в ближайшее время'
+	text = 'Заполните форму заявки, и наш специалист свяжется с вами в ближайшее время',
+	formId
 }: FeedbackFormProps) {
+	const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+	const [captchaVisible, setCaptchaVisible] = useState(false);
+	const [captchaKey, setCaptchaKey] = useState(0);
+	const { mutateAsync: submitFeedback, isPending } = useFeedbackFormSubmit();
+	const [pendingData, setPendingData] = useState<FormValues | null>(null);
+
 	const {
 		register,
 		handleSubmit,
@@ -61,12 +73,66 @@ export function FeedbackForm({
 		}
 	});
 
+	const resolvedFormId =
+		typeof formId === 'number' && Number.isFinite(formId) && formId > 0 ? formId : undefined;
+
+	const send = async (data: FormValues, token: string) => {
+		await submitFeedback({
+			name: data.name,
+			phone: data.phone,
+			email: data.email,
+			message: data.message,
+			captchaToken: token,
+			formId: resolvedFormId
+		});
+	};
+
+	const onCaptchaTokenChange = async (token: string | null) => {
+		setCaptchaToken(token);
+		if (!token) {
+			return;
+		}
+
+		if (!pendingData) {
+			return;
+		}
+
+		setPendingData(null);
+		setCaptchaVisible(false);
+
+		try {
+			await send(pendingData, token);
+			reset();
+			setCaptchaToken(null);
+			setCaptchaKey(key => key + 1);
+			toast.success('Спасибо! Мы свяжемся с вами в ближайшее время.');
+		} catch (error) {
+			const message = error instanceof Error ? error.message : 'Не удалось отправить форму';
+			toast.error(message);
+			setCaptchaToken(null);
+			setCaptchaKey(key => key + 1);
+		}
+	};
+
 	const onSubmit = async (data: FormValues) => {
-		// TODO: Implement API call
-		console.log(data);
-		await new Promise(resolve => setTimeout(resolve, 1000));
-		reset();
-		toast.success('Спасибо! Мы свяжемся с вами в ближайшее время.');
+		if (!captchaToken) {
+			setPendingData(data);
+			setCaptchaVisible(true);
+			return;
+		}
+
+		try {
+			await send(data, captchaToken);
+			reset();
+			setCaptchaToken(null);
+			setCaptchaKey(key => key + 1);
+			toast.success('Спасибо! Мы свяжемся с вами в ближайшее время.');
+		} catch (error) {
+			const message = error instanceof Error ? error.message : 'Не удалось отправить форму';
+			toast.error(message);
+			setCaptchaToken(null);
+			setCaptchaKey(key => key + 1);
+		}
 	};
 
 	const { onChange: onPhoneChange, ...phoneProps } = register('phone');
@@ -145,12 +211,19 @@ export function FeedbackForm({
 							)}
 						</div>
 
+						<SmartCaptcha
+							key={captchaKey}
+							visible={captchaVisible}
+							onChallengeHidden={() => setCaptchaVisible(false)}
+							onTokenChange={onCaptchaTokenChange}
+						/>
+
 						<Button
 							type='submit'
-							disabled={isSubmitting}
+							disabled={isSubmitting || isPending}
 							className='mt-2 md:mt-2.5 md:w-55'
 						>
-							{isSubmitting ? 'Отправка...' : 'Оставить заявку'}
+							{isSubmitting || isPending ? 'Отправка...' : 'Оставить заявку'}
 						</Button>
 					</form>
 				</div>

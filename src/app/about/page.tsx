@@ -20,6 +20,7 @@ export default function AboutPage() {
 			<AboutProjects />
 			<AboutTeam />
 			<FeedbackForm
+				formId={225}
 				title='Закажите проект у нас!'
 				text='Заполните форму заявки, и мы вышлем вам презентацию наших проектов'
 			/>

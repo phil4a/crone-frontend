@@ -19,7 +19,7 @@ export default function Layout({ children }: PropsWithChildren<unknown>) {
 								<div className='flex lg:flex-col gap-x-8 gap-y-3 lg:gap-4 flex-wrap'>
 									<SkeletonLoader
 										count={5}
-										className='h-6 w-full max-w-[150px]'
+										className='h-6 w-full max-w-37.5'
 									/>
 								</div>
 							</div>

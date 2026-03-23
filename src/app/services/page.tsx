@@ -22,6 +22,7 @@ export default function ServicesPage() {
 			<ServicesPriceFactors />
 			<ServicesProjects />
 			<FeedbackForm
+				formId={225}
 				title='Закажите проект у нас!'
 				text='Заполните форму заявки, и мы вышлем вам презентацию'
 			/>

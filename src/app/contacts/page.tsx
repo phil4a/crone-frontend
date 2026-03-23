@@ -14,7 +14,7 @@ export default function ContactsPage() {
 		<main>
 			<ContactsInfo />
 			<ContactsMap />
-			<FeedbackForm />
+			<FeedbackForm formId={225} />
 		</main>
 	);
 }

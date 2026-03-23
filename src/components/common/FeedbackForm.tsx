@@ -35,7 +35,8 @@ const formSchema = z.object({
 			message: 'Используйте только цифры и символы форматирования (+, -, пробел, скобки)'
 		}),
 	email: z.email({ message: 'Введите корректный email' }).optional().or(z.literal('')),
-	message: z.string().optional()
+	message: z.string().optional(),
+	accept: z.boolean().refine(v => v, { message: 'Необходимо согласиться с условиями' })
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -70,7 +71,8 @@ export function FeedbackForm({
 			name: '',
 			phone: '',
 			email: '',
-			message: ''
+			message: '',
+			accept: false
 		}
 	});
 
@@ -166,7 +168,7 @@ export function FeedbackForm({
 								className={cn(errors.name && 'border-red-500')}
 							/>
 							{errors.name && (
-								<span className='text-red-500 text-sm mt-1 pl-2'>{errors.name.message}</span>
+								<span className='text-red-700 text-sm mt-1 pl-2'>{errors.name.message}</span>
 							)}
 						</div>
 
@@ -183,7 +185,7 @@ export function FeedbackForm({
 								className={cn(errors.phone && 'border-red-500')}
 							/>
 							{errors.phone && (
-								<span className='text-red-500 text-sm mt-1 pl-2'>{errors.phone.message}</span>
+								<span className='text-red-700 text-sm mt-1 pl-2'>{errors.phone.message}</span>
 							)}
 						</div>
 
@@ -196,7 +198,7 @@ export function FeedbackForm({
 								className={cn(errors.email && 'border-red-500')}
 							/>
 							{errors.email && (
-								<span className='text-red-500 text-sm mt-1 pl-2'>{errors.email.message}</span>
+								<span className='text-red-700 text-sm mt-1 pl-2'>{errors.email.message}</span>
 							)}
 						</div>
 
@@ -208,16 +210,51 @@ export function FeedbackForm({
 								className={cn(errors.message && 'border-red-500')}
 							/>
 							{errors.message && (
-								<span className='text-red-500 text-sm mt-1 pl-2'>{errors.message.message}</span>
+								<span className='text-red-700 text-sm mt-1 pl-2'>{errors.message.message}</span>
 							)}
 						</div>
 
 						<SmartCaptcha
+							className='-mt-4 md:-mt-5'
 							key={captchaKey}
 							visible={captchaVisible}
 							onChallengeHidden={() => setCaptchaVisible(false)}
 							onTokenChange={onCaptchaTokenChange}
 						/>
+
+						<label className='flex place-items-center gap-2 text-sm text-main'>
+							<input
+								type='checkbox'
+								className={cn(
+									'h-4 w-4 rounded border-light-beige text-beige focus:ring-beige',
+									errors.accept && 'outline outline-red-500'
+								)}
+								{...register('accept')}
+							/>
+							<span>
+								Соглашаюсь с{' '}
+								<Link
+									target='_blank'
+									rel='noopener noreferrer'
+									href='/privacy-policy/'
+									className='underline underline-offset-2 text-brown hover:text-beige transition-colors'
+								>
+									обработкой персональных данных
+								</Link>{' '}
+								и{' '}
+								<Link
+									target='_blank'
+									rel='noopener noreferrer'
+									href='/user-agreement/'
+									className='underline underline-offset-2 text-brown hover:text-beige transition-colors'
+								>
+									условиями пользовательского соглашения
+								</Link>
+							</span>
+						</label>
+						{errors.accept && (
+							<span className='text-red-700 text-sm pl-2 -mt-1'>{errors.accept.message}</span>
+						)}
 
 						<Button
 							type='submit'
@@ -228,32 +265,9 @@ export function FeedbackForm({
 						</Button>
 
 						<p className='mt-3 text-xs font-light text-main leading-normal'>
-							Нажимая кнопку «Оставить заявку», вы даете согласие на обработку персональных данных и
-							соглашаетесь с{' '}
-							<Link
-								target='_blank'
-								rel='noopener noreferrer'
-								href='/privacy-policy/'
-								className='underline underline-offset-2 text-brown hover:text-beige transition-colors'
-							>
-								политикой конфиденциальности
-							</Link>{' '}
-							и{' '}
-							<Link
-								target='_blank'
-								rel='noopener noreferrer'
-								href='/user-agreement/'
-								className='underline underline-offset-2 text-brown hover:text-beige transition-colors'
-							>
-								пользовательским соглашением
-							</Link>
-							.
-							<br />
-							<br />
-							<br />
 							Сайт защищен Yandex SmartCaptcha, к нему применяются{' '}
 							<Link
-								href='https://yandex.ru/legal/smartcaptcha_notice/ru/'
+								href='https://yandex.ru/legal/smartcaptcha_notice/ru/?utm_source=smart-captcha&utm_medium=shield&utm_campaign=security'
 								target='_blank'
 								rel='noopener noreferrer'
 								className='underline underline-offset-2 text-brown hover:text-beige transition-colors'

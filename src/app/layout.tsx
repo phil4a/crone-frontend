@@ -1,12 +1,15 @@
 import type { Metadata } from 'next';
 import { Manrope } from 'next/font/google';
+import { cookies } from 'next/headers';
 
+import { CookieConsent } from '@/components/layout/CookieConsent';
 import { Footer } from '@/components/layout/Footer';
 import { Header } from '@/components/layout/Header';
 
 import { Providers } from '@/providers/Providers';
 
 import './globals.css';
+import { COOKIE_CONSENT_COOKIE_NAME, parseConsentCookieValue } from '@/lib/cookies/consent';
 
 const manrope = Manrope({
 	variable: '--font-manrope',
@@ -21,11 +24,16 @@ export const metadata: Metadata = {
 		'Загородные дома из клееного бруса в Новосибирске. Проектирование и строительство под ключ от «Крона Групп». Закажите на сайте или по телефону.📞+7 (913) 925-92-99.'
 };
 
-export default function RootLayout({
+export default async function RootLayout({
 	children
 }: Readonly<{
 	children: React.ReactNode;
 }>) {
+	const cookieStore = await cookies();
+	const initialConsent = parseConsentCookieValue(
+		cookieStore.get(COOKIE_CONSENT_COOKIE_NAME)?.value
+	);
+
 	return (
 		<html
 			lang='ru'
@@ -36,6 +44,7 @@ export default function RootLayout({
 					<Header />
 					{children}
 					<Footer />
+					<CookieConsent initialConsent={initialConsent} />
 				</Providers>
 			</body>
 		</html>

@@ -46,7 +46,7 @@ export function ArticleDetail({ article }: ArticleDetailProps) {
 					</div>
 				)} */}
 
-				<div className='text-main leading-relaxed [&_p]:mb-4 [&_ul]:mb-4 [&_ol]:mb-4 [&_li]:list-disc [&_ol>li]:list-decimal [&_li]:ml-5 [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:mt-8 [&_h2]:mb-4 [&_h3]:text-xl [&_h3]:font-bold [&_h3]:mt-6 [&_h3]:mb-3 [&_h4]:text-lg [&_h4]:font-semibold [&_h4]:mt-4 [&_h4]:mb-2 [&_img]:rounded-xl [&_img]:my-6 [&_img]:w-full [&_a]:text-beige [&_a]:underline hover:[&_a]:no-underline'>
+				<div className='text-main leading-relaxed [&_p]:mb-4 [&_ul]:mb-4 [&_ol]:mb-4 [&_li]:list-disc [&_ol>li]:list-decimal [&_li]:ml-5 [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:mt-8 [&_h2]:mb-4 [&_h3]:text-xl [&_h3]:font-bold [&_h3]:mt-6 [&_h3]:mb-3 [&_h4]:text-lg [&_h4]:font-semibold [&_h4]:mt-4 [&_h4]:mb-2 [&_img]:rounded-xl [&_img]:w-full [&_a]:text-beige [&_a]:underline hover:[&_a]:no-underline'>
 					<ArticleContentParser content={article.content} />
 				</div>
 			</article>

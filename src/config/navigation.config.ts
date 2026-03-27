@@ -27,6 +27,10 @@ export const MAIN_MENU: IMenuItem[] = [
 	{
 		label: 'Статьи',
 		href: PAGE.ARTICLES
+	},
+	{
+		label: 'Помощь',
+		href: PAGE.FAQ
 	}
 ];
 
@@ -35,6 +39,7 @@ export const FOOTER_MENU: IMenuItem[] = [
 	{ label: 'Контакты', href: PAGE.CONTACTS },
 	{ label: 'Услуги', href: PAGE.SERVICES },
 	{ label: 'Статьи', href: PAGE.ARTICLES },
+	{ label: 'FAQ', href: PAGE.FAQ },
 	{ label: 'Карта сайта', href: PAGE.SITE_MAP }
 ];
 

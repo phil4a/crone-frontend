@@ -12,6 +12,7 @@ class Page {
 		return `${this.ARTICLES}/${path}`;
 	}
 	CONTACTS = '/contacts';
+	FAQ = '/faq';
 	SITE_MAP = '/karta-sajta';
 }
 export const PAGE = new Page();

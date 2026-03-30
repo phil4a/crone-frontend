@@ -34,7 +34,7 @@ export function FaqTabs({ categories, className }: FaqTabsProps) {
 				aria-label='Категории вопросов'
 				className='flex flex-wrap gap-2 rounded-2xl bg-light-beige p-2'
 			>
-				{categories.map((category, index) => {
+				{categories.map(category => {
 					const isActive = category.id === resolvedActiveId;
 					const tabId = `${baseId}-tab-${category.id}`;
 					const panelId = `${baseId}-panel-${category.id}`;

@@ -17,21 +17,23 @@ export const metadata: Metadata = {
 	description: 'Ответы на частые вопросы о проектировании и строительстве домов из клееного бруса.'
 };
 
-async function loadFaqMarkdown() {
-	const filePath = path.join(process.cwd(), '..', 'faq.md');
-	return readFile(filePath, 'utf8');
+const FAQ_MARKDOWN_PATH = path.join(process.cwd(), 'src', 'data', 'faq.md');
+
+async function getFaqData() {
+	try {
+		const markdown = await readFile(FAQ_MARKDOWN_PATH, 'utf8');
+		const categories = parseFaqMarkdown(markdown);
+		return {
+			categories,
+			jsonLd: categories.length > 0 ? buildFaqJsonLd(categories) : null
+		};
+	} catch {
+		return { categories: [], jsonLd: null };
+	}
 }
 
 export default async function HelpPage() {
-	let markdown = '';
-	try {
-		markdown = await loadFaqMarkdown();
-	} catch {
-		markdown = '';
-	}
-
-	const categories = parseFaqMarkdown(markdown);
-	const jsonLd = buildFaqJsonLd(categories);
+	const { categories, jsonLd } = await getFaqData();
 
 	return (
 		<main>
@@ -53,10 +55,12 @@ export default async function HelpPage() {
 						{categories.length > 0 ? (
 							<>
 								<FaqTabs categories={categories} />
-								<script
-									type='application/ld+json'
-									dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-								/>
+								{jsonLd ? (
+									<script
+										type='application/ld+json'
+										dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+									/>
+								) : null}
 							</>
 						) : (
 							<p className='text-main leading-relaxed'>Раздел FAQ пока не опубликован.</p>

@@ -1,3 +1,6 @@
+import { Lexer, Parser, TextRenderer, marked } from 'marked';
+import type { Token, Tokens } from 'marked';
+
 import { FaqAnswerBlock, FaqCategory, FaqItem } from '@/types/faq.types';
 
 function slugify(value: string) {
@@ -11,88 +14,52 @@ function slugify(value: string) {
 	return slug || 'section';
 }
 
-function normalizeLines(markdown: string) {
-	return markdown.replace(/\r\n/g, '\n').split('\n');
+const textRenderer = new TextRenderer();
+const inlineParser = new Parser();
+
+function normalizeText(value: string) {
+	return value.replace(/\s+/g, ' ').trim();
 }
 
-function nextNonEmptyLine(lines: string[], startIndex: number) {
-	for (let i = startIndex; i < lines.length; i++) {
-		const value = lines[i]?.trim();
-		if (value) return value;
-	}
-	return null;
+function inlineMarkdownToText(value: string) {
+	return normalizeText(inlineParser.parseInline(Lexer.lexInline(value), textRenderer));
 }
 
-function isNumberedQuestionLine(line: string) {
-	return /^\s*\d+\.\s+/.test(line);
+function isHeading2(token: Token): token is Tokens.Heading {
+	return token.type === 'heading' && typeof (token as Tokens.Heading).depth === 'number';
 }
 
-function isCategoryHeaderLine(line: string) {
-	return /^\s*##\s+/.test(line);
-}
-
-function isSubheadingLine(lines: string[], index: number) {
-	const current = lines[index]?.trim();
-	if (!current) return false;
-	if (current.startsWith('#')) return false;
-	if (current.endsWith('?')) return false;
-	if (isNumberedQuestionLine(current)) return false;
-	if (/^[-*]\s+/.test(current)) return false;
-
-	const next = nextNonEmptyLine(lines, index + 1);
-	if (!next) return false;
-
-	return isNumberedQuestionLine(next);
-}
-
-function trimAnswerLine(line: string) {
-	return line.replace(/^\s{1,4}/, '');
+function isList(token: Token): token is Tokens.List {
+	return token.type === 'list' && typeof (token as Tokens.List).ordered === 'boolean';
 }
 
 function parseAnswerBlocks(answerMarkdown: string): FaqAnswerBlock[] {
-	const lines = normalizeLines(answerMarkdown);
+	const tokens = marked.lexer(answerMarkdown);
 	const blocks: FaqAnswerBlock[] = [];
 
-	let paragraphLines: string[] = [];
-	let listItems: string[] = [];
+	for (const token of tokens) {
+		if (token.type === 'space') continue;
 
-	const flushParagraph = () => {
-		const text = paragraphLines
-			.join(' ')
-			.replace(/\s+/g, ' ')
-			.trim();
-		if (text) blocks.push({ type: 'paragraph', text });
-		paragraphLines = [];
-	};
-
-	const flushList = () => {
-		const items = listItems.map(i => i.trim()).filter(Boolean);
-		if (items.length > 0) blocks.push({ type: 'list', items });
-		listItems = [];
-	};
-
-	for (const rawLine of lines) {
-		const line = rawLine.trim();
-
-		if (!line) {
-			flushParagraph();
-			flushList();
+		if (token.type === 'paragraph') {
+			const paragraph = inlineMarkdownToText(token.text);
+			if (paragraph) blocks.push({ type: 'paragraph', text: paragraph });
 			continue;
 		}
 
-		const listMatch = /^[-*]\s+(.*)$/.exec(line);
-		if (listMatch) {
-			flushParagraph();
-			listItems.push(listMatch[1] ?? '');
+		if (token.type === 'text') {
+			const paragraph = inlineMarkdownToText(token.text);
+			if (paragraph) blocks.push({ type: 'paragraph', text: paragraph });
 			continue;
 		}
 
-		flushList();
-		paragraphLines.push(line);
+		if (isList(token) && !token.ordered) {
+			const items = token.items
+				.map((item: Tokens.ListItem) => inlineMarkdownToText(item.text))
+				.filter(Boolean);
+
+			if (items.length > 0) blocks.push({ type: 'list', items });
+		}
 	}
-
-	flushParagraph();
-	flushList();
 
 	return blocks;
 }
@@ -107,82 +74,67 @@ function answerBlocksToText(blocks: FaqAnswerBlock[]) {
 		.trim();
 }
 
+function makeUniqueId(base: string, map: Map<string, number>) {
+	const next = (map.get(base) ?? 0) + 1;
+	map.set(base, next);
+	return next === 1 ? base : `${base}-${next}`;
+}
+
+function isOrderedList(token: Token): token is Tokens.List {
+	return isList(token) && token.ordered === true;
+}
+
 export function parseFaqMarkdown(markdown: string): FaqCategory[] {
-	const lines = normalizeLines(markdown);
+	const tokens = marked.lexer(markdown);
 
 	const categories: FaqCategory[] = [];
 	const categoryIdCounts = new Map<string, number>();
 	const questionIdCounts = new Map<string, number>();
 
 	let currentCategory: FaqCategory | null = null;
-	let currentQuestion: string | null = null;
-	let currentAnswerLines: string[] = [];
 
-	const makeUniqueId = (base: string, map: Map<string, number>) => {
-		const next = (map.get(base) ?? 0) + 1;
-		map.set(base, next);
-		return next === 1 ? base : `${base}-${next}`;
-	};
-
-	const startCategory = (title: string) => {
-		const baseId = slugify(title);
-		const id = makeUniqueId(baseId, categoryIdCounts);
-		currentCategory = { id, title: title.trim(), items: [] };
-		categories.push(currentCategory);
-	};
-
-	const flushItem = () => {
-		if (!currentCategory || !currentQuestion) return;
-
-		const rawAnswer = currentAnswerLines.map(trimAnswerLine).join('\n').trim();
-		const blocks = parseAnswerBlocks(rawAnswer);
-		const answerText = answerBlocksToText(blocks);
-
-		const baseId = slugify(currentQuestion);
-		const id = makeUniqueId(baseId, questionIdCounts);
-
-		const item: FaqItem = {
-			id,
-			question: currentQuestion.trim(),
-			answerText,
-			blocks
-		};
-
-		currentCategory.items.push(item);
-		currentQuestion = null;
-		currentAnswerLines = [];
-	};
-
-	for (let index = 0; index < lines.length; index++) {
-		const line = lines[index] ?? '';
-
-		if (isCategoryHeaderLine(line)) {
-			flushItem();
-			const title = line.replace(/^\s*##\s+/, '').trim();
-			if (title) startCategory(title);
+	for (const token of tokens) {
+		if (isHeading2(token) && token.depth === 2) {
+			const title = inlineMarkdownToText(token.text);
+			if (title) {
+				const baseId = slugify(title);
+				const id = makeUniqueId(baseId, categoryIdCounts);
+				currentCategory = { id, title: title.trim(), items: [] };
+				categories.push(currentCategory);
+			}
 			continue;
 		}
 
-		if (!currentQuestion && isSubheadingLine(lines, index)) {
-			flushItem();
-			startCategory(line.trim());
-			continue;
-		}
+		if (!currentCategory) continue;
+		const category = currentCategory;
 
-		const questionMatch = /^\s*\d+\.\s+(.*)$/.exec(line);
-		if (questionMatch) {
-			flushItem();
-			currentQuestion = (questionMatch[1] ?? '').trim();
-			currentAnswerLines = [];
-			continue;
-		}
+		if (isOrderedList(token)) {
+			for (const listItem of token.items) {
+				const itemSource = listItem.raw.replace(/^\s*\d+\.\s+/, '').trim();
+				const match = /^\*\*(.+?)\*\*(?:\s+|$)([\s\S]*)$/.exec(itemSource);
 
-		if (currentQuestion) {
-			currentAnswerLines.push(line);
+				const questionMarkdown = (match?.[1] ?? itemSource).trim();
+				const answerMarkdown = (match?.[2] ?? '').trim();
+				const question = inlineMarkdownToText(questionMarkdown);
+				if (!question) continue;
+
+				const blocks = parseAnswerBlocks(answerMarkdown);
+				const answerText = answerBlocksToText(blocks);
+
+				const baseId = slugify(question);
+				const id = makeUniqueId(baseId, questionIdCounts);
+
+				const item: FaqItem = {
+					id,
+					question,
+					answerText,
+					blocks
+				};
+
+				category.items.push(item);
+			}
 		}
 	}
-
-	flushItem();
 
 	return categories.filter(c => c.items.length > 0);
 }

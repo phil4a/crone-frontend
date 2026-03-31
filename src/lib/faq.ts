@@ -1,4 +1,4 @@
-import { Lexer, Parser, TextRenderer, marked } from 'marked';
+import { marked } from 'marked';
 import type { Token, Tokens } from 'marked';
 
 import { FaqAnswerBlock, FaqCategory, FaqItem } from '@/types/faq.types';
@@ -14,15 +14,81 @@ function slugify(value: string) {
 	return slug || 'section';
 }
 
-const textRenderer = new TextRenderer();
-const inlineParser = new Parser();
-
 function normalizeText(value: string) {
 	return value.replace(/\s+/g, ' ').trim();
 }
 
+function isSafeHref(href: string) {
+	const value = href.trim().toLowerCase();
+	if (!value) return false;
+	if (value.startsWith('/')) return true;
+	if (value.startsWith('#')) return true;
+	if (value.startsWith('http://')) return true;
+	if (value.startsWith('https://')) return true;
+	if (value.startsWith('mailto:')) return true;
+	if (value.startsWith('tel:')) return true;
+	return false;
+}
+
+function escapeHtmlText(value: string) {
+	return value
+		.replace(/&/g, '&amp;')
+		.replace(/</g, '&lt;')
+		.replace(/>/g, '&gt;')
+		.replace(/"/g, '&quot;')
+		.replace(/'/g, '&#39;');
+}
+
+function decodeHtmlEntities(value: string) {
+	return value
+		.replace(/&nbsp;/g, ' ')
+		.replace(/&amp;/g, '&')
+		.replace(/&lt;/g, '<')
+		.replace(/&gt;/g, '>')
+		.replace(/&quot;/g, '"')
+		.replace(/&#39;/g, "'");
+}
+
+function sanitizeFaqInlineHtml(html: string) {
+	const withoutDisallowedTags = html.replace(/<(?!\/?(?:strong|em|del|code|br|a)\b)[^>]*>/gi, '');
+
+	const normalizedTags = withoutDisallowedTags.replace(
+		/<(strong|em|del|code)\b[^>]*>/gi,
+		(_match, tagName: string) => `<${tagName.toLowerCase()}>`
+	);
+
+	const withSafeLinks = normalizedTags.replace(/<a\b[^>]*>/gi, match => {
+		const hrefMatch =
+			/\bhref\s*=\s*"([^"]*)"/i.exec(match) ||
+			/\bhref\s*=\s*'([^']*)'/i.exec(match) ||
+			/\bhref\s*=\s*([^\s>]+)/i.exec(match);
+
+		const href = hrefMatch?.[1]?.trim() ?? '';
+		if (!isSafeHref(href)) return '';
+
+		const safeHref = escapeHtmlText(href);
+		const isExternal = /^https?:\/\//i.test(href);
+		const extra = isExternal ? ' target="_blank" rel="noopener noreferrer"' : '';
+
+		return `<a href="${safeHref}"${extra}>`;
+	});
+
+	return withSafeLinks;
+}
+
+function htmlToText(html: string) {
+	const withNewLines = html.replace(/<br\s*\/?>/gi, '\n');
+	const withoutTags = withNewLines.replace(/<\/?[^>]+>/g, '');
+	return decodeHtmlEntities(withoutTags);
+}
+
+function inlineMarkdownToHtml(value: string) {
+	const rawHtml = marked.parseInline(value, { async: false, gfm: true, breaks: false });
+	return sanitizeFaqInlineHtml(String(rawHtml).trim());
+}
+
 function inlineMarkdownToText(value: string) {
-	return normalizeText(inlineParser.parseInline(Lexer.lexInline(value), textRenderer));
+	return normalizeText(htmlToText(inlineMarkdownToHtml(value)));
 }
 
 function isHeading2(token: Token): token is Tokens.Heading {
@@ -41,21 +107,27 @@ function parseAnswerBlocks(answerMarkdown: string): FaqAnswerBlock[] {
 		if (token.type === 'space') continue;
 
 		if (token.type === 'paragraph') {
-			const paragraph = inlineMarkdownToText(token.text);
-			if (paragraph) blocks.push({ type: 'paragraph', text: paragraph });
+			const text = inlineMarkdownToText(token.text);
+			const html = inlineMarkdownToHtml(token.text);
+			if (text) blocks.push({ type: 'paragraph', text, html });
 			continue;
 		}
 
 		if (token.type === 'text') {
-			const paragraph = inlineMarkdownToText(token.text);
-			if (paragraph) blocks.push({ type: 'paragraph', text: paragraph });
+			const text = inlineMarkdownToText(token.text);
+			const html = inlineMarkdownToHtml(token.text);
+			if (text) blocks.push({ type: 'paragraph', text, html });
 			continue;
 		}
 
 		if (isList(token) && !token.ordered) {
 			const items = token.items
-				.map((item: Tokens.ListItem) => inlineMarkdownToText(item.text))
-				.filter(Boolean);
+				.map((item: Tokens.ListItem) => {
+					const text = inlineMarkdownToText(item.text);
+					if (!text) return null;
+					return { text, html: inlineMarkdownToHtml(item.text) };
+				})
+				.filter((value): value is { text: string; html: string } => Boolean(value));
 
 			if (items.length > 0) blocks.push({ type: 'list', items });
 		}
@@ -68,7 +140,7 @@ function answerBlocksToText(blocks: FaqAnswerBlock[]) {
 	return blocks
 		.map(block => {
 			if (block.type === 'paragraph') return block.text;
-			return block.items.join('\n');
+			return block.items.map(item => item.text).join('\n');
 		})
 		.join('\n')
 		.trim();

@@ -1,11 +1,15 @@
 export interface FaqAnswerBlockParagraph {
 	type: 'paragraph';
 	text: string;
+	html: string;
 }
 
 export interface FaqAnswerBlockList {
 	type: 'list';
-	items: string[];
+	items: Array<{
+		text: string;
+		html: string;
+	}>;
 }
 
 export type FaqAnswerBlock = FaqAnswerBlockParagraph | FaqAnswerBlockList;

@@ -1,6 +1,7 @@
 'use client';
 
-import { useId, useMemo, useState } from 'react';
+import { parseAsStringEnum, useQueryState } from 'nuqs';
+import { useId, useMemo } from 'react';
 
 import { cn } from '@/lib/utils';
 import { FaqCategory } from '@/types/faq.types';
@@ -12,14 +13,20 @@ interface FaqTabsProps {
 
 export function FaqTabs({ categories, className }: FaqTabsProps) {
 	const baseId = useId();
-	const [activeId, setActiveId] = useState<string>(() => categories[0]?.id ?? '');
+	const categoryIds = useMemo(() => categories.map(category => category.id), [categories]);
+	const defaultActiveId = categoryIds[0] ?? '';
 
-	const activeIndex = useMemo(() => {
-		const index = categories.findIndex(c => c.id === activeId);
-		return index >= 0 ? index : 0;
-	}, [activeId, categories]);
+	const activeIdParser = useMemo(
+		() => parseAsStringEnum(categoryIds).withDefault(defaultActiveId),
+		[categoryIds, defaultActiveId]
+	);
 
-	const resolvedActiveId = categories[activeIndex]?.id ?? '';
+	const [activeId, setActiveId] = useQueryState('tab', activeIdParser);
+
+	const resolvedActiveId = useMemo(() => {
+		if (categories.some(category => category.id === activeId)) return activeId;
+		return defaultActiveId;
+	}, [activeId, categories, defaultActiveId]);
 
 	if (categories.length === 0) return null;
 
@@ -111,7 +118,12 @@ export function FaqTabs({ categories, className }: FaqTabsProps) {
 											>
 												{item.blocks.map((block, index) => {
 													if (block.type === 'paragraph') {
-														return <p key={index}>{block.text}</p>;
+														return (
+															<p
+																key={index}
+																dangerouslySetInnerHTML={{ __html: block.html }}
+															/>
+														);
 													}
 
 													return (
@@ -119,8 +131,11 @@ export function FaqTabs({ categories, className }: FaqTabsProps) {
 															key={index}
 															className='list-disc pl-5 space-y-2'
 														>
-															{block.items.map((value, itemIndex) => (
-																<li key={itemIndex}>{value}</li>
+															{block.items.map((itemValue, itemIndex) => (
+																<li
+																	key={itemIndex}
+																	dangerouslySetInnerHTML={{ __html: itemValue.html }}
+																/>
 															))}
 														</ul>
 													);

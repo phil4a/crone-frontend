@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { readFile } from 'node:fs/promises';
+import { access, readFile } from 'node:fs/promises';
 import path from 'node:path';
 
 import { FaqTabs } from '@/components/features/help/FaqTabs';
@@ -17,17 +17,34 @@ export const metadata: Metadata = {
 	description: 'Ответы на частые вопросы о проектировании и строительстве домов из клееного бруса.'
 };
 
-const FAQ_MARKDOWN_PATH = path.join(process.cwd(), 'src', 'data', 'faq.md');
+const FAQ_MARKDOWN_CANDIDATES = [
+	path.join(process.cwd(), 'src', 'data', 'faq.md'),
+	path.join(process.cwd(), 'crone-frontend', 'src', 'data', 'faq.md')
+];
+
+async function loadFaqMarkdown() {
+	for (const filePath of FAQ_MARKDOWN_CANDIDATES) {
+		try {
+			await access(filePath);
+			return readFile(filePath, 'utf8');
+		} catch {
+			continue;
+		}
+	}
+
+	throw new Error('FAQ markdown file not found');
+}
 
 async function getFaqData() {
 	try {
-		const markdown = await readFile(FAQ_MARKDOWN_PATH, 'utf8');
+		const markdown = await loadFaqMarkdown();
 		const categories = parseFaqMarkdown(markdown);
 		return {
 			categories,
 			jsonLd: categories.length > 0 ? buildFaqJsonLd(categories) : null
 		};
-	} catch {
+	} catch (error) {
+		console.error(error);
 		return { categories: [], jsonLd: null };
 	}
 }

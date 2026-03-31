@@ -5,6 +5,7 @@ import { cookies } from 'next/headers';
 import { CookieConsent } from '@/components/layout/CookieConsent';
 import { Footer } from '@/components/layout/Footer';
 import { Header } from '@/components/layout/Header';
+import { FeedbackModal } from '@/components/common/FeedbackModal';
 
 import { Providers } from '@/providers/Providers';
 
@@ -44,6 +45,7 @@ export default async function RootLayout({
 					<Header />
 					{children}
 					<Footer />
+					<FeedbackModal />
 					<CookieConsent initialConsent={initialConsent} />
 				</Providers>
 			</body>

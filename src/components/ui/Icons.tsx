@@ -289,3 +289,17 @@ export const MarkerIcon = ({ className }: { className?: string }) => (
 		/>
 	</svg>
 );
+export const CloseIcon = ({ className }: { className?: string }) => (
+	<svg
+		className={cn('h-4.5 w-4.5', className)}
+		viewBox='0 0 22 22'
+		fill='none'
+		xmlns='http://www.w3.org/2000/svg'
+	>
+		<path
+			d='M2 2.17911L10.9095 11M10.9095 11L20 20M10.9095 11L2 19.8209M10.9095 11L20 2'
+			strokeWidth='3'
+			stroke='currentColor'
+		></path>
+	</svg>
+);

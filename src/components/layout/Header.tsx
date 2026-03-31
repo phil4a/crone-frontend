@@ -11,6 +11,7 @@ import { MAIN_MENU } from '@/config/navigation.config';
 import { SITE_CONFIG } from '@/config/site.config';
 
 import { useHeaderStore } from '@/store/header';
+import { useFeedbackModalStore } from '@/store/feedbackModal';
 
 import { useActivePath } from '@/hooks/useActivePath';
 
@@ -21,6 +22,7 @@ export function Header() {
 	const [menuPath, setMenuPath] = useState<string | null>(null);
 	const { pathname, isActivePath } = useActivePath();
 	const { theme } = useHeaderStore();
+	const openFeedbackModal = useFeedbackModalStore(state => state.open);
 
 	const HEADER_TRANSITION_DURATION = 600;
 	const closeMenu = () => setMenuPath(null);
@@ -275,7 +277,13 @@ export function Header() {
 							</Link>
 						</div>
 
-						<Button className={cn('mt-0 xl:w-auto')}>Оставить заявку</Button>
+						<Button
+							type='button'
+							onClick={openFeedbackModal}
+							className={cn('mt-0 xl:w-auto')}
+						>
+							Оставить заявку
+						</Button>
 					</div>
 				</div>
 			</div>

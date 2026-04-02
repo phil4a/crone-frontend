@@ -14,11 +14,11 @@ export default function HomePage() {
 			<Hero />
 			<Advantages />
 			<LazyFeatures />
-			<ViewportLazy rootMargin='500px'>
+			<ViewportLazy rootMargin='700px'>
 				<LazyCreating />
 			</ViewportLazy>
 			<Projects />
-			<ViewportLazy rootMargin='500px'>
+			<ViewportLazy rootMargin='800px'>
 				<LazyGeography />
 			</ViewportLazy>
 			<Steps />

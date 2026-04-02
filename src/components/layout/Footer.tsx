@@ -31,7 +31,9 @@ export async function Footer() {
 						<Link
 							href='/'
 							className='mb-10 xl:mb-0 block w-fit'
+							aria-label='На главную'
 						>
+							<span className='sr-only'>На главную</span>
 							<Logo className='text-white w-62.75 h-8' />
 						</Link>
 
@@ -83,7 +85,7 @@ export async function Footer() {
 function FooterMenu({ title, items }: { title: string; items: { label: string; href: string }[] }) {
 	return (
 		<nav className='flex-1 min-w-50'>
-			<h4 className='font-bold text-lg text-beige mb-6 uppercase tracking-wider'>{title}</h4>
+			<h5 className='font-bold text-lg text-beige mb-6 uppercase tracking-wider'>{title}</h5>
 			<ul className='flex flex-col gap-4'>
 				{items.map((item, index) => (
 					<li key={index}>
@@ -108,6 +110,7 @@ function FooterContacts() {
 					href={SITE_CONFIG.contacts.socials.telegramGroup}
 					target='_blank'
 					rel='noopener noreferrer'
+					aria-label='Перейти в телеграмм-группу Крона Групп'
 					className='flex items-center gap-3 text-white hover:text-beige transition-colors'
 				>
 					<TelegramIcon className='w-4.5 h-4.5' />
@@ -118,6 +121,7 @@ function FooterContacts() {
 					target='_blank'
 					rel='noopener noreferrer'
 					className='flex items-center gap-3 text-white hover:text-beige transition-colors'
+					aria-label='Перейти в MAX-группу Крона Групп'
 				>
 					<MaxIcon className='w-4.5 h-4.5' />
 					<span>Канал в MAX</span>
@@ -125,6 +129,7 @@ function FooterContacts() {
 				<Link
 					href={SITE_CONFIG.contacts.email.href}
 					className='flex items-center gap-3 text-white hover:text-beige transition-colors'
+					aria-label='Написать по электронной почте'
 				>
 					<EmailIcon className='w-4.5 h-3.75' />
 					<span>{SITE_CONFIG.contacts.email.label}</span>
@@ -132,6 +137,7 @@ function FooterContacts() {
 				<Link
 					href={SITE_CONFIG.contacts.phone.href}
 					className='flex items-center gap-3 text-white hover:text-beige transition-colors'
+					aria-label='Позвонить по телефону'
 				>
 					<PhoneIcon className='w-4.5 h-4.75' />
 					<span>{SITE_CONFIG.contacts.phone.label}</span>
@@ -157,6 +163,7 @@ function FooterContacts() {
 					target='_blank'
 					rel='noopener noreferrer'
 					className='xl:hidden flex items-center gap-3 text-white hover:text-beige transition-colors'
+					aria-label='Больше информации в instagram'
 				>
 					<InstagramIcon className='w-8 h-8' />
 				</Link>

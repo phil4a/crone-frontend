@@ -5,7 +5,7 @@ import { Projects } from '@/components/features/home/Projects';
 import { Steps } from '@/components/features/home/Steps';
 import { LazyCreating } from '@/components/features/home/creating/LazyCreating';
 import { LazyFeatures } from '@/components/features/home/features/LazyFeatures';
-import { Geography } from '@/components/features/home/geography/Geography';
+import { LazyGeography } from '@/components/features/home/geography/LazyGeography';
 import { ViewportLazy } from '@/components/layout/ViewportLazy';
 
 export default function HomePage() {
@@ -18,7 +18,9 @@ export default function HomePage() {
 				<LazyCreating />
 			</ViewportLazy>
 			<Projects />
-			<Geography />
+			<ViewportLazy rootMargin='500px'>
+				<LazyGeography />
+			</ViewportLazy>
 			<Steps />
 			<FeedbackForm formId={225} />
 		</main>

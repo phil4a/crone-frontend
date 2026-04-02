@@ -1,13 +1,13 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
+import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import * as z from 'zod';
 
-import { SmartCaptcha } from '@/components/common/SmartCaptcha';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Textarea } from '@/components/ui/Textarea';
@@ -18,6 +18,11 @@ import { useFeedbackFormSubmit } from '@/hooks/useFeedbackFormSubmit';
 import { HeaderThemeObserver } from '../layout/HeaderThemeObserver';
 
 import { cn } from '@/lib/utils';
+
+const DynamicSmartCaptcha = dynamic(
+	() => import('@/components/common/SmartCaptcha').then(mod => mod.SmartCaptcha),
+	{ ssr: false }
+);
 
 const formSchema = z.object({
 	name: z.string().min(2, { message: 'Имя должно содержать минимум 2 символа' }),
@@ -227,7 +232,7 @@ export function FeedbackForm({
 					</div>
 				) : null}
 			</div>
-			<SmartCaptcha
+			<DynamicSmartCaptcha
 				className='-mt-4 md:-mt-5'
 				key={captchaKey}
 				visible={captchaVisible}

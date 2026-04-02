@@ -16,6 +16,7 @@ import { Title } from '@/components/ui/Title';
 import { useFeedbackFormSubmit } from '@/hooks/useFeedbackFormSubmit';
 
 import { HeaderThemeObserver } from '../layout/HeaderThemeObserver';
+import { ViewportLazy } from '../layout/ViewportLazy';
 
 import { cn } from '@/lib/utils';
 
@@ -232,13 +233,15 @@ export function FeedbackForm({
 					</div>
 				) : null}
 			</div>
-			<DynamicSmartCaptcha
-				className='-mt-4 md:-mt-5'
-				key={captchaKey}
-				visible={captchaVisible}
-				onChallengeHidden={() => setCaptchaVisible(false)}
-				onTokenChange={onCaptchaTokenChange}
-			/>
+			<ViewportLazy rootMargin='300px'>
+				<DynamicSmartCaptcha
+					className='-mt-4 md:-mt-5'
+					key={captchaKey}
+					visible={captchaVisible}
+					onChallengeHidden={() => setCaptchaVisible(false)}
+					onTokenChange={onCaptchaTokenChange}
+				/>
+			</ViewportLazy>
 			<label className='flex place-items-center gap-2 text-sm text-main'>
 				<input
 					type='checkbox'

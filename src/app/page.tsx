@@ -6,6 +6,7 @@ import { Steps } from '@/components/features/home/Steps';
 import { LazyCreating } from '@/components/features/home/creating/LazyCreating';
 import { LazyFeatures } from '@/components/features/home/features/LazyFeatures';
 import { Geography } from '@/components/features/home/geography/Geography';
+import { ViewportLazy } from '@/components/layout/ViewportLazy';
 
 export default function HomePage() {
 	return (
@@ -13,7 +14,9 @@ export default function HomePage() {
 			<Hero />
 			<Advantages />
 			<LazyFeatures />
-			<LazyCreating />
+			<ViewportLazy rootMargin='500px'>
+				<LazyCreating />
+			</ViewportLazy>
 			<Projects />
 			<Geography />
 			<Steps />

@@ -16,7 +16,7 @@ import { FEATURES_DATA } from '@/config/features.data';
 
 import { useFeedbackModalStore } from '@/store/feedbackModal';
 
-import { FeaturesSlide } from './features/FeaturesSlide';
+import { FeaturesSlide } from './FeaturesSlide';
 import { cn } from '@/lib/utils';
 
 export function Features() {

@@ -1,19 +1,19 @@
 import { FeedbackForm } from '@/components/common/FeedbackForm';
 import { Advantages } from '@/components/features/home/Advantages';
-import { Creating } from '@/components/features/home/Creating';
-import { Features } from '@/components/features/home/Features';
-import { Geography } from '@/components/features/home/Geography';
 import { Hero } from '@/components/features/home/Hero';
 import { Projects } from '@/components/features/home/Projects';
 import { Steps } from '@/components/features/home/Steps';
+import { LazyCreating } from '@/components/features/home/creating/LazyCreating';
+import { LazyFeatures } from '@/components/features/home/features/LazyFeatures';
+import { Geography } from '@/components/features/home/geography/Geography';
 
 export default function HomePage() {
 	return (
 		<main className='flex min-h-screen flex-col'>
 			<Hero />
 			<Advantages />
-			<Features />
-			<Creating />
+			<LazyFeatures />
+			<LazyCreating />
 			<Projects />
 			<Geography />
 			<Steps />

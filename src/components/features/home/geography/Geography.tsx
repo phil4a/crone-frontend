@@ -1,6 +1,6 @@
 import { Title } from '@/components/ui/Title';
 
-import { GeographyMap } from './geography/GeographyMap';
+import { GeographyMap } from './GeographyMap';
 
 export function Geography() {
 	return (

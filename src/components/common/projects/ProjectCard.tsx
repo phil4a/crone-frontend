@@ -53,9 +53,9 @@ export function ProjectCard({ project }: ProjectCardProps) {
 					<div></div>
 				</div>
 				<div className='flex justify-between items-center pt-4 pb-5 px-2 gap-2'>
-					<h5 className='text-xl md:text-lg font-semibold text-main transition-colors duration-300 group-hover:text-brown'>
+					<p className='text-xl md:text-lg font-semibold text-main transition-colors duration-300 group-hover:text-brown'>
 						{project.title}
-					</h5>
+					</p>
 					<div className='text-base text-dark-gray shrink-0 whitespace-nowrap'>{specs}</div>
 				</div>
 			</Link>

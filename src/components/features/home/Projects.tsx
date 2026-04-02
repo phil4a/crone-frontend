@@ -36,10 +36,10 @@ export function Projects() {
 					</Button>
 				</div>
 
-				<div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5'>
+				<ul className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5'>
 					{isLoading &&
 						Array.from({ length: 6 }).map((_, idx) => (
-							<div
+							<li
 								key={idx}
 								className='relative group flex flex-col w-full'
 							>
@@ -59,7 +59,7 @@ export function Projects() {
 										className='w-28.25 h-6 rounded-lg'
 									/>
 								</div>
-							</div>
+							</li>
 						))}
 					{!!error && <p>Произошла ошибка загрузки проектов</p>}
 					{projects?.map(project => (
@@ -68,7 +68,7 @@ export function Projects() {
 							project={project}
 						/>
 					))}
-				</div>
+				</ul>
 				<Button
 					as={Link}
 					href={PAGE.OBJECTS}

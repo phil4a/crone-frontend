@@ -10,8 +10,8 @@ import { Logo } from '@/components/ui/Logo';
 import { MAIN_MENU } from '@/config/navigation.config';
 import { SITE_CONFIG } from '@/config/site.config';
 
-import { useHeaderStore } from '@/store/header';
 import { useFeedbackModalStore } from '@/store/feedbackModal';
+import { useHeaderStore } from '@/store/header';
 
 import { useActivePath } from '@/hooks/useActivePath';
 
@@ -104,13 +104,16 @@ export function Header() {
 				<Link
 					href='/'
 					className='group relative z-3 shrink-0'
+					aria-label='На главную'
 				>
+					<span className='sr-only'>На главную</span>
 					<Logo className={cn('w-40.5 transition-colors duration-300 xl:w-62.5', logoColorClass)} />
 				</Link>
 
 				<div className='hidden md:flex flex-1 xl:hidden gap-8 justify-end'>
 					<Link
 						href={SITE_CONFIG.contacts.email.href}
+						aria-label={`Написать на ${SITE_CONFIG.contacts.email.label}`}
 						className={cn(
 							'group flex items-center gap-2.5 transition-colors text-sm font-bold',
 							textColorClass,
@@ -125,6 +128,7 @@ export function Header() {
 
 					<Link
 						href={SITE_CONFIG.contacts.phone.href}
+						aria-label={`Позвонить по номеру ${SITE_CONFIG.contacts.phone.label}`}
 						className={cn(
 							'group flex items-center gap-2.5 transition-colors text-sm font-bold',
 							textColorClass,
@@ -139,23 +143,29 @@ export function Header() {
 
 					<Link
 						href={SITE_CONFIG.contacts.socials.telegram}
+						aria-label='Открыть Telegram'
 						className={cn('transition-colors', textColorClass, hoverColorClass)}
 						target='_blank'
+						rel='noopener noreferrer'
 					>
 						<TelegramIcon />
 					</Link>
 
 					<Link
 						href={SITE_CONFIG.contacts.socials.whatsapp}
+						aria-label='Открыть WhatsApp'
 						className={cn('transition-colors', textColorClass, hoverColorClass)}
 						target='_blank'
+						rel='noopener noreferrer'
 					>
 						<WhatsappIcon />
 					</Link>
 					<Link
 						href={SITE_CONFIG.contacts.socials.max}
+						aria-label='Открыть Max'
 						className={cn('transition-colors', textColorClass, hoverColorClass)}
 						target='_blank'
+						rel='noopener noreferrer'
 					>
 						<MaxIcon />
 					</Link>
@@ -163,6 +173,9 @@ export function Header() {
 				<button
 					type='button'
 					className='xl:hidden z-5 bg-beige h-11 w-11 flex items-center justify-center rounded-lg'
+					aria-label={isMenuOpen ? 'Закрыть меню' : 'Открыть меню'}
+					aria-expanded={isMenuOpen}
+					aria-controls='site-menu'
 					onClick={() => setMenuPath(prev => (prev === pathname ? null : pathname))}
 				>
 					<div className={cn('relative h-4.5 w-6 cursor-pointer', isMenuOpen && 'menu-open')}>
@@ -188,6 +201,7 @@ export function Header() {
 				</button>
 
 				<div
+					id='site-menu'
 					className={cn(
 						'fixed inset-0 z-2 flex flex-col bg-white px-5 md:px-10 pt-25 pb-5 transition-all duration-300 xl:static xl:flex xl:flex-1 h-dvh xl:h-auto xl:w-auto xl:translate-x-0 xl:flex-row xl:items-center xl:justify-between xl:gap-7.5 xl:bg-transparent xl:p-0',
 						!isMenuOpen && 'translate-x-full'
@@ -223,6 +237,7 @@ export function Header() {
 						<Link
 							href={SITE_CONFIG.contacts.email.href}
 							onClick={closeMenu}
+							aria-label={`Написать на ${SITE_CONFIG.contacts.email.label}`}
 							className={cn(
 								'group flex items-center gap-2.5 transition-colors text-sm font-bold',
 								textColorClass,
@@ -238,6 +253,7 @@ export function Header() {
 						<Link
 							href={SITE_CONFIG.contacts.phone.href}
 							onClick={closeMenu}
+							aria-label={`Позвонить по номеру ${SITE_CONFIG.contacts.phone.label}`}
 							className={cn(
 								'group flex items-center gap-2.5 transition-colors text-sm font-bold',
 								textColorClass,
@@ -254,24 +270,30 @@ export function Header() {
 							<Link
 								href={SITE_CONFIG.contacts.socials.telegram}
 								onClick={closeMenu}
+								aria-label='Написать в Telegram'
 								className={cn('transition-colors', textColorClass, hoverColorClass)}
 								target='_blank'
+								rel='noopener noreferrer'
 							>
 								<TelegramIcon />
 							</Link>
 							<Link
 								href={SITE_CONFIG.contacts.socials.whatsapp}
 								onClick={closeMenu}
+								aria-label='Написать в WhatsApp'
 								className={cn('transition-colors', textColorClass, hoverColorClass)}
 								target='_blank'
+								rel='noopener noreferrer'
 							>
 								<WhatsappIcon />
 							</Link>
 							<Link
 								href={SITE_CONFIG.contacts.socials.max}
 								onClick={closeMenu}
+								aria-label='Написать в Max'
 								className={cn('transition-colors', textColorClass, hoverColorClass)}
 								target='_blank'
+								rel='noopener noreferrer'
 							>
 								<MaxIcon />
 							</Link>

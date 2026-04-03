@@ -1,10 +1,10 @@
-import Image from 'next/image';
 import Link from 'next/link';
 
 import { ProjectLikeClient } from '@/components/common/projects/ProjectLikeClient';
 import { Badge } from '@/components/ui/Badge';
 
 import { ProjectCardIcon } from './ProjectCardIcons';
+import { ProjectImageClient } from './ProjectImage';
 import { pluralizeFloors } from '@/lib/formatters/pluralize';
 import { Project } from '@/types/project.types';
 
@@ -16,9 +16,10 @@ interface ProjectCardDetailedProps {
 export function ProjectCardDetailed({ project, index }: ProjectCardDetailedProps) {
 	const { area, floor, year, city } = project.specs;
 
-	// Logic for displaying the image: result -> process -> coverImage
 	const displayImage =
 		project.galleries.result[0] || project.galleries.process[0] || project.coverImage;
+
+	const isPriority = index !== undefined && index < 4;
 
 	return (
 		<li className='relative group flex flex-col w-full'>
@@ -40,14 +41,10 @@ export function ProjectCardDetailed({ project, index }: ProjectCardDetailedProps
 			>
 				<div className='relative w-full aspect-4/3 lg:aspect-video overflow-hidden rounded-lg hover:scale-[1.0125] duration-300 transition-transform will-change-transform'>
 					{displayImage ? (
-						<Image
+						<ProjectImageClient
 							src={displayImage.url}
 							alt={displayImage.alt || `Изображение проекта «${project.title}»`}
-							fill
-							fetchPriority={index !== undefined && index < 4 ? 'high' : 'low'}
-							priority={index !== undefined && index < 4}
-							className='object-cover'
-							sizes='(max-width: 640px) 100vw, (max-width: 992px) 50vw, 33vw'
+							priority={isPriority}
 						/>
 					) : (
 						<div className='w-full h-full bg-gray-200 flex items-center justify-center'>

@@ -1,74 +1,71 @@
 'use client';
 
-import Image from 'next/image';
-import { useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 
-import { useMediaQuery } from '@/hooks/useMediaQuery';
+import { cn } from '@/lib/utils';
 
 export function HeroBackground() {
-	// True if mobile (<768px) OR portrait mode
-	// False if desktop (>=768px) AND landscape mode
-	const isMobile = useMediaQuery('(max-width: 767px), (orientation: portrait)');
-	const [isPosterVisible, setIsPosterVisible] = useState(true);
+	const videoRef = useRef<HTMLVideoElement>(null);
+	const [isVideoReady, setIsVideoReady] = useState(false);
 
-	// During SSR or initial hydration, render just the poster to avoid layout shift/flicker
-	// and ensure hydration matches (since we return null initially from hook)
-	if (isMobile === null) {
-		return (
-			<div className='relative h-full w-full'>
-				<Image
-					src='/video/hero-mobile-poster.webp'
-					alt='Постер изображения проекта Крона Групп'
-					fill
-					priority
-					sizes='100vw'
-					className='object-cover md:hidden'
-				/>
-				<Image
-					src='/video/hero-desktop-poster.webp'
-					alt='Постер изображения проекта Крона Групп'
-					fill
-					priority
-					sizes='100vw'
-					className='hidden object-cover md:block'
-				/>
-			</div>
-		);
-	}
+	const handleCanPlay = () => {
+		setIsVideoReady(true);
+		videoRef.current?.play().catch(() => null);
+	};
 
-	const posterSrc = isMobile ? '/video/hero-mobile-poster.webp' : '/video/hero-desktop-poster.webp';
+	const setVideoNode = useCallback((node: HTMLVideoElement | null) => {
+		videoRef.current = node;
+		if (!node) return;
+
+		if (node.readyState >= 3) {
+			setIsVideoReady(true);
+			node.play().catch(() => null);
+		}
+	}, []);
 
 	return (
 		<>
-			{isPosterVisible ? (
-				<div className='absolute inset-0 z-10 pointer-events-none'>
-					<Image
-						src={posterSrc}
-						alt='Постер изображения проекта Крона Групп'
-						fill
-						priority
-						quality={75}
-						sizes='100vw'
-						className='object-cover'
+			<div
+				className={cn(
+					'absolute inset-0 z-10 pointer-events-none transition-opacity duration-250',
+					isVideoReady ? 'opacity-0' : 'opacity-100'
+				)}
+			>
+				<picture>
+					<source
+						media='(max-width: 767px), (orientation: portrait)'
+						srcSet='/video/hero-mobile-poster.webp'
 					/>
-				</div>
-			) : null}
+					<img
+						src='/video/hero-desktop-poster.webp'
+						alt='Постер изображения проекта Крона Групп'
+						loading='eager'
+						decoding='async'
+						className='absolute inset-0 h-full w-full object-cover'
+					/>
+				</picture>
+			</div>
 
 			<video
+				ref={setVideoNode}
+				onCanPlay={handleCanPlay}
 				autoPlay
 				muted
 				loop
 				playsInline
-				preload='metadata'
-				poster={posterSrc}
-				className='absolute inset-0 z-0 h-full w-full object-cover'
-				key={isMobile ? 'mobile' : 'desktop'}
-				onPlaying={() => setIsPosterVisible(false)}
-				onCanPlay={() => setIsPosterVisible(false)}
-				onLoadedData={() => setIsPosterVisible(false)}
+				preload='auto'
+				className={cn(
+					'absolute inset-0 z-0 h-full w-full object-cover transition-opacity duration-250',
+					isVideoReady ? 'opacity-100' : 'opacity-0'
+				)}
 			>
 				<source
-					src={isMobile ? '/video/hero-mobile-2.mp4' : '/video/hero-desktop.mp4'}
+					src='/video/hero-mobile-2.mp4'
+					type='video/mp4'
+					media='(max-width: 767px), (orientation: portrait)'
+				/>
+				<source
+					src='/video/hero-desktop.mp4'
 					type='video/mp4'
 				/>
 			</video>

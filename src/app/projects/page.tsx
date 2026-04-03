@@ -60,8 +60,6 @@ export async function generateMetadata(props: PageProps): Promise<Metadata> {
 	};
 }
 
-
-
 export default async function ProjectsPage(props: PageProps) {
 	const searchParams = await props.searchParams;
 	const tag = typeof searchParams.tag === 'string' ? searchParams.tag : undefined;

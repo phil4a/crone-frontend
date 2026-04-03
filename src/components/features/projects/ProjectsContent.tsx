@@ -135,14 +135,15 @@ export function ProjectsContent() {
 						</div>
 					) : (
 						<>
-							<div className='grid grid-cols-1 md:grid-cols-2 gap-5'>
-								{projects.map(project => (
+							<ul className='grid grid-cols-1 md:grid-cols-2 gap-5'>
+								{projects.map((project, index) => (
 									<ProjectCardDetailed
 										key={project.id}
 										project={project}
+										index={index}
 									/>
 								))}
-							</div>
+							</ul>
 
 							<div className='mt-10'>
 								<Pagination

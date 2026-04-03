@@ -1,8 +1,8 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
-import { Badge } from '@/components/ui/Badge';
 import { ProjectLikeClient } from '@/components/common/projects/ProjectLikeClient';
+import { Badge } from '@/components/ui/Badge';
 
 import { ProjectCardIcon } from './ProjectCardIcons';
 import { pluralizeFloors } from '@/lib/formatters/pluralize';
@@ -10,9 +10,10 @@ import { Project } from '@/types/project.types';
 
 interface ProjectCardDetailedProps {
 	project: Project;
+	index?: number;
 }
 
-export function ProjectCardDetailed({ project }: ProjectCardDetailedProps) {
+export function ProjectCardDetailed({ project, index }: ProjectCardDetailedProps) {
 	const { area, floor, year, city } = project.specs;
 
 	// Logic for displaying the image: result -> process -> coverImage
@@ -43,6 +44,8 @@ export function ProjectCardDetailed({ project }: ProjectCardDetailedProps) {
 							src={displayImage.url}
 							alt={displayImage.alt || `Изображение проекта «${project.title}»`}
 							fill
+							fetchPriority={index !== undefined && index < 4 ? 'high' : 'low'}
+							priority={index !== undefined && index < 4}
 							className='object-cover'
 							sizes='(max-width: 640px) 100vw, (max-width: 992px) 50vw, 33vw'
 						/>

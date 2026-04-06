@@ -71,6 +71,7 @@ export function FiltersDrawer({ filters, onApply, stats }: FiltersDrawerProps) {
 						</div>
 						<button
 							type='button'
+							aria-label='Закрыть фильтры'
 							className='h-8 w-8 flex items-center justify-center rounded-full text-dark-gray hover:text-brown'
 							onClick={() => setIsOpen(false)}
 						>

@@ -31,7 +31,8 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
 							'absolute left-5 top-1/2 -translate-y-1/2 text-brown/50 text-base pointer-events-none transition-all duration-200',
 							'peer-focus:top-3 peer-focus:text-[10px] peer-focus:leading-none peer-focus:text-brown/50',
 							'peer-[:not(:placeholder-shown)]:top-3 peer-[:not(:placeholder-shown)]:text-[10px] peer-[:not(:placeholder-shown)]:leading-none',
-						)}>
+						)}
+						htmlFor={props.id}>
 						{labelText}
 					</label>
 				)}

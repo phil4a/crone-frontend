@@ -49,6 +49,7 @@ export function ProjectSortPopover({ sort, onChange }: ProjectSortPopoverProps) 
 				<PopoverTrigger asChild>
 					<button
 						type='button'
+						aria-label={`Сортировка: ${getLabel(sort)}`}
 						className='inline-flex items-center md:ml-1 md:pr-3 md:py-1 rounded-lg text-brown cursor-pointer text-sm'
 					>
 						<div className='flex items-center gap-2'>

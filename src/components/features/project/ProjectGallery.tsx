@@ -7,7 +7,8 @@ import lgThumbnail from 'lightgallery/plugins/thumbnail';
 import lgZoom from 'lightgallery/plugins/zoom';
 import LightGallery from 'lightgallery/react';
 import Image from 'next/image';
-import { useEffect, useRef } from 'react';
+import type { CSSProperties } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { RowsPhotoAlbum } from 'react-photo-album';
 import 'react-photo-album/rows.css';
 
@@ -15,11 +16,95 @@ import { HeaderThemeObserver } from '@/components/layout/HeaderThemeObserver';
 import { Title } from '@/components/ui/Title';
 
 import { getProxiedUrl } from '@/lib/utils';
-import { ProjectGalleryProps, ProjectImage } from '@/types/project.types';
+import { ProjectGalleryProps } from '@/types/project.types';
+
+interface AlbumImageRenderProps {
+	alt?: string;
+	className?: string;
+	style?: CSSProperties;
+}
+
+function GalleryThumb({
+	photo,
+	title,
+	projectAlt,
+	albumProps
+}: {
+	photo: { src: string; width: number; height: number };
+	title: string;
+	projectAlt: string;
+	albumProps: AlbumImageRenderProps;
+}) {
+	const proxiedSrc = getProxiedUrl(photo.src);
+	const anchorRef = useRef<HTMLAnchorElement | null>(null);
+	const [measuredWidth, setMeasuredWidth] = useState<number | null>(() => {
+		const styleWidth = albumProps.style?.width;
+		if (typeof styleWidth === 'number' && Number.isFinite(styleWidth) && styleWidth > 0) {
+			return Math.round(styleWidth);
+		}
+		if (typeof styleWidth === 'string') {
+			const match = styleWidth.trim().match(/^(\d+(?:\.\d+)?)px$/);
+			if (match?.[1]) {
+				const parsed = Number.parseFloat(match[1]);
+				if (Number.isFinite(parsed) && parsed > 0) return Math.round(parsed);
+			}
+		}
+		return null;
+	});
+
+	useEffect(() => {
+		const node = anchorRef.current;
+		if (!node) return;
+
+		const updateWidth = () => {
+			const width = node.getBoundingClientRect().width;
+			if (Number.isFinite(width) && width > 0) {
+				setMeasuredWidth(Math.round(width));
+			}
+		};
+
+		updateWidth();
+
+		const resizeObserver = new ResizeObserver(() => {
+			updateWidth();
+		});
+
+		resizeObserver.observe(node);
+		return () => {
+			resizeObserver.disconnect();
+		};
+	}, []);
+
+	const sizes = measuredWidth ? `${measuredWidth}px` : undefined;
+
+	return (
+		<a
+			ref={anchorRef}
+			href={proxiedSrc}
+			data-src={proxiedSrc}
+			aria-label={`Открыть изображение ${title}`}
+			data-lg-size={`${photo.width}-${photo.height}`}
+			data-sub-html={`Проект «${projectAlt}» (${title})`}
+			className={`lg-item relative block overflow-hidden rounded-lg ${albumProps.className ?? ''}`}
+			style={albumProps.style}
+		>
+			{sizes ? (
+				<Image
+					src={photo.src}
+					alt={albumProps.alt || ''}
+					fill
+					quality={55}
+					className='h-full w-full object-cover'
+					sizes={sizes}
+				/>
+			) : null}
+		</a>
+	);
+}
 
 export function ProjectGallery(props: ProjectGalleryProps) {
 	const { title, projectAlt, items } = props;
-	const lightboxRef = useRef<any>(null);
+	const lightboxRef = useRef<{ refresh: () => void } | null>(null);
 
 	useEffect(() => {
 		if (lightboxRef.current) {
@@ -51,7 +136,7 @@ export function ProjectGallery(props: ProjectGalleryProps) {
 				<LightGallery
 					onInit={ref => {
 						if (ref) {
-							lightboxRef.current = ref.instance;
+							lightboxRef.current = ref.instance as { refresh: () => void };
 							// Force refresh to ensure LightGallery discovers the elements rendered by RowsPhotoAlbum
 							// This is necessary because react-photo-album might render/layout after LightGallery initializes
 							setTimeout(() => {
@@ -75,25 +160,13 @@ export function ProjectGallery(props: ProjectGalleryProps) {
 						spacing={10}
 						render={{
 							image: (props, { photo }) => {
-								const proxiedSrc = getProxiedUrl(photo.src);
 								return (
-									<a
-										href={proxiedSrc}
-										data-src={proxiedSrc}
-										aria-label={`Открыть изображение ${title}`}
-										data-lg-size={`${photo.width}-${photo.height}`}
-										data-sub-html={`Проект «${projectAlt}» (${title})`}
-										className='lg-item relative block w-full h-full'
-									>
-										<Image
-											src={photo.src}
-											alt={props.alt || ''}
-											width={photo.width}
-											height={photo.height}
-											className='object-cover rounded-lg'
-											sizes='(max-width: 640px) 100vw, 50vw'
-										/>
-									</a>
+									<GalleryThumb
+										photo={photo}
+										title={title}
+										projectAlt={projectAlt}
+										albumProps={props}
+									/>
 								);
 							}
 						}}

@@ -1,9 +1,7 @@
 'use client';
 
-import 'lightgallery/css/lg-thumbnail.css';
 import 'lightgallery/css/lg-zoom.css';
 import 'lightgallery/css/lightgallery.css';
-import lgThumbnail from 'lightgallery/plugins/thumbnail';
 import lgZoom from 'lightgallery/plugins/zoom';
 import LightGallery from 'lightgallery/react';
 import Image from 'next/image';
@@ -75,7 +73,11 @@ function GalleryThumb({
 		};
 	}, []);
 
-	const sizes = measuredWidth ? `${measuredWidth}px` : undefined;
+	const devicePixelRatio =
+		typeof window !== 'undefined' && window.devicePixelRatio ? window.devicePixelRatio : 1;
+	const sizes = measuredWidth
+		? `${Math.max(1, Math.round(measuredWidth / (devicePixelRatio || 1)))}px`
+		: undefined;
 
 	return (
 		<a
@@ -150,7 +152,7 @@ export function ProjectGallery(props: ProjectGalleryProps) {
 						showCloseIcon: true
 					}}
 					download={true}
-					plugins={[lgZoom, lgThumbnail]}
+					plugins={[lgZoom]}
 					selector='.lg-item'
 				>
 					<RowsPhotoAlbum

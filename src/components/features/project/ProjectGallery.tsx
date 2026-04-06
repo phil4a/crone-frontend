@@ -15,17 +15,10 @@ import { HeaderThemeObserver } from '@/components/layout/HeaderThemeObserver';
 import { Title } from '@/components/ui/Title';
 
 import { getProxiedUrl } from '@/lib/utils';
-import { ProjectImage } from '@/types/project.types';
+import { ProjectGalleryProps, ProjectImage } from '@/types/project.types';
 
-export function ProjectGallery({
-	title,
-	projectAlt,
-	items
-}: {
-	title: string;
-	projectAlt: string;
-	items: ProjectImage[];
-}) {
+export function ProjectGallery(props: ProjectGalleryProps) {
+	const { title, projectAlt, items } = props;
 	const lightboxRef = useRef<any>(null);
 
 	useEffect(() => {

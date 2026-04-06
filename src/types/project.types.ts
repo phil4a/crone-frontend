@@ -32,6 +32,12 @@ export interface ProjectGalleries {
 	result: ProjectImage[];
 }
 
+export interface ProjectGalleryProps {
+	title: string;
+	projectAlt: string;
+	items: ProjectImage[];
+}
+
 export interface ProjectVideos {
 	main: string | null;
 	gallery: ProjectImage[];

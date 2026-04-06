@@ -1,5 +1,7 @@
 import { FeedbackForm } from '@/components/common/FeedbackForm';
+import { ViewportLazy } from '@/components/layout/ViewportLazy';
 
+import { LazyProjectGallery } from './LazyProjectGallery';
 import { ProjectBackButton } from './ProjectBackButton';
 import { ProjectGallery } from './ProjectGallery';
 import { ProjectHero } from './ProjectHero';
@@ -20,27 +22,34 @@ export function ProjectContent({ project, relatedProjects = [] }: ProjectContent
 			<ProjectHero {...project} />
 			<ProjectMainImage {...project} />
 			<ProjectParams {...project} />
-
-			<ProjectGallery
-				title='Планировка'
-				projectAlt={project.title}
-				items={project.galleries.plans}
-			/>
-			<ProjectGallery
-				title='Результат'
-				projectAlt={project.title}
-				items={project.galleries.result}
-			/>
-			<ProjectGallery
-				title='Процесс'
-				projectAlt={project.title}
-				items={project.galleries.process}
-			/>
-			<VideoGallery
-				title='Видео'
-				projectAlt={project.title}
-				items={project.videos.gallery}
-			/>
+			<ViewportLazy rootMargin='500px'>
+				<LazyProjectGallery
+					title='Планировка'
+					projectAlt={project.title}
+					items={project.galleries.plans}
+				/>
+			</ViewportLazy>
+			<ViewportLazy rootMargin='500px'>
+				<LazyProjectGallery
+					title='Результат'
+					projectAlt={project.title}
+					items={project.galleries.result}
+				/>
+			</ViewportLazy>
+			<ViewportLazy rootMargin='500px'>
+				<LazyProjectGallery
+					title='Процесс'
+					projectAlt={project.title}
+					items={project.galleries.process}
+				/>
+			</ViewportLazy>
+			<ViewportLazy rootMargin='500px'>
+				<VideoGallery
+					title='Видео'
+					projectAlt={project.title}
+					items={project.videos.gallery}
+				/>
+			</ViewportLazy>
 			<FeedbackForm formId={225} />
 			{relatedProjects.length > 0 && <ProjectRelated relatedProjects={relatedProjects} />}
 			<ProjectBackButton />

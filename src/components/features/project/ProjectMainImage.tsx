@@ -24,7 +24,8 @@ export function ProjectMainImage({ coverImage, videos }: Project) {
 					fill
 					className='w-full h-full object-cover'
 					sizes='100vw'
-					priority
+					priority={true}
+					fetchPriority='high'
 					loading='eager'
 				/>
 			) : (

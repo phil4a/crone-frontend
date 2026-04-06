@@ -2,6 +2,7 @@ import { FeedbackForm } from '@/components/common/FeedbackForm';
 import { ViewportLazy } from '@/components/layout/ViewportLazy';
 
 import { LazyProjectGallery } from './LazyProjectGallery';
+import { LazyProjectRelated } from './LazyProjectRelated';
 import { ProjectBackButton } from './ProjectBackButton';
 import { ProjectGallery } from './ProjectGallery';
 import { ProjectHero } from './ProjectHero';
@@ -51,7 +52,11 @@ export function ProjectContent({ project, relatedProjects = [] }: ProjectContent
 				/>
 			</ViewportLazy>
 			<FeedbackForm formId={225} />
-			{relatedProjects.length > 0 && <ProjectRelated relatedProjects={relatedProjects} />}
+			{relatedProjects.length > 0 && (
+				<ViewportLazy rootMargin='300px'>
+					<LazyProjectRelated relatedProjects={relatedProjects} />
+				</ViewportLazy>
+			)}
 			<ProjectBackButton />
 		</main>
 	);

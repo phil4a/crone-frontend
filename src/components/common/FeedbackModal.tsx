@@ -52,8 +52,13 @@ export function FeedbackModal() {
 		const frame = requestAnimationFrame(() => {
 			const dialog = dialogRef.current;
 			if (!dialog) return;
-			const focusable = getFocusableElements(dialog);
-			(focusable[0] ?? dialog).focus();
+			if (typeof dialog.focus === 'function') {
+				try {
+					dialog.focus({ preventScroll: true });
+				} catch {
+					dialog.focus();
+				}
+			}
 		});
 
 		return () => {
@@ -147,7 +152,7 @@ export function FeedbackModal() {
 				tabIndex={-1}
 				className={cn(
 					'relative w-full max-w-lg rounded-lg bg-white p-6 md:p-8 shadow-xl',
-					'max-h-[calc(100vh-2rem)] overflow-auto'
+					'max-h-[calc(100dvh-2rem)] overflow-auto'
 				)}
 			>
 				<div className='flex items-start justify-between gap-4'>

@@ -233,7 +233,7 @@ export function FeedbackForm({
 					</div>
 				) : null}
 			</div>
-			<ViewportLazy rootMargin='300px'>
+			{variant === 'modal' ? (
 				<DynamicSmartCaptcha
 					className='-mt-4 md:-mt-5'
 					key={captchaKey}
@@ -241,7 +241,17 @@ export function FeedbackForm({
 					onChallengeHidden={() => setCaptchaVisible(false)}
 					onTokenChange={onCaptchaTokenChange}
 				/>
-			</ViewportLazy>
+			) : (
+				<ViewportLazy rootMargin='300px'>
+					<DynamicSmartCaptcha
+						className='-mt-4 md:-mt-5'
+						key={captchaKey}
+						visible={captchaVisible}
+						onChallengeHidden={() => setCaptchaVisible(false)}
+						onTokenChange={onCaptchaTokenChange}
+					/>
+				</ViewportLazy>
+			)}
 			<label className='flex place-items-center gap-2 text-sm text-main'>
 				<input
 					type='checkbox'

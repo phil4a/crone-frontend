@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useLayoutEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 
 import { FeedbackForm } from '@/components/common/FeedbackForm';
@@ -34,37 +34,25 @@ export function FeedbackModal() {
 	const dialogRef = useRef<HTMLDivElement | null>(null);
 	const previouslyFocusedRef = useRef<HTMLElement | null>(null);
 
-	useLayoutEffect(() => {
+	useEffect(() => {
 		if (!isOpen) return;
 
 		previouslyFocusedRef.current =
 			document.activeElement instanceof HTMLElement ? document.activeElement : null;
 
 		const originalOverflow = document.body.style.overflow;
-		const originalPaddingRight = document.body.style.paddingRight;
-		const scrollBarWidth = window.innerWidth - document.documentElement.clientWidth;
-
 		document.body.style.overflow = 'hidden';
-		if (scrollBarWidth > 0) {
-			document.body.style.paddingRight = `${scrollBarWidth}px`;
-		}
 
 		const frame = requestAnimationFrame(() => {
 			const dialog = dialogRef.current;
 			if (!dialog) return;
-			if (typeof dialog.focus === 'function') {
-				try {
-					dialog.focus({ preventScroll: true });
-				} catch {
-					dialog.focus();
-				}
-			}
+			const focusable = getFocusableElements(dialog);
+			(focusable[0] ?? dialog).focus();
 		});
 
 		return () => {
 			cancelAnimationFrame(frame);
 			document.body.style.overflow = originalOverflow;
-			document.body.style.paddingRight = originalPaddingRight;
 			previouslyFocusedRef.current?.focus();
 		};
 	}, [isOpen]);
@@ -152,7 +140,7 @@ export function FeedbackModal() {
 				tabIndex={-1}
 				className={cn(
 					'relative w-full max-w-lg rounded-lg bg-white p-6 md:p-8 shadow-xl',
-					'max-h-[calc(100dvh-2rem)] overflow-auto'
+					'max-h-[calc(100vh-2rem)] overflow-auto'
 				)}
 			>
 				<div className='flex items-start justify-between gap-4'>

@@ -1,6 +1,6 @@
 'use client';
 
-import { useLayoutEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import {
 	ProjectSidebar,
@@ -16,24 +16,15 @@ export function FiltersDrawer({ filters, onApply, stats }: FiltersDrawerProps) {
 	const [isOpen, setIsOpen] = useState(false);
 	const sidebarKey = JSON.stringify(filters);
 
-	useLayoutEffect(() => {
-		const originalOverflow = document.body.style.overflow;
-		const originalPaddingRight = document.body.style.paddingRight;
-
+	useEffect(() => {
 		if (isOpen) {
-			const scrollBarWidth = window.innerWidth - document.documentElement.clientWidth;
 			document.body.style.overflow = 'hidden';
-			if (scrollBarWidth > 0) {
-				document.body.style.paddingRight = `${scrollBarWidth}px`;
-			}
 		} else {
-			document.body.style.overflow = originalOverflow;
-			document.body.style.paddingRight = originalPaddingRight;
+			document.body.style.overflow = '';
 		}
 
 		return () => {
-			document.body.style.overflow = originalOverflow;
-			document.body.style.paddingRight = originalPaddingRight;
+			document.body.style.overflow = '';
 		};
 	}, [isOpen]);
 

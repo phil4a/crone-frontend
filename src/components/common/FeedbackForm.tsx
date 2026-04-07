@@ -235,9 +235,9 @@ export function FeedbackForm({
 			</div>
 			<ViewportLazy
 				rootMargin='300px'
-				placeholder={<div className='hidden' />}
+				placeholder={<div className={cn(variant === 'modal' ? 'min-h-0.5 h-0.5' : '')} />}
 			>
-				<div className={cn(variant === 'modal' ? 'min-h-0 overflow-hidden' : '')}>
+				<div className={cn(variant === 'modal' ? 'min-h-0.5 h-0.5 overflow-hidden' : '')}>
 					<DynamicSmartCaptcha
 						className='-mt-4 md:-mt-5'
 						key={captchaKey}

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useLayoutEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 
 import { FeedbackForm } from '@/components/common/FeedbackForm';
@@ -34,14 +34,20 @@ export function FeedbackModal() {
 	const dialogRef = useRef<HTMLDivElement | null>(null);
 	const previouslyFocusedRef = useRef<HTMLElement | null>(null);
 
-	useEffect(() => {
+	useLayoutEffect(() => {
 		if (!isOpen) return;
 
 		previouslyFocusedRef.current =
 			document.activeElement instanceof HTMLElement ? document.activeElement : null;
 
 		const originalOverflow = document.body.style.overflow;
+		const originalPaddingRight = document.body.style.paddingRight;
+		const scrollBarWidth = window.innerWidth - document.documentElement.clientWidth;
+
 		document.body.style.overflow = 'hidden';
+		if (scrollBarWidth > 0) {
+			document.body.style.paddingRight = `${scrollBarWidth}px`;
+		}
 
 		const frame = requestAnimationFrame(() => {
 			const dialog = dialogRef.current;
@@ -53,6 +59,7 @@ export function FeedbackModal() {
 		return () => {
 			cancelAnimationFrame(frame);
 			document.body.style.overflow = originalOverflow;
+			document.body.style.paddingRight = originalPaddingRight;
 			previouslyFocusedRef.current?.focus();
 		};
 	}, [isOpen]);

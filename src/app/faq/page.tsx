@@ -49,8 +49,18 @@ async function getFaqData() {
 	}
 }
 
-export default async function HelpPage() {
+export default async function HelpPage({
+	searchParams
+}: {
+	searchParams?: { [key: string]: string | string[] | undefined };
+}) {
 	const { categories, jsonLd } = await getFaqData();
+	const tabParam = searchParams?.tab;
+	const requestedTab = typeof tabParam === 'string' ? tabParam : undefined;
+	const initialActiveId =
+		requestedTab && categories.some(category => category.id === requestedTab)
+			? requestedTab
+			: (categories[0]?.id ?? '');
 
 	return (
 		<main>
@@ -71,7 +81,10 @@ export default async function HelpPage() {
 					<div className='bg-light-gray rounded-2xl p-6 md:p-7.5'>
 						{categories.length > 0 ? (
 							<>
-								<FaqTabs categories={categories} />
+								<FaqTabs
+									categories={categories}
+									initialActiveId={initialActiveId}
+								/>
 								{jsonLd ? (
 									<script
 										type='application/ld+json'

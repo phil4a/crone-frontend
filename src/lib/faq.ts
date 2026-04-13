@@ -83,7 +83,8 @@ function htmlToText(html: string) {
 }
 
 function inlineMarkdownToHtml(value: string) {
-	const rawHtml = marked.parseInline(value, { async: false, gfm: true, breaks: false });
+	// Включаем breaks: true для поддержки переносов строк внутри абзацев
+	const rawHtml = marked.parseInline(value, { async: false, gfm: true, breaks: true });
 	return sanitizeFaqInlineHtml(String(rawHtml).trim());
 }
 
@@ -100,7 +101,8 @@ function isList(token: Token): token is Tokens.List {
 }
 
 function parseAnswerBlocks(answerMarkdown: string): FaqAnswerBlock[] {
-	const tokens = marked.lexer(answerMarkdown);
+	// Использование breaks: true, чтобы переносы строк в Markdown превращались в <br>
+	const tokens = marked.lexer(answerMarkdown, { breaks: true, gfm: true });
 	const blocks: FaqAnswerBlock[] = [];
 
 	for (const token of tokens) {
@@ -108,14 +110,19 @@ function parseAnswerBlocks(answerMarkdown: string): FaqAnswerBlock[] {
 
 		if (token.type === 'paragraph') {
 			const text = inlineMarkdownToText(token.text);
-			const html = inlineMarkdownToHtml(token.text);
+			// Включаем поддержку breaks при генерации html для абзацев
+			const html = sanitizeFaqInlineHtml(
+				String(marked.parseInline(token.text, { async: false, gfm: true, breaks: true })).trim()
+			);
 			if (text) blocks.push({ type: 'paragraph', text, html });
 			continue;
 		}
 
 		if (token.type === 'text') {
 			const text = inlineMarkdownToText(token.text);
-			const html = inlineMarkdownToHtml(token.text);
+			const html = sanitizeFaqInlineHtml(
+				String(marked.parseInline(token.text, { async: false, gfm: true, breaks: true })).trim()
+			);
 			if (text) blocks.push({ type: 'paragraph', text, html });
 			continue;
 		}
@@ -125,7 +132,10 @@ function parseAnswerBlocks(answerMarkdown: string): FaqAnswerBlock[] {
 				.map((item: Tokens.ListItem) => {
 					const text = inlineMarkdownToText(item.text);
 					if (!text) return null;
-					return { text, html: inlineMarkdownToHtml(item.text) };
+					const html = sanitizeFaqInlineHtml(
+						String(marked.parseInline(item.text, { async: false, gfm: true, breaks: true })).trim()
+					);
+					return { text, html };
 				})
 				.filter((value): value is { text: string; html: string } => Boolean(value));
 
@@ -182,11 +192,46 @@ export function parseFaqMarkdown(markdown: string): FaqCategory[] {
 
 		if (isOrderedList(token)) {
 			for (const listItem of token.items) {
-				const itemSource = listItem.raw.replace(/^\s*\d+\.\s+/, '').trim();
-				const match = /^\*\*(.+?)\*\*(?:\s+|$)([\s\S]*)$/.exec(itemSource);
+				const itemSource = listItem.raw.replace(/^\s*\d+\.\s+/, '');
+				const match = /^\s*\*\*(.+?)\*\*(?:[ \t]*\r?\n|[ \t]+)?([\s\S]*)$/.exec(itemSource);
 
 				const questionMarkdown = (match?.[1] ?? itemSource).trim();
-				const answerMarkdown = (match?.[2] ?? '').trim();
+
+				// Here we un-indent the answer markdown so marked can parse lists and paragraphs correctly
+				// The lines inside a list item usually have a 3-space or 4-space indent
+				const rawAnswerMarkdown = match?.[2] ?? '';
+
+				// Find the minimum indent of non-empty lines in the answer
+				const answerLines = rawAnswerMarkdown.split('\n');
+				let minIndent = Infinity;
+				for (const line of answerLines) {
+					if (line.trim().length === 0) continue;
+					const indentMatch = line.match(/^(\s+)/);
+					if (indentMatch) {
+						minIndent = Math.min(minIndent, indentMatch[1].length);
+					} else {
+						minIndent = 0;
+						break;
+					}
+				}
+
+				// Strip the minimum indent from all lines
+				const answerMarkdown = answerLines
+					.map(line => {
+						if (line.trim().length === 0) return '';
+						return minIndent > 0 && minIndent !== Infinity ? line.substring(minIndent) : line;
+					})
+					// IMPORTANT: Remove leading empty lines before joining
+					.filter((line, index, arr) => {
+						// Keep all non-empty lines
+						if (line.trim().length > 0) return true;
+						// Only keep empty lines if there's already been a non-empty line before it
+						const hasTextBefore = arr.slice(0, index).some(l => l.trim().length > 0);
+						return hasTextBefore;
+					})
+					.join('\n')
+					.trim();
+
 				const question = inlineMarkdownToText(questionMarkdown);
 				if (!question) continue;
 

@@ -11,6 +11,14 @@ interface UseProjectSidebarParams {
 
 export function useProjectSidebar({ filters, onApply, stats }: UseProjectSidebarParams) {
 	const [localFilters, setLocalFilters] = useState<ProjectFiltersData>(filters);
+	const [areaInputs, setAreaInputs] = useState<{ min: string | null; max: string | null }>({
+		min: null,
+		max: null
+	});
+	const [bedroomsInputs, setBedroomsInputs] = useState<{ min: string | null; max: string | null }>({
+		min: null,
+		max: null
+	});
 
 	const minArea = stats?.minArea ?? 0;
 	const maxArea = stats?.maxArea ?? 1000;
@@ -22,6 +30,7 @@ export function useProjectSidebar({ filters, onApply, stats }: UseProjectSidebar
 	const floorOptions = Array.from({ length: maxFloor - minFloor + 1 }, (_, i) => minFloor + i);
 
 	const handleAreaChange = (value: number[]) => {
+		setAreaInputs({ min: null, max: null });
 		setLocalFilters(prev => ({
 			...prev,
 			area: { min: value[0], max: value[1] }
@@ -29,8 +38,11 @@ export function useProjectSidebar({ filters, onApply, stats }: UseProjectSidebar
 	};
 
 	const handleAreaInputChange = (type: 'min' | 'max', value: string) => {
-		const numValue = parseInt(value, 10);
-		if (isNaN(numValue)) return;
+		setAreaInputs(prev => ({ ...prev, [type]: value }));
+
+		if (value.trim() === '') return;
+		const numValue = Number.parseInt(value, 10);
+		if (!Number.isFinite(numValue)) return;
 
 		setLocalFilters(prev => {
 			const currentMin = prev.area?.min ?? minArea;
@@ -50,6 +62,32 @@ export function useProjectSidebar({ filters, onApply, stats }: UseProjectSidebar
 		});
 	};
 
+	const commitAreaInput = (type: 'min' | 'max') => {
+		setLocalFilters(prev => {
+			const currentMin = prev.area?.min ?? minArea;
+			const currentMax = prev.area?.max ?? maxArea;
+			const rawValue = areaInputs[type];
+
+			if (!rawValue || rawValue.trim() === '') {
+				if (type === 'min') return { ...prev, area: { min: minArea, max: currentMax } };
+				return { ...prev, area: { min: currentMin, max: maxArea } };
+			}
+
+			const parsed = Number.parseInt(rawValue, 10);
+			if (!Number.isFinite(parsed)) {
+				if (type === 'min') return { ...prev, area: { min: minArea, max: currentMax } };
+				return { ...prev, area: { min: currentMin, max: maxArea } };
+			}
+
+			const nextMin = type === 'min' ? Math.min(parsed, currentMax) : currentMin;
+			const nextMax = type === 'max' ? Math.max(parsed, currentMin) : currentMax;
+
+			return { ...prev, area: { min: nextMin, max: nextMax } };
+		});
+
+		setAreaInputs(prev => ({ ...prev, [type]: null }));
+	};
+
 	const handleFloorChange = (floor: number) => {
 		setLocalFilters(prev => {
 			const current = prev.floor ?? [];
@@ -64,6 +102,7 @@ export function useProjectSidebar({ filters, onApply, stats }: UseProjectSidebar
 	};
 
 	const handleBedroomsChange = (value: number[]) => {
+		setBedroomsInputs({ min: null, max: null });
 		setLocalFilters(prev => ({
 			...prev,
 			bedrooms: { min: value[0], max: value[1] }
@@ -71,8 +110,11 @@ export function useProjectSidebar({ filters, onApply, stats }: UseProjectSidebar
 	};
 
 	const handleBedroomsInputChange = (type: 'min' | 'max', value: string) => {
-		const numValue = parseInt(value, 10);
-		if (isNaN(numValue)) return;
+		setBedroomsInputs(prev => ({ ...prev, [type]: value }));
+
+		if (value.trim() === '') return;
+		const numValue = Number.parseInt(value, 10);
+		if (!Number.isFinite(numValue)) return;
 
 		setLocalFilters(prev => {
 			const currentMin = prev.bedrooms?.min ?? minBedrooms;
@@ -90,6 +132,32 @@ export function useProjectSidebar({ filters, onApply, stats }: UseProjectSidebar
 				};
 			}
 		});
+	};
+
+	const commitBedroomsInput = (type: 'min' | 'max') => {
+		setLocalFilters(prev => {
+			const currentMin = prev.bedrooms?.min ?? minBedrooms;
+			const currentMax = prev.bedrooms?.max ?? maxBedrooms;
+			const rawValue = bedroomsInputs[type];
+
+			if (!rawValue || rawValue.trim() === '') {
+				if (type === 'min') return { ...prev, bedrooms: { min: minBedrooms, max: currentMax } };
+				return { ...prev, bedrooms: { min: currentMin, max: maxBedrooms } };
+			}
+
+			const parsed = Number.parseInt(rawValue, 10);
+			if (!Number.isFinite(parsed)) {
+				if (type === 'min') return { ...prev, bedrooms: { min: minBedrooms, max: currentMax } };
+				return { ...prev, bedrooms: { min: currentMin, max: maxBedrooms } };
+			}
+
+			const nextMin = type === 'min' ? Math.min(parsed, currentMax) : currentMin;
+			const nextMax = type === 'max' ? Math.max(parsed, currentMin) : currentMax;
+
+			return { ...prev, bedrooms: { min: nextMin, max: nextMax } };
+		});
+
+		setBedroomsInputs(prev => ({ ...prev, [type]: null }));
 	};
 
 	const handleStatusChange = (status: string) => {
@@ -114,6 +182,8 @@ export function useProjectSidebar({ filters, onApply, stats }: UseProjectSidebar
 			status: null
 		};
 
+		setAreaInputs({ min: null, max: null });
+		setBedroomsInputs({ min: null, max: null });
 		setLocalFilters(resetFilters);
 		onApply(resetFilters);
 	};
@@ -137,11 +207,15 @@ export function useProjectSidebar({ filters, onApply, stats }: UseProjectSidebar
 		minBedrooms,
 		maxBedrooms,
 		floorOptions,
+		areaInputs,
+		bedroomsInputs,
 		handleAreaChange,
 		handleAreaInputChange,
+		commitAreaInput,
 		handleFloorChange,
 		handleBedroomsChange,
 		handleBedroomsInputChange,
+		commitBedroomsInput,
 		handleStatusChange,
 		handleResetFilters,
 		hasActiveFilters,

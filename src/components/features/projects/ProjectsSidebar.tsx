@@ -33,11 +33,15 @@ export function ProjectSidebar({ filters, onApply, className, stats }: ProjectSi
 		minBedrooms,
 		maxBedrooms,
 		floorOptions,
+		areaInputs,
+		bedroomsInputs,
 		handleAreaChange,
 		handleAreaInputChange,
+		commitAreaInput,
 		handleFloorChange,
 		handleBedroomsChange,
 		handleBedroomsInputChange,
+		commitBedroomsInput,
 		handleStatusChange,
 		handleResetFilters,
 		hasActiveFilters,
@@ -61,8 +65,9 @@ export function ProjectSidebar({ filters, onApply, className, stats }: ProjectSi
 						id='area-min'
 						type='number'
 						aria-label='Минимальная площадь, м²'
-						value={localFilters.area?.min ?? minArea}
+						value={areaInputs.min ?? String(localFilters.area?.min ?? minArea)}
 						onChange={e => handleAreaInputChange('min', e.target.value)}
+						onBlur={() => commitAreaInput('min')}
 						className='flex-1 py-3.25 px-3 rounded-lg border border-light-beige text-center text-sm text-brown bg-white focus:ring-0 focus:border-brown'
 					/>
 					—
@@ -70,8 +75,9 @@ export function ProjectSidebar({ filters, onApply, className, stats }: ProjectSi
 						id='area-max'
 						type='number'
 						aria-label='Максимальная площадь, м²'
-						value={localFilters.area?.max ?? maxArea}
+						value={areaInputs.max ?? String(localFilters.area?.max ?? maxArea)}
 						onChange={e => handleAreaInputChange('max', e.target.value)}
+						onBlur={() => commitAreaInput('max')}
 						className='flex-1 py-3.25 px-3 rounded-lg border border-light-beige text-center text-sm text-brown bg-white focus:ring-0 focus:border-brown'
 					/>
 				</div>
@@ -137,8 +143,9 @@ export function ProjectSidebar({ filters, onApply, className, stats }: ProjectSi
 						id='bedrooms-min'
 						type='number'
 						aria-label='Минимум спален'
-						value={localFilters.bedrooms?.min ?? minBedrooms}
+						value={bedroomsInputs.min ?? String(localFilters.bedrooms?.min ?? minBedrooms)}
 						onChange={e => handleBedroomsInputChange('min', e.target.value)}
+						onBlur={() => commitBedroomsInput('min')}
 						className='flex-1 py-3.25 px-3 rounded-lg border border-light-beige text-center text-sm text-brown bg-white focus:ring-0 focus:border-brown'
 					/>
 					—
@@ -146,8 +153,9 @@ export function ProjectSidebar({ filters, onApply, className, stats }: ProjectSi
 						id='bedrooms-max'
 						type='number'
 						aria-label='Максимум спален'
-						value={localFilters.bedrooms?.max ?? maxBedrooms}
+						value={bedroomsInputs.max ?? String(localFilters.bedrooms?.max ?? maxBedrooms)}
 						onChange={e => handleBedroomsInputChange('max', e.target.value)}
+						onBlur={() => commitBedroomsInput('max')}
 						className='flex-1 py-3.25 px-3 rounded-lg border border-light-beige text-center text-sm text-brown bg-white focus:ring-0 focus:border-brown'
 					/>
 				</div>

@@ -1,45 +1,57 @@
 'use client';
+
 import { HeaderThemeObserver } from '@/components/layout/HeaderThemeObserver';
 import { Badge } from '@/components/ui/Badge';
 import { Title } from '@/components/ui/Title';
-import { AdvantagesItem } from './advantages/AdvantagesItem';
-import { PlanningIcon, QualityIcon } from './advantages/AdvantagesIcons';
-import { AdvantagesNumber } from './advantages/AdvantagesNumber';
+
 import { SITE_CONFIG } from '@/config/site.config';
+
+import { PlanningIcon, QualityIcon } from './advantages/AdvantagesIcons';
+import { AdvantagesItem } from './advantages/AdvantagesItem';
+import { AdvantagesNumber } from './advantages/AdvantagesNumber';
 
 export function Advantages() {
 	return (
-		<section className="relative bg-white py-20 md:py-25 lg:py-37.5">
-			<HeaderThemeObserver theme="light" />
-			<div className="container">
+		<section className='relative bg-white py-20 md:py-25 lg:py-37.5'>
+			<HeaderThemeObserver theme='light' />
+			<div className='container'>
 				{/* Heading */}
-				<div className="mb-8 md:mb-10">
-					<Badge variant="beige" className="mb-2.5 md:mb-3 leading-[1.4] font-normal">
+				<div className='mb-8 md:mb-10'>
+					<Badge
+						variant='beige'
+						className='mb-2.5 md:mb-3 leading-[1.4] font-normal'
+					>
 						О компании
 					</Badge>
-					<Title as="h2" variant="h2">
+					<Title
+						as='h2'
+						variant='h2'
+					>
 						Преимущества работы с нами
 					</Title>
 				</div>
 
 				{/* Content */}
-				<div className="flex flex-col xl:flex-row gap-7.5 md:gap-10 lg:gap-5">
+				<div className='flex flex-col xl:flex-row gap-7.5 md:gap-10 lg:gap-5'>
 					{/* Left Column */}
-					<div className="flex-1 md:basis-1/2 lg:pr-6.25">
-						<h1 className="text-main font-semibold text-base leading-[1.4] mb-7.5 md:mb-10 lg:mb-7.5">
-							КРОНА Групп специализируется на проектировании и строительстве домов из клееного
-							бруса, предлагая комплексное решение для требовательных заказчиков
+					<div className='flex-1 md:basis-1/2 lg:pr-6.25'>
+						<h1 className='text-main font-semibold text-base leading-[1.4] mb-7.5 md:mb-10 lg:mb-7.5'>
+							КРОНА Групп специализируется на проектировании и строительстве домов из клееного бруса
+							— комплексный подход для каждого проекта.
 						</h1>
 
 						{/* Bullets: Numbers */}
-						<div className="flex flex-col md:gap-5 md:flex-row border-y border-[#61413762] mb-5">
-							{SITE_CONFIG.advantages.map((advantage) => (
-								<AdvantagesNumber key={advantage.number} {...advantage} />
+						<div className='flex flex-col md:gap-5 md:flex-row border-y border-[#61413762] mb-5'>
+							{SITE_CONFIG.advantages.map(advantage => (
+								<AdvantagesNumber
+									key={advantage.number}
+									{...advantage}
+								/>
 							))}
 						</div>
 
 						{/* Bullets: Icons */}
-						<div className="flex flex-col lg:flex-row gap-5 px-2.5">
+						<div className='flex flex-col lg:flex-row gap-5 px-2.5'>
 							<AdvantagesItem icon={<PlanningIcon />}>
 								Индивидуальный подход к планированию времени для работы с заказчиком
 							</AdvantagesItem>
@@ -50,8 +62,8 @@ export function Advantages() {
 					</div>
 
 					{/* Right Column */}
-					<div className="flex-1 md:basis-1/2">
-						<div className="space-y-5 text-main leading-relaxed">
+					<div className='flex-1 md:basis-1/2'>
+						<div className='space-y-5 text-main leading-relaxed'>
 							<p>
 								<strong>
 									Философия нашей компании – создаем архитектуру деревянных домов вне времени.

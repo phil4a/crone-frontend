@@ -36,7 +36,7 @@ export function Creating() {
 						</p>
 
 						<div className='mb-8 md:mb-10'>
-							<p className='mb-4 font-semibold'>Мы работаем с лучшей древесиной Горного Алтая:</p>
+							<p className='mb-4 font-semibold'>Мы работаем с лучшей древесиной:</p>
 							<ul className='flex flex-col gap-4 text-lg list-none'>
 								<li>
 									<span className='font-bold'>Сосна</span> — устойчива к влаге, отличается
@@ -54,7 +54,7 @@ export function Creating() {
 						</div>
 
 						<Link
-							href='/articles/articles-materials/pochemu-kleeniy-brus/'
+							href='/articles/pochemu-kleeniy-brus'
 							target='_blank'
 							className={cn(buttonVariants({ variant: 'default' }), 'w-full md:w-auto text-center')}
 						>

@@ -1,0 +1,14 @@
+query GetSitemapData {
+	projects: posts(first: 1000, where: { categoryName: "project" }) {
+		nodes {
+			title
+			slug
+		}
+	}
+	articles: posts(first: 1000, where: { categoryName: "articles" }) {
+		nodes {
+			title
+			slug
+		}
+	}
+}

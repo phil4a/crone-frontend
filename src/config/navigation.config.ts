@@ -39,7 +39,7 @@ export const FOOTER_MENU: IMenuItem[] = [
 	{ label: 'Контакты', href: PAGE.CONTACTS },
 	{ label: 'Услуги', href: PAGE.SERVICES },
 	{ label: 'Статьи', href: PAGE.ARTICLES },
-	{ label: 'FAQ', href: PAGE.FAQ },
+	{ label: 'Помощь', href: PAGE.FAQ },
 	{ label: 'Карта сайта', href: PAGE.SITE_MAP }
 ];
 

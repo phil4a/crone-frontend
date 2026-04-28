@@ -15,10 +15,18 @@ jobs:
       IMAGE_NAME:
         ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPOSITORY != '' &&
         secrets.DOCKERHUB_REPOSITORY || github.event.repository.name }}
+      NEXT_PUBLIC_GRAPHQL_API_URL: ${{ secrets.NEXT_PUBLIC_GRAPHQL_API_URL }}
+      NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
+      NEXT_PUBLIC_SITE_URL: ${{ secrets.NEXT_PUBLIC_SITE_URL }}
+      NEXT_PUBLIC_GOOGLE_MAPS_API_KEY: ${{ secrets.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY }}
+      NEXT_PUBLIC_GOOGLE_MAPS_ID: ${{ secrets.NEXT_PUBLIC_GOOGLE_MAPS_ID }}
+      NEXT_PUBLIC_LIGHT_GALLERY_LICENSE_KEY: ${{ secrets.NEXT_PUBLIC_LIGHT_GALLERY_LICENSE_KEY }}
+      NEXT_PUBLIC_YANDEX_SMARTCAPTCHA_SITE_KEY:
+        ${{ secrets.NEXT_PUBLIC_YANDEX_SMARTCAPTCHA_SITE_KEY }} ${{ secrets.DOCKERHUB_USERNAME
+        }}/${{ secrets.DOCKERHUB_REPOSITORY != '' && secrets.DOCKERHUB_REPOSITORY ||
+        github.event.repository.name }}
       DOKPLOY_WEBHOOK_URL: ${{ secrets.DOKPLOY_WEBHOOK_URL }}
       DOKPLOY_URL: ${{ secrets.DOKPLOY_URL }}
-      DOKPLOY_API_KEY: ${{ secrets.DOKPLOY_API_KEY }}
-      DOKPLOY_APPLICATION_ID: ${{ secrets.DOKPLOY_APPLICATION_ID }}
 
     steps:
       - name: Checkout
@@ -42,6 +50,13 @@ jobs:
             type=raw,value=latest
             type=sha,format=short
 
+      - name: Validate required build env
+        run: |
+          if [ -z "$NEXT_PUBLIC_GRAPHQL_API_URL" ]; then
+            echo "NEXT_PUBLIC_GRAPHQL_API_URL is required for next build (generateStaticParams uses GraphQL)."
+            exit 1
+          fi
+
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
@@ -54,13 +69,13 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
           build-args: |
-            NEXT_PUBLIC_GRAPHQL_API_URL=${{ secrets.NEXT_PUBLIC_GRAPHQL_API_URL }}
-            NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }}
-            NEXT_PUBLIC_SITE_URL=${{ secrets.NEXT_PUBLIC_SITE_URL }}
-            NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=${{ secrets.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY }}
-            NEXT_PUBLIC_GOOGLE_MAPS_ID=${{ secrets.NEXT_PUBLIC_GOOGLE_MAPS_ID }}
-            NEXT_PUBLIC_LIGHT_GALLERY_LICENSE_KEY=${{ secrets.NEXT_PUBLIC_LIGHT_GALLERY_LICENSE_KEY }}
-            NEXT_PUBLIC_YANDEX_SMARTCAPTCHA_SITE_KEY=${{ secrets.NEXT_PUBLIC_YANDEX_SMARTCAPTCHA_SITE_KEY }}
+            NEXT_PUBLIC_GRAPHQL_API_URL=${{ env.NEXT_PUBLIC_GRAPHQL_API_URL }}
+            NEXT_PUBLIC_API_URL=${{ env.NEXT_PUBLIC_API_URL }}
+            NEXT_PUBLIC_SITE_URL=${{ env.NEXT_PUBLIC_SITE_URL }}
+            NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=${{ env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY }}
+            NEXT_PUBLIC_GOOGLE_MAPS_ID=${{ env.NEXT_PUBLIC_GOOGLE_MAPS_ID }}
+            NEXT_PUBLIC_LIGHT_GALLERY_LICENSE_KEY=${{ env.NEXT_PUBLIC_LIGHT_GALLERY_LICENSE_KEY }}
+            NEXT_PUBLIC_YANDEX_SMARTCAPTCHA_SITE_KEY=${{ env.NEXT_PUBLIC_YANDEX_SMARTCAPTCHA_SITE_KEY }}
 
       - name: Trigger Dokploy deploy (Webhook)
         if: ${{ env.DOKPLOY_WEBHOOK_URL != '' }}

@@ -19,12 +19,13 @@ const endpoint = getGraphqlEndpoint();
 
 export const client = new GraphQLClient(endpoint);
 
-export const fetcher = <TData, TVariables>(
+export const fetcher = <TData, TVariables extends object = Record<string, never>>(
 	query: string,
 	variables?: TVariables,
-	headers?: RequestInit['headers']
+	headers?: HeadersInit
 ) => {
 	return async (): Promise<TData> => {
-		return client.request<TData>(query, variables as any, headers as any);
+		const response = await client.rawRequest<TData, TVariables>(query, variables, headers);
+		return response.data;
 	};
 };

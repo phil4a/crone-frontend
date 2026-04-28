@@ -1,7 +1,7 @@
+import { FeedbackModalTrigger } from '@/components/common/FeedbackModal';
 import { ProjectLikeClient } from '@/components/common/projects/ProjectLikeClient';
 import { HeaderThemeObserver } from '@/components/layout/HeaderThemeObserver';
 import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
-import { Button } from '@/components/ui/Button';
 import { Title } from '@/components/ui/Title';
 
 import { PAGE } from '@/config/pages.config';
@@ -57,7 +57,7 @@ export function ProjectHero({ title, specs, globalId, id, likes }: Project) {
 							))}
 						</div>
 						<div className='w-full md:w-auto pt-10 border-t border-t-brown/35 xl:border-t-0 xl:pt-0'>
-							<Button className='w-full'>Написать нам</Button>
+							<FeedbackModalTrigger className='w-full'>Написать нам</FeedbackModalTrigger>
 						</div>
 					</div>
 				</div>

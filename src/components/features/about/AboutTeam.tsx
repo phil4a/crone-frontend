@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
-import { Button } from '@/components/ui/Button';
+import { FeedbackModalTrigger } from '@/components/common/FeedbackModal';
 import { MaxIcon, TelegramIcon, WhatsappIcon } from '@/components/ui/Icons';
 import { Title } from '@/components/ui/Title';
 
@@ -111,13 +111,15 @@ export function AboutTeam() {
 							<div className='hidden md:block absolute w-full h-4/5 xl:h-2/3 bottom-0 left-0 bg-linear-to-b from-transparent to-black' />
 							<div className='hidden md:flex absolute bottom-0 left-0 p-7.5 flex-col gap-5'>
 								<p className='leading-normal text-white'>{WORK_TEXT}</p>
-								<Button className='w-full md:w-fit'>Отправить заявку</Button>
+								<FeedbackModalTrigger className='w-full md:w-fit'>
+									Отправить заявку
+								</FeedbackModalTrigger>
 							</div>
 						</div>
 
 						<div className='md:hidden mt-6 flex flex-col gap-5 text-main'>
 							<p className='leading-normal'>{WORK_TEXT}</p>
-							<Button className='w-full'>Отправить заявку</Button>
+							<FeedbackModalTrigger className='w-full'>Отправить заявку</FeedbackModalTrigger>
 						</div>
 					</div>
 				</div>

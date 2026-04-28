@@ -18,6 +18,10 @@ import { SITE_CONFIG } from '@/config/site.config';
 import { HeaderThemeObserver } from '../../layout/HeaderThemeObserver';
 
 export function ContactsInfo() {
+	const officeLocation = SITE_CONFIG.contacts.coordinates;
+
+	const yandexRouteUrl = `https://yandex.ru/maps/?rtext=~${officeLocation.lat},${officeLocation.lng}&rtt=auto`;
+
 	return (
 		<section className='pb-10 pt-32 md:pb-15 md:pt-40 xl:pb-17.5 xl:pt-52'>
 			<HeaderThemeObserver theme='light' />
@@ -30,7 +34,7 @@ export function ContactsInfo() {
 						Контакты
 					</Title>
 				</div>
-				<div className='grid grid-cols-1 gap-8 lg:grid-cols-2 md:gap-x-7.5 md:gap-y-10 xl:grid-cols-5'>
+				<div className='grid grid-cols-1 gap-8 lg:grid-cols-2 md:gap-x-7.5 md:gap-y-10 2xl:grid-cols-5'>
 					{/* Address */}
 					<div className='xl:col-span-2'>
 						<Badge
@@ -43,7 +47,14 @@ export function ContactsInfo() {
 						<h4 className='text-lg font-bold leading-tight md:text-2xl'>
 							{SITE_CONFIG.contacts.address}
 						</h4>
-						<p className='mt-2'>Время работы: пн-пт 9:00 — 18:00</p>
+						<p className='mt-2 mb-4'>Время работы: пн-пт 9:00 — 18:00</p>
+						<Link
+							className='text-lg font-medium uppercase text-nowrap text-main underline'
+							href={yandexRouteUrl}
+							target='_blank'
+						>
+							Проложить маршрут
+						</Link>
 					</div>
 
 					{/* Phone */}
@@ -81,7 +92,7 @@ export function ContactsInfo() {
 					</div>
 
 					{/* Social */}
-					<div className='flex gap-4 items-baseline-last mb-8'>
+					<div className='flex gap-4 self-center mb-8'>
 						<Link
 							href={SITE_CONFIG.contacts.socials.instagram}
 							target='_blank'

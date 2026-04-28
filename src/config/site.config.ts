@@ -48,6 +48,10 @@ export const SITE_CONFIG = {
 	],
 	contacts: {
 		address: 'Новосибирск, ул. Кубановская, 1/1, офис 206',
+		coordinates: {
+			lat: 55.030596,
+			lng: 82.895268
+		},
 		phone: {
 			label: '+7 (913) 925-92-99',
 			href: 'tel:+79139259299'

@@ -34,6 +34,7 @@ ENV NODE_ENV=production
 COPY package.json package-lock.json ./
 RUN npm ci --omit=dev && npm cache clean --force
 
+COPY --from=build /app/next.config.js ./next.config.js
 COPY --from=build /app/public ./public
 COPY --from=build /app/.next ./.next
 

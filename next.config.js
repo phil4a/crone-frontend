@@ -13,6 +13,10 @@ const nextConfig = {
 			},
 			{
 				protocol: 'https',
+				hostname: 'api.crone-group.ru'
+			},
+			{
+				protocol: 'https',
 				hostname: '*.userapi.com'
 			},
 			{

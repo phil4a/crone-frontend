@@ -10,7 +10,7 @@ const nextConfig: NextConfig = {
 		remotePatterns: [
 			{
 				protocol: 'https',
-				hostname: 'crone-group.ru'
+				hostname: 'api.crone-group.ru'
 			},
 			{
 				protocol: 'https',

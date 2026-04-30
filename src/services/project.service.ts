@@ -104,7 +104,8 @@ class ProjectService {
 			// Формируем URL для кастомного эндпоинта
 			// API_URL = .../wp-json/wp/v2 -> Root = .../wp-json
 			const rootApiUrl =
-				process.env.NEXT_PUBLIC_API_URL?.replace('/wp/v2', '') || 'https://crone-group.ru/wp-json';
+				process.env.NEXT_PUBLIC_API_URL?.replace('/wp/v2', '') ||
+				'https://api.crone-group.ru/wp-json';
 			const endpoint = `${rootApiUrl}/crone/v1/project/like`;
 
 			const { data } = await axiosClassic.post<{ likes: number }>(endpoint, {

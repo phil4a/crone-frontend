@@ -3,7 +3,7 @@ export const API_PATHS = {
 };
 
 export const WP_ROOT_API_URL =
-	process.env.NEXT_PUBLIC_API_URL?.replace('/wp/v2', '') || 'https://crone-group.ru/wp-json';
+	process.env.NEXT_PUBLIC_API_URL?.replace('/wp/v2', '') || 'https://api.crone-group.ru/wp-json';
 
 export const CONTACT_FORM7_FORM_ID = (() => {
 	const raw = process.env.CONTACT_FORM_7_ID;

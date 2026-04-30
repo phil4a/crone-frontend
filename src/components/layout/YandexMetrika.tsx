@@ -94,7 +94,10 @@ export const YandexMetrika = () => {
 				})(window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
 
 				ym(${metrikaId}, "init", {
+					webvisor:true,
 					clickmap:true,
+					referrer: document.referrer,
+					url: location.href,
 					trackLinks:true,
 					accurateTrackBounce:true
 				});

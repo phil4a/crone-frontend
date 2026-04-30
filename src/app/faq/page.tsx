@@ -10,7 +10,7 @@ import { Title } from '@/components/ui/Title';
 import { buildFaqJsonLd, parseFaqMarkdown } from '@/lib/faq';
 
 export const revalidate = 86400;
-export const dynamic = 'force-static';
+export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
 	title: 'Помощь и FAQ | Крона Групп',
@@ -52,10 +52,11 @@ async function getFaqData() {
 export default async function HelpPage({
 	searchParams
 }: {
-	searchParams?: { [key: string]: string | string[] | undefined };
+	searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
+	const resolvedSearchParams = await searchParams;
 	const { categories, jsonLd } = await getFaqData();
-	const tabParam = searchParams?.tab;
+	const tabParam = resolvedSearchParams.tab;
 	const requestedTab = typeof tabParam === 'string' ? tabParam : undefined;
 	const initialActiveId =
 		requestedTab && categories.some(category => category.id === requestedTab)

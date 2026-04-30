@@ -1,7 +1,7 @@
 'use client';
 
 import { parseAsStringEnum, useQueryState } from 'nuqs';
-import { useMemo } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 
 import { cn } from '@/lib/utils';
 import { FaqCategory } from '@/types/faq.types';
@@ -12,29 +12,66 @@ interface FaqTabsProps {
 	className?: string;
 }
 
+function safeDecodeURIComponent(value: string) {
+	try {
+		return decodeURIComponent(value);
+	} catch {
+		return value;
+	}
+}
+
 export function FaqTabs({ categories, initialActiveId, className }: FaqTabsProps) {
+	const rootRef = useRef<HTMLElement | null>(null);
+	const didMountRef = useRef(false);
+
 	const categoryIds = useMemo(() => categories.map(category => category.id), [categories]);
 	const defaultActiveId = categoryIds[0] ?? '';
 	const defaultTabId =
 		initialActiveId && categoryIds.includes(initialActiveId) ? initialActiveId : defaultActiveId;
 
+	const acceptedTabIds = useMemo(() => {
+		const encodedUpper = categoryIds.map(id => encodeURIComponent(id));
+		const encodedLower = encodedUpper.map(value =>
+			value.replace(/%[0-9A-F]{2}/g, part => part.toLowerCase())
+		);
+		return Array.from(new Set([...categoryIds, ...encodedUpper, ...encodedLower]));
+	}, [categoryIds]);
+
 	const activeIdParser = useMemo(
-		() => parseAsStringEnum(categoryIds).withDefault(defaultTabId),
-		[categoryIds, defaultTabId]
+		() => parseAsStringEnum(acceptedTabIds).withDefault(defaultTabId),
+		[acceptedTabIds, defaultTabId]
 	);
 
 	const [activeId, setActiveId] = useQueryState('tab', activeIdParser);
 
 	const resolvedActiveId = useMemo(() => {
 		if (categories.some(category => category.id === activeId)) return activeId;
+		const decodedActiveId = safeDecodeURIComponent(activeId);
+		if (categories.some(category => category.id === decodedActiveId)) return decodedActiveId;
 		return defaultTabId;
 	}, [activeId, categories, defaultTabId]);
+
+	const scrollToTop = () => {
+		const el = rootRef.current;
+		if (!el) return;
+		el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+	};
+
+	useEffect(() => {
+		if (!didMountRef.current) {
+			didMountRef.current = true;
+			return;
+		}
+
+		scrollToTop();
+	}, [resolvedActiveId]);
 
 	if (categories.length === 0) return null;
 
 	return (
 		<section
-			className={cn('w-full', className)}
+			ref={rootRef}
+			className={cn('w-full scroll-mt-20 md:scroll-mt-35', className)}
 			itemScope
 			itemType='https://schema.org/FAQPage'
 		>
@@ -58,9 +95,12 @@ export function FaqTabs({ categories, initialActiveId, className }: FaqTabsProps
 								aria-selected={isActive}
 								aria-controls={panelId}
 								tabIndex={isActive ? 0 : -1}
-								onClick={() => setActiveId(category.id)}
+								onClick={() => {
+									scrollToTop();
+									void setActiveId(category.id);
+								}}
 								className={cn(
-									'px-4 py-2 rounded-xl text-sm font-medium transition-colors',
+									'px-4 py-2 rounded-xl text-left text-sm font-medium transition-colors',
 									isActive
 										? 'bg-white text-main shadow-sm'
 										: 'text-dark-gray hover:text-main hover:bg-white/60'
@@ -94,7 +134,10 @@ export function FaqTabs({ categories, initialActiveId, className }: FaqTabsProps
 										aria-selected={isActive}
 										aria-controls={panelId}
 										tabIndex={isActive ? 0 : -1}
-										onClick={() => setActiveId(category.id)}
+										onClick={() => {
+											scrollToTop();
+											void setActiveId(category.id);
+										}}
 										className={cn(
 											'w-full text-left px-4 py-2 rounded-xl font-medium transition-colors',
 											isActive
@@ -155,7 +198,7 @@ export function FaqTabs({ categories, initialActiveId, className }: FaqTabsProps
 											>
 												<div
 													itemProp='text'
-													className='text-main leading-relaxed space-y-3'
+													className='text-main leading-relaxed space-y-3 [&_em]:text-brown'
 												>
 													{item.blocks.map((block, index) => {
 														if (block.type === 'paragraph') {

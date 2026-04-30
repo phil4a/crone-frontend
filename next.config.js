@@ -14,6 +14,10 @@ const nextConfig = {
 			{
 				protocol: 'https',
 				hostname: '*.userapi.com'
+			},
+			{
+				protocol: 'https',
+				hostname: 'mc.yandex.ru'
 			}
 		]
 	},
@@ -28,4 +32,3 @@ const nextConfig = {
 };
 
 module.exports = nextConfig;
-

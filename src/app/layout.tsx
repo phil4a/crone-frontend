@@ -5,6 +5,7 @@ import { cookies } from 'next/headers';
 import { CookieConsent } from '@/components/layout/CookieConsent';
 import { Footer } from '@/components/layout/Footer';
 import { Header } from '@/components/layout/Header';
+import { YandexMetrika } from '@/components/layout/YandexMetrika';
 import { FeedbackModal } from '@/components/common/FeedbackModal';
 
 import { Providers } from '@/providers/Providers';
@@ -41,6 +42,7 @@ export default async function RootLayout({
 			className={manrope.variable}
 		>
 			<body className='antialiased bg-beige'>
+				<YandexMetrika />
 				<Providers>
 					<Header />
 					{children}

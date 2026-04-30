@@ -15,6 +15,10 @@ const nextConfig: NextConfig = {
 			{
 				protocol: 'https',
 				hostname: '*.userapi.com'
+			},
+			{
+				protocol: 'https',
+				hostname: 'mc.yandex.ru'
 			}
 		]
 	},

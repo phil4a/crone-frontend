@@ -3,32 +3,12 @@
 import Image from 'next/image';
 import { usePathname, useSearchParams } from 'next/navigation';
 import Script from 'next/script';
-import { useEffect, useMemo, useRef, useSyncExternalStore } from 'react';
-
-import { loadConsent } from '@/lib/cookies/consent';
+import { useEffect, useMemo, useRef } from 'react';
 
 declare global {
 	interface Window {
 		ym?: (...args: unknown[]) => void;
 	}
-}
-
-function subscribeConsent(onStoreChange: () => void): () => void {
-	if (typeof window === 'undefined') {
-		return () => {};
-	}
-
-	const handler = () => {
-		onStoreChange();
-	};
-
-	window.addEventListener('storage', handler);
-	window.addEventListener('crone-cookie-consent', handler);
-
-	return () => {
-		window.removeEventListener('storage', handler);
-		window.removeEventListener('crone-cookie-consent', handler);
-	};
 }
 
 function getYandexMetrikaId(): number | null {
@@ -47,14 +27,7 @@ export const YandexMetrika = () => {
 	const searchParams = useSearchParams();
 	const lastTrackedUrlRef = useRef<string | null>(null);
 
-	const analyticsConsent = useSyncExternalStore(
-		subscribeConsent,
-		() => (loadConsent()?.analytics ? '1' : ''),
-		() => ''
-	);
-
-	const enabled =
-		process.env.NODE_ENV === 'production' && Boolean(metrikaId) && analyticsConsent === '1';
+	const enabled = process.env.NODE_ENV === 'production' && Boolean(metrikaId);
 
 	const currentUrl = useMemo(() => {
 		const query = searchParams?.toString();

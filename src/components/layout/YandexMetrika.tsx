@@ -11,6 +11,10 @@ declare global {
 	}
 }
 
+const PROJECT_VIEWS_SLUGS_KEY = 'crone_project_viewed_slugs';
+const PROJECT_3_PAGES_GOAL_SENT_KEY = 'crone_project_3_pages_goal_sent';
+const PROJECT_3_PAGES_GOAL_PENDING_KEY = 'crone_project_3_pages_goal_pending';
+
 function getYandexMetrikaId(): number | null {
 	const raw = process.env.NEXT_PUBLIC_YM_ID;
 	if (!raw) return null;
@@ -33,6 +37,49 @@ export const YandexMetrika = () => {
 		const query = searchParams?.toString();
 		return query ? `${pathname}?${query}` : pathname;
 	}, [pathname, searchParams]);
+
+	useEffect(() => {
+		if (!enabled || !metrikaId) return;
+		if (typeof window === 'undefined') return;
+
+		const tryFireGoal = () => {
+			if (sessionStorage.getItem(PROJECT_3_PAGES_GOAL_SENT_KEY) === '1') return;
+			if (sessionStorage.getItem(PROJECT_3_PAGES_GOAL_PENDING_KEY) !== '1') return;
+			if (typeof window.ym !== 'function') return;
+
+			window.ym(metrikaId, 'reachGoal', 'project_3_pages');
+			sessionStorage.setItem(PROJECT_3_PAGES_GOAL_SENT_KEY, '1');
+			sessionStorage.removeItem(PROJECT_3_PAGES_GOAL_PENDING_KEY);
+		};
+
+		try {
+			tryFireGoal();
+
+			if (!pathname.startsWith('/project/')) return;
+			if (sessionStorage.getItem(PROJECT_3_PAGES_GOAL_SENT_KEY) === '1') return;
+
+			const slug = pathname.split('/')[2] ?? '';
+			if (!slug) return;
+
+			const raw = sessionStorage.getItem(PROJECT_VIEWS_SLUGS_KEY);
+			const parsed = raw ? (JSON.parse(raw) as unknown) : [];
+			const existing = Array.isArray(parsed)
+				? parsed.filter((value): value is string => typeof value === 'string')
+				: [];
+
+			if (!existing.includes(slug)) {
+				existing.push(slug);
+				sessionStorage.setItem(PROJECT_VIEWS_SLUGS_KEY, JSON.stringify(existing));
+			}
+
+			if (existing.length >= 3) {
+				sessionStorage.setItem(PROJECT_3_PAGES_GOAL_PENDING_KEY, '1');
+				tryFireGoal();
+			}
+		} catch {
+			return;
+		}
+	}, [enabled, metrikaId, pathname]);
 
 	useEffect(() => {
 		if (!enabled || !metrikaId) return;

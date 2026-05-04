@@ -1,13 +1,19 @@
-import { type ClassValue, clsx } from "clsx";
-import { twMerge } from "tailwind-merge";
+import { type ClassValue, clsx } from 'clsx';
+import { twMerge } from 'tailwind-merge';
 
 export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
+	return twMerge(clsx(inputs));
 }
 
 export function getProxiedUrl(url: string) {
-	if (url.startsWith('https://crone-group.ru/wp-content/')) {
-		return url.replace('https://crone-group.ru', '');
+	const trimmed = url.trim();
+	if (!trimmed) return url;
+
+	if (trimmed.startsWith('/wp-content/')) {
+		return `https://crone-group.ru${trimmed}`;
 	}
-	return url;
+	if (trimmed.startsWith('//crone-group.ru/wp-content/')) {
+		return `https:${trimmed}`;
+	}
+	return trimmed;
 }

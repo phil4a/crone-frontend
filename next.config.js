@@ -25,11 +25,27 @@ const nextConfig = {
 			}
 		]
 	},
-	async rewrites() {
+	async redirects() {
 		return [
 			{
 				source: '/wp-content/:path*',
-				destination: 'https://crone-group.ru/wp-content/:path*'
+				destination: 'https://crone-group.ru/wp-content/:path*',
+				permanent: true
+			},
+			{
+				source: '/wp-includes/:path*',
+				destination: 'https://crone-group.ru/wp-includes/:path*',
+				permanent: true
+			},
+			{
+				source: '/wp-json/:path*',
+				destination: 'https://api.crone-group.ru/wp-json/:path*',
+				permanent: true
+			},
+			{
+				source: '/wp-admin/:path*',
+				destination: 'https://crone-group.ru/wp-admin/:path*',
+				permanent: true
 			}
 		];
 	}

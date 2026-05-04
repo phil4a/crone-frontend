@@ -20,6 +20,12 @@ import { ViewportLazy } from '../layout/ViewportLazy';
 
 import { cn } from '@/lib/utils';
 
+declare global {
+	interface Window {
+		ym?: (...args: unknown[]) => void;
+	}
+}
+
 const DynamicSmartCaptcha = dynamic(
 	() => import('@/components/common/SmartCaptcha').then(mod => mod.SmartCaptcha),
 	{ ssr: false }
@@ -93,6 +99,29 @@ export function FeedbackForm({
 	const resolvedFormId =
 		typeof formId === 'number' && Number.isFinite(formId) && formId > 0 ? formId : undefined;
 
+	const reachFeedbackGoal = () => {
+		if (process.env.NODE_ENV !== 'production') return;
+		if (typeof window === 'undefined') return;
+		if (typeof window.ym !== 'function') return;
+
+		const raw = process.env.NEXT_PUBLIC_YM_ID;
+		if (!raw) return;
+
+		const metrikaId = Number.parseInt(raw, 10);
+		if (!Number.isFinite(metrikaId)) return;
+
+		window.ym(metrikaId, 'reachGoal', 'feedback');
+	};
+
+	const handleSuccess = () => {
+		reset();
+		setCaptchaToken(null);
+		setCaptchaKey(key => key + 1);
+		toast.success('Спасибо! Мы свяжемся с вами в ближайшее время.');
+		reachFeedbackGoal();
+		onSuccess?.();
+	};
+
 	const send = async (data: FormValues, token: string) => {
 		await submitFeedback({
 			name: data.name,
@@ -119,11 +148,7 @@ export function FeedbackForm({
 
 		try {
 			await send(pendingData, token);
-			reset();
-			setCaptchaToken(null);
-			setCaptchaKey(key => key + 1);
-			toast.success('Спасибо! Мы свяжемся с вами в ближайшее время.');
-			onSuccess?.();
+			handleSuccess();
 		} catch (error) {
 			const message = error instanceof Error ? error.message : 'Не удалось отправить форму';
 			toast.error(message);
@@ -141,11 +166,7 @@ export function FeedbackForm({
 
 		try {
 			await send(data, captchaToken);
-			reset();
-			setCaptchaToken(null);
-			setCaptchaKey(key => key + 1);
-			toast.success('Спасибо! Мы свяжемся с вами в ближайшее время.');
-			onSuccess?.();
+			handleSuccess();
 		} catch (error) {
 			const message = error instanceof Error ? error.message : 'Не удалось отправить форму';
 			toast.error(message);

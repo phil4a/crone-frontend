@@ -42,8 +42,8 @@ export function ProjectCardDetailed({ project, index }: ProjectCardDetailedProps
 				<div className='relative w-full aspect-4/3 lg:aspect-video overflow-hidden rounded-lg hover:scale-[1.0125] duration-300 transition-transform will-change-transform'>
 					{displayImage ? (
 						<ProjectImageClient
-							src={displayImage.url}
-							alt={displayImage.alt || `Изображение проекта «${project.title}»`}
+							src={project.coverImage?.url || ''}
+							alt={project.coverImage?.alt || `Изображение проекта «${project.title}»`}
 							priority={isPriority}
 						/>
 					) : (

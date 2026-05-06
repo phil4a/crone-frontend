@@ -4,11 +4,9 @@ import { ViewportLazy } from '@/components/layout/ViewportLazy';
 import { LazyProjectGallery } from './LazyProjectGallery';
 import { LazyProjectRelated } from './LazyProjectRelated';
 import { ProjectBackButton } from './ProjectBackButton';
-import { ProjectGallery } from './ProjectGallery';
 import { ProjectHero } from './ProjectHero';
 import { ProjectMainImage } from './ProjectMainImage';
 import { ProjectParams } from './ProjectParams';
-import { ProjectRelated } from './ProjectRelated';
 import { VideoGallery } from './VideoGallery';
 import type { Project } from '@/types/project.types';
 

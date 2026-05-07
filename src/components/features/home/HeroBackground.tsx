@@ -6,11 +6,17 @@ import { cn } from '@/lib/utils';
 
 export function HeroBackground() {
 	const videoRef = useRef<HTMLVideoElement>(null);
-	const [isVideoReady, setIsVideoReady] = useState(false);
+	const [hasVideoStarted, setHasVideoStarted] = useState(false);
 
 	const handleCanPlay = () => {
-		setIsVideoReady(true);
 		videoRef.current?.play().catch(() => null);
+	};
+
+	const handleTimeUpdate = () => {
+		const currentTime = videoRef.current?.currentTime ?? 0;
+		if (currentTime > 0) {
+			setHasVideoStarted(true);
+		}
 	};
 
 	const setVideoNode = useCallback((node: HTMLVideoElement | null) => {
@@ -18,7 +24,6 @@ export function HeroBackground() {
 		if (!node) return;
 
 		if (node.readyState >= 3) {
-			setIsVideoReady(true);
 			node.play().catch(() => null);
 		}
 	}, []);
@@ -28,7 +33,7 @@ export function HeroBackground() {
 			<div
 				className={cn(
 					'absolute inset-0 z-10 pointer-events-none transition-opacity duration-250',
-					isVideoReady ? 'opacity-0' : 'opacity-100'
+					hasVideoStarted ? 'opacity-0' : 'opacity-100'
 				)}
 			>
 				<picture>
@@ -49,6 +54,7 @@ export function HeroBackground() {
 			<video
 				ref={setVideoNode}
 				onCanPlay={handleCanPlay}
+				onTimeUpdate={handleTimeUpdate}
 				autoPlay
 				muted
 				loop
@@ -56,7 +62,7 @@ export function HeroBackground() {
 				preload='auto'
 				className={cn(
 					'absolute inset-0 z-0 h-full w-full object-cover transition-opacity duration-250',
-					isVideoReady ? 'opacity-100' : 'opacity-0'
+					hasVideoStarted ? 'opacity-100' : 'opacity-0'
 				)}
 			>
 				<source

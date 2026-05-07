@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { Manrope } from 'next/font/google';
 import { cookies } from 'next/headers';
 
@@ -30,6 +30,10 @@ const metadataBase = (() => {
 		return undefined;
 	}
 })();
+
+export const viewport: Viewport = {
+	themeColor: '#e1b286'
+};
 
 export const metadata: Metadata = {
 	metadataBase,

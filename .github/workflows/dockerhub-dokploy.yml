@@ -22,11 +22,11 @@ jobs:
       NEXT_PUBLIC_GOOGLE_MAPS_ID: ${{ secrets.NEXT_PUBLIC_GOOGLE_MAPS_ID }}
       NEXT_PUBLIC_LIGHT_GALLERY_LICENSE_KEY: ${{ secrets.NEXT_PUBLIC_LIGHT_GALLERY_LICENSE_KEY }}
       NEXT_PUBLIC_YANDEX_SMARTCAPTCHA_SITE_KEY:
-        ${{ secrets.NEXT_PUBLIC_YANDEX_SMARTCAPTCHA_SITE_KEY }} ${{ secrets.DOCKERHUB_USERNAME
-        }}/${{ secrets.DOCKERHUB_REPOSITORY != '' && secrets.DOCKERHUB_REPOSITORY ||
-        github.event.repository.name }}
+        ${{ secrets.NEXT_PUBLIC_YANDEX_SMARTCAPTCHA_SITE_KEY }}
       DOKPLOY_WEBHOOK_URL: ${{ secrets.DOKPLOY_WEBHOOK_URL }}
       DOKPLOY_URL: ${{ secrets.DOKPLOY_URL }}
+      DOKPLOY_API_KEY: ${{ secrets.DOKPLOY_API_KEY }}
+      DOKPLOY_APPLICATION_ID: ${{ secrets.DOKPLOY_APPLICATION_ID }}
 
     steps:
       - name: Checkout

@@ -1,36 +1,86 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Crone Frontend
 
-## Getting Started
+Next.js (App Router) проект для переноса существующей HTML/SCSS-верстки и Wordpress на современный стек. Данные берутся из WordPress (GraphQL/REST).
 
-First, run the development server:
+## Стек
+
+- Next.js 16+ (App Router), React 19+, TypeScript (strict)
+- Tailwind CSS 4 + SCSS Modules
+- Zustand, TanStack Query (React Query), nuqs
+- React Hook Form + Zod
+- Axios (инстанс с базовым URL и интерцепторами)
+
+## Запуск локально
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Открыть: http://localhost:3000
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Скрипты
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `npm run dev` — dev сервер
+- `npm run build` — production build
+- `npm run start` — запуск production сервера
+- `npm run lint` — ESLint
+- `npm run codegen` — генерация типов GraphQL
 
-## Learn More
+## GraphQL Codegen
 
-To learn more about Next.js, take a look at the following resources:
+Команда:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+npm run codegen
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Что делает:
 
-## Deploy on Vercel
+- Берёт GraphQL schema из `NEXT_PUBLIC_API_URL` (см. [codegen.ts](./codegen.ts)).
+- Читает документы из `src/graphql/**/*.graphql`.
+- Генерирует типы и React Query хелперы в `src/graphql/generated.ts`.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Важно:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Перед запуском убедись, что `NEXT_PUBLIC_API_URL` указывает на GraphQL endpoint (например `https://crone-group.ru/graphql`).
+
+## Переменные окружения
+
+### Публичные (попадают в клиент, начинаются с NEXT_PUBLIC_)
+
+- `NEXT_PUBLIC_SITE_URL` — базовый URL сайта (нужен для canonical/OG/JSON-LD, sitemap/robots)
+- `NEXT_PUBLIC_GRAPHQL_API_URL` — endpoint GraphQL (например `https://crone-group.ru/graphql`)
+- `NEXT_PUBLIC_API_URL` — WP REST base (например `https://api.crone-group.ru/wp-json/wp/v2`)
+- `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` — ключ Google Maps (обязательно ограничить по HTTP referrer)
+- `NEXT_PUBLIC_GOOGLE_MAPS_ID` — Map ID
+- `NEXT_PUBLIC_LIGHT_GALLERY_LICENSE_KEY` — license key LightGallery (если используется)
+- `NEXT_PUBLIC_YANDEX_SMARTCAPTCHA_SITE_KEY` — site key SmartCaptcha
+- `NEXT_PUBLIC_YM_ID` — ID Яндекс.Метрики
+
+### Серверные (не должны попадать в клиент)
+
+- `CONTACT_FORM_7_ID` — ID формы CF7 (используется на сервере/route handler)
+
+## SEO
+
+- `GET /sitemap.xml` — генерируется автоматически (App Router `sitemap.ts`)
+- `GET /robots.txt` — генерируется автоматически (App Router `robots.ts`)
+- Проекты `/project/[slug]` включают canonical, OpenGraph/Twitter и JSON-LD (WebPage + BreadcrumbList)
+
+## Деплой (Docker Hub → Dokploy)
+
+Репозиторий содержит workflow GitHub Actions, который:
+1) собирает Docker image и пушит в Docker Hub
+2) триггерит деплой в Dokploy через webhook (или через API при наличии ключа)
+
+Нужные GitHub Secrets:
+
+- Docker Hub:
+  - `DOCKERHUB_USERNAME`
+  - `DOCKERHUB_TOKEN`
+  - `DOCKERHUB_REPOSITORY` (опционально)
+- Build args (NEXT_PUBLIC_*):
+  - `NEXT_PUBLIC_SITE_URL`, `NEXT_PUBLIC_GRAPHQL_API_URL`, `NEXT_PUBLIC_API_URL`, и т.д.
+- Dokploy:
+  - `DOKPLOY_WEBHOOK_URL` (предпочтительно)
+  - или `DOKPLOY_URL`, `DOKPLOY_API_KEY`, `DOKPLOY_APPLICATION_ID`

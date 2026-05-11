@@ -42,15 +42,15 @@ npm run codegen
 
 Важно:
 
-- Перед запуском убедись, что `NEXT_PUBLIC_API_URL` указывает на GraphQL endpoint (например `https://crone-group.ru/graphql`).
+- Перед запуском убедиться, что `NEXT_PUBLIC_API_URL` указывает на GraphQL endpoint.
 
 ## Переменные окружения
 
 ### Публичные (попадают в клиент, начинаются с NEXT_PUBLIC_)
 
 - `NEXT_PUBLIC_SITE_URL` — базовый URL сайта (нужен для canonical/OG/JSON-LD, sitemap/robots)
-- `NEXT_PUBLIC_GRAPHQL_API_URL` — endpoint GraphQL (например `https://crone-group.ru/graphql`)
-- `NEXT_PUBLIC_API_URL` — WP REST base (например `https://api.crone-group.ru/wp-json/wp/v2`)
+- `NEXT_PUBLIC_GRAPHQL_API_URL` — endpoint GraphQL
+- `NEXT_PUBLIC_API_URL` — WP REST base
 - `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` — ключ Google Maps (обязательно ограничить по HTTP referrer)
 - `NEXT_PUBLIC_GOOGLE_MAPS_ID` — Map ID
 - `NEXT_PUBLIC_LIGHT_GALLERY_LICENSE_KEY` — license key LightGallery (если используется)

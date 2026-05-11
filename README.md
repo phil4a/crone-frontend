@@ -1,7 +1,8 @@
 # Crone Frontend
 Сайт строительной компании.
 Next.js (App Router) проект для переноса существующей HTML/SCSS-верстки и Wordpress на современный стек. Данные берутся из WordPress (GraphQL/REST).
-![Сайт](https://crone-group.ru/)
+
+[Ссылка](https://crone-group.ru/)
 
 
 ## Стек

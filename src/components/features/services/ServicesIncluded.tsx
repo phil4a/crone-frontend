@@ -6,6 +6,8 @@ import { useCallback, useEffect, useId, useLayoutEffect, useMemo, useRef, useSta
 import { Button } from '@/components/ui/Button';
 import { Title } from '@/components/ui/Title';
 
+import { useFeedbackModalStore } from '@/store/feedbackModal';
+
 import { cn } from '@/lib/utils';
 
 interface PriceRow {
@@ -100,6 +102,7 @@ export function ServicesIncluded() {
 	const contentRefs = useRef<Array<HTMLDivElement | null>>([]);
 	const [contentHeights, setContentHeights] = useState<number[]>([]);
 	const isInitRef = useRef(false);
+	const openFeedbackModal = useFeedbackModalStore(state => state.open);
 
 	const toggle = useCallback((index: number) => {
 		setOpenIndexes(prev => {
@@ -264,7 +267,14 @@ export function ServicesIncluded() {
 												</div>
 											</div>
 										)}
-										{item.buttonText && <Button variant='outline'>{item.buttonText}</Button>}
+										{item.buttonText && (
+											<Button
+												variant='outline'
+												onClick={() => openFeedbackModal()}
+											>
+												{item.buttonText}
+											</Button>
+										)}
 
 										{item.bullets && (
 											<ul className='list-disc pl-5 space-y-2'>

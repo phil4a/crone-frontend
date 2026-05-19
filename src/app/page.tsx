@@ -1,3 +1,6 @@
+import type { Metadata } from 'next';
+import { unstable_cache } from 'next/cache';
+
 import { FeedbackForm } from '@/components/common/FeedbackForm';
 import { Advantages } from '@/components/features/home/Advantages';
 import { Hero } from '@/components/features/home/Hero';
@@ -8,28 +11,15 @@ import { LazyGeography } from '@/components/features/home/geography/LazyGeograph
 import { LazySteps } from '@/components/features/home/steps/LazySteps';
 import { ViewportLazy } from '@/components/layout/ViewportLazy';
 
-import type { Metadata } from 'next';
-import { unstable_cache } from 'next/cache';
-
-import { SITE_CONFIG, SITE_URL } from '@/config/site.config';
+import { SITE_CONFIG } from '@/config/site.config';
 
 import { client } from '@/api/graphql';
-import { GetProjectsDocument, type GetProjectsQuery, type GetProjectsQueryVariables } from '@/graphql/generated';
 
-function getBaseUrl(): string {
-	const raw = SITE_URL?.trim();
-	if (!raw) return 'http://localhost:3000';
-
-	try {
-		return new URL(raw).origin;
-	} catch {
-		return 'http://localhost:3000';
-	}
-}
-
-function toAbsoluteUrl(baseUrl: string, path: string): string {
-	return new URL(path, baseUrl).toString();
-}
+import {
+	GetProjectsDocument,
+	type GetProjectsQuery,
+	type GetProjectsQueryVariables
+} from '@/graphql/generated';
 
 function normalizeImageUrl(value: string): string {
 	const trimmed = value.trim();
@@ -96,55 +86,8 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default function HomePage() {
-	const baseUrl = getBaseUrl();
-	const websiteId = `${baseUrl}/#website`;
-	const organizationId = `${baseUrl}/#organization`;
-
-	const ldJson = {
-		'@context': 'https://schema.org',
-		'@graph': [
-			{
-				'@type': 'Organization',
-				'@id': organizationId,
-				name: SITE_CONFIG.name,
-				url: baseUrl,
-				email: SITE_CONFIG.contacts.email.label,
-				telephone: SITE_CONFIG.contacts.phone.label,
-				address: {
-					'@type': 'PostalAddress',
-					streetAddress: SITE_CONFIG.contacts.address,
-					addressLocality: 'Новосибирск',
-					addressCountry: 'RU'
-				},
-				sameAs: Object.values(SITE_CONFIG.contacts.socials)
-			},
-			{
-				'@type': 'WebSite',
-				'@id': websiteId,
-				url: baseUrl,
-				name: SITE_CONFIG.name,
-				description: SITE_CONFIG.description,
-				inLanguage: 'ru-RU',
-				publisher: { '@id': organizationId }
-			},
-			{
-				'@type': 'WebPage',
-				url: toAbsoluteUrl(baseUrl, '/'),
-				name: SITE_CONFIG.metadata.title,
-				description: SITE_CONFIG.metadata.description,
-				isPartOf: { '@id': websiteId },
-				about: { '@id': organizationId },
-				inLanguage: 'ru-RU'
-			}
-		]
-	};
-
 	return (
 		<main className='flex min-h-screen flex-col'>
-			<script
-				type='application/ld+json'
-				dangerouslySetInnerHTML={{ __html: JSON.stringify(ldJson) }}
-			/>
 			<Hero />
 			<Advantages />
 			<LazyFeatures />

@@ -72,8 +72,6 @@ export function FaqTabs({ categories, initialActiveId, className }: FaqTabsProps
 		<section
 			ref={rootRef}
 			className={cn('w-full scroll-mt-20 md:scroll-mt-35', className)}
-			itemScope
-			itemType='https://schema.org/FAQPage'
 		>
 			<div className='lg:grid lg:grid-cols-[280px_1fr] lg:gap-10'>
 				<div

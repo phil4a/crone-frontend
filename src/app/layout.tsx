@@ -96,8 +96,10 @@ export default async function RootLayout({
 				url: baseUrl,
 				description: SITE_CONFIG.description,
 				telephone: phone || undefined,
+				priceRange: '₽₽₽',
 				email: SITE_CONFIG.contacts.email.label,
 				address: {
+					image: `${baseUrl}/images/home/fs-pc.jpg`,
 					'@type': 'PostalAddress',
 					streetAddress: SITE_CONFIG.contacts.address,
 					addressLocality: 'Новосибирск',

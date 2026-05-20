@@ -182,11 +182,11 @@ export function FeedbackForm({
 			<Title
 				as='h2'
 				variant='h2'
-				className={cn(variant === 'section' ? 'mb-6 md:mb-7.5' : 'mb-3')}
+				className={cn(variant === 'section' ? 'mb-6 md:mb-7.5 max-w-170' : 'mb-3')}
 			>
 				{title}
 			</Title>
-			<p className={cn('text-base md:text-lg text-brown', variant === 'section' && 'max-w-125')}>
+			<p className={cn('text-base md:text-lg text-brown', variant === 'section' && 'max-w-200')}>
 				{text}
 			</p>
 		</div>

@@ -49,7 +49,11 @@ export function ProjectContent({ project, relatedProjects = [] }: ProjectContent
 					items={project.videos.gallery}
 				/>
 			</ViewportLazy>
-			<FeedbackForm formId={225} />
+			<FeedbackForm
+				title='Понравился этот проект? Сделаем под вас!'
+				text='Возьмём этот объект за основу и адаптируем под ваш участок, планировку и бюджет — получите индивидуальный проект под ключ. Консультация бесплатна.'
+				formId={225}
+			/>
 			{relatedProjects.length > 0 && (
 				<ViewportLazy rootMargin='300px'>
 					<LazyProjectRelated relatedProjects={relatedProjects} />

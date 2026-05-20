@@ -31,12 +31,12 @@ export function Creating() {
 					{/* Left Content */}
 					<div className='flex-1 xl:max-w-[50%] flex flex-col items-start text-main'>
 						<p className='mb-6 md:mb-8 text-base font-bold md:text-lg leading-relaxed'>
-							Большинство наших проектов реализуется с использованием материалов, произведённых на
-							мощностях завода «Кадрин».
+							Мы строим из тщательно отобранной древесины и используем современные технологии
+							производства клееного бруса — так дом получается тёплым, стабильным и долговечным.
 						</p>
 
 						<div className='mb-8 md:mb-10'>
-							<p className='mb-4 font-semibold'>Мы работаем с лучшей древесиной:</p>
+							<p className='mb-4 font-semibold'>Какие породы используем чаще всего:</p>
 							<ul className='flex flex-col gap-4 text-lg list-none'>
 								<li>
 									<span className='font-bold'>Сосна</span> — устойчива к влаге, отличается

@@ -119,7 +119,7 @@ export function FloatingFeedbackButton() {
 							className={cn(
 								'absolute inset-0 grid place-items-center transition-[opacity,transform] duration-300',
 								'motion-reduce:transition-none',
-								isExpanded ? 'opacity-100 scale-100 rotate-0' : 'opacity-0 scale-60 -rotate-45'
+								isExpanded ? 'opacity-100 rotate-0' : 'opacity-0  -rotate-45'
 							)}
 						>
 							<CloseIcon className='h-5 w-5 md:h-6 md:w-6' />
@@ -142,9 +142,10 @@ export function FloatingFeedbackButton() {
 										<span
 											key={item.key}
 											className={cn(
-												'absolute inset-0 grid place-items-center transition-[opacity,transform] duration-500',
+												'absolute inset-0 grid place-items-center transition-[opacity,transform]',
 												'motion-reduce:transition-none',
-												isActive ? 'opacity-100 scale-100 rotate-0' : 'opacity-0 scale-75 rotate-45'
+												isActive ? 'duration-500 ease-out' : 'duration-150 ease-in',
+												isActive ? 'opacity-100 scale-100 rotate-0' : 'opacity-0 scale-0 rotate-45'
 											)}
 										>
 											<Icon className={cn('h-6 w-6', item.iconClassName)} />

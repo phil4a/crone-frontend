@@ -79,7 +79,7 @@ export default async function HelpPage({
 						Помощь
 					</Title>
 
-					<div className='bg-light-gray rounded-2xl p-6 md:p-7.5'>
+					<div className='bg-transparent md:bg-light-gray rounded-2xl p-0 md:p-6 md:p-7.5'>
 						{categories.length > 0 ? (
 							<>
 								<FaqTabs

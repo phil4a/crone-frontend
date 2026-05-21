@@ -84,7 +84,7 @@ export const PhoneIcon = ({ className }: { className?: string }) => (
 
 export const TelegramIcon = ({ className }: { className?: string }) => (
 	<svg
-		className={cn('h-4.5 w-5', className)}
+		className={cn('h-4.5 w-4.5', className)}
 		viewBox='0 0 20 18'
 		fill='none'
 		xmlns='http://www.w3.org/2000/svg'

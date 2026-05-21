@@ -3,6 +3,7 @@ import { Manrope } from 'next/font/google';
 import { cookies } from 'next/headers';
 
 import { FeedbackModal } from '@/components/common/FeedbackModal';
+import { FloatingFeedbackButton } from '@/components/common/FloatingFeedbackButton';
 import { CookieConsent } from '@/components/layout/CookieConsent';
 import { Footer } from '@/components/layout/Footer';
 import { Header } from '@/components/layout/Header';
@@ -137,6 +138,7 @@ export default async function RootLayout({
 					<Header />
 					{children}
 					<Footer />
+					<FloatingFeedbackButton />
 					<FeedbackModal />
 					<CookieConsent initialConsent={initialConsent} />
 				</Providers>

@@ -1,6 +1,7 @@
 'use client';
 
 import dynamic from 'next/dynamic';
+import { useCallback } from 'react';
 
 import { ProjectCardDetailed } from '@/components/common/projects/ProjectCardDetailed';
 import { FiltersDrawer } from '@/components/features/projects/FiltersDrawer';
@@ -8,7 +9,6 @@ import { ProjectSkeletonLoader } from '@/components/features/projects/ProjectSke
 import { ProjectSidebar } from '@/components/features/projects/ProjectsSidebar';
 import { HeaderThemeObserver } from '@/components/layout/HeaderThemeObserver';
 import { Button } from '@/components/ui/Button';
-import { Pagination } from '@/components/ui/Pagination';
 import { SkeletonLoader } from '@/components/ui/SkeletonLoader';
 import { Title } from '@/components/ui/Title';
 
@@ -17,7 +17,8 @@ import { ITEMS_PER_PAGE } from '@/config/site.config';
 import { useProjectFilters } from '@/hooks/projects/useProjectFilters';
 import { useProjectStats } from '@/hooks/projects/useProjectStats';
 import { useProjectTags } from '@/hooks/projects/useProjectTags';
-import { useProjects } from '@/hooks/projects/useProjects';
+import { useInfiniteProjects } from '@/hooks/projects/useProjects';
+import { useInfinitePageLoader } from '@/hooks/useInfinitePageLoader';
 
 import { ProjectsText } from './ProjectsText';
 import { pluralizeProjects } from '@/lib/formatters/pluralize';
@@ -37,13 +38,29 @@ export function ProjectsContent() {
 	const { page, setPage, tag, filters, sort, setSort, applyFilters, resetTag, setTagFilter } =
 		useProjectFilters(stats);
 	const { tags, getPageTitle } = useProjectTags();
-	const { projects, totalItems, totalPages, isLoading, error } = useProjects(
-		page,
-		ITEMS_PER_PAGE,
-		filters,
-		sort
-	);
+	const {
+		projects,
+		totalItems,
+		totalPages,
+		loadedPages,
+		isLoading,
+		error,
+		fetchNextPage,
+		hasNextPage,
+		isFetchingNextPage
+	} = useInfiniteProjects(ITEMS_PER_PAGE, filters, sort);
 	const sidebarKey = JSON.stringify(filters);
+	const onPageChange = useCallback((nextPage: number) => setPage(nextPage), [setPage]);
+	const { sentinelRef, containerRef, handleLoadMore } = useInfinitePageLoader<HTMLUListElement>({
+		itemsPerPage: ITEMS_PER_PAGE,
+		page,
+		loadedPages,
+		hasNextPage,
+		isLoading,
+		isFetchingNextPage,
+		fetchNextPage,
+		onPageChange
+	});
 
 	return (
 		<main className='pt-38 pb-27 container  min-h-screen'>
@@ -125,7 +142,7 @@ export function ProjectsContent() {
 								<ProjectSkeletonLoader key={idx} />
 							))}
 						</div>
-					) : error ? (
+					) : error && projects.length === 0 ? (
 						<div className='p-8 text-center text-red-500'>
 							Произошла ошибка при загрузке проектов. Пожалуйста, попробуйте позже.
 						</div>
@@ -135,7 +152,10 @@ export function ProjectsContent() {
 						</div>
 					) : (
 						<>
-							<ul className='grid grid-cols-1 md:grid-cols-2 gap-5'>
+							<ul
+								ref={containerRef}
+								className='grid grid-cols-1 md:grid-cols-2 gap-5'
+							>
 								{projects.map((project, index) => (
 									<ProjectCardDetailed
 										key={project.id}
@@ -143,17 +163,35 @@ export function ProjectsContent() {
 										index={index}
 									/>
 								))}
+								{isFetchingNextPage
+									? Array.from({ length: 2 }).map((_, idx) => (
+											<ProjectSkeletonLoader key={`next-${idx}`} />
+										))
+									: null}
 							</ul>
 
-							<div className='mt-10'>
-								<Pagination
-									currentPage={page || 1}
-									totalPages={totalPages}
-									onPageChange={p => {
-										setPage(p);
-										window.scrollTo({ top: 0, behavior: 'smooth' });
-									}}
+							<div className='mt-10 flex flex-col items-center gap-4'>
+								{hasNextPage ? (
+									<Button
+										type='button'
+										variant='outline'
+										disabled={isFetchingNextPage}
+										onClick={handleLoadMore}
+									>
+										{isFetchingNextPage ? 'Загрузка…' : 'Показать ещё'}
+									</Button>
+								) : (
+									<p className='text-dark-gray'>Все проекты загружены</p>
+								)}
+								<div
+									ref={sentinelRef}
+									className='h-1 w-full'
 								/>
+								{totalPages > 0 ? (
+									<p className='text-sm text-dark-gray'>
+										Загружено: {loadedPages} / {totalPages}
+									</p>
+								) : null}
 							</div>
 						</>
 					)}

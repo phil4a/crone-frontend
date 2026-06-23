@@ -105,7 +105,7 @@ export function FloatingFeedbackButton() {
 					aria-label={isExpanded ? 'Скрыть способы связи' : 'Открыть способы связи'}
 					onMouseEnter={() => setIsExpanded(prev => !prev)}
 					onMouseLeave={() => setIsExpanded(prev => !prev)}
-					onTouchStart={() => setIsExpanded(prev => !prev)}
+					onTouchEnd={() => setIsExpanded(prev => !prev)}
 					title={isExpanded ? 'Скрыть способы связи' : 'Открыть способы связи'}
 					className={cn(
 						'cursor-pointer relative grid h-12 w-12 place-items-center rounded-full shadow-lg ring-1 ring-black/5 transition-[background-color,transform,box-shadow] duration-500 md:h-14 md:w-14',

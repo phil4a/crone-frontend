@@ -57,7 +57,7 @@ export function ProjectHero({ title, specs, globalId, id, likes }: Project) {
 							))}
 						</div>
 						<div className='w-full md:w-auto pt-10 border-t border-t-brown/35 xl:border-t-0 xl:pt-0'>
-							<FeedbackModalTrigger className='w-full'>Написать нам</FeedbackModalTrigger>
+							<FeedbackModalTrigger className='w-full'>Запросить цену проекта</FeedbackModalTrigger>
 						</div>
 					</div>
 				</div>

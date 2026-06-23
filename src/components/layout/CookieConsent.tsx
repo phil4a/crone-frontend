@@ -56,7 +56,7 @@ export function CookieConsent({
 	return (
 		<div
 			className={cn(
-				'fixed bottom-0 left-0 right-0 z-2 pointer-events-auto isolate',
+				'fixed bottom-0 left-0 right-0 z-1 pointer-events-auto isolate',
 				'bg-light-gray border-t border-light-beige',
 				'px-4 py-3 md:px-6 md:py-4',
 				className

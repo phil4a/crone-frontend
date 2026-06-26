@@ -189,7 +189,7 @@ export function ProjectsContent() {
 								/>
 								{totalPages > 0 ? (
 									<p className='text-sm text-dark-gray'>
-										Загружено: {loadedPages} / {totalPages}
+										Загружено: {loadedPages} / {totalPages} страниц
 									</p>
 								) : null}
 							</div>

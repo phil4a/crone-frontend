@@ -128,7 +128,7 @@ export function ArticlesContent() {
 						/>
 						{totalPages > 0 ? (
 							<p className='text-sm text-gray-500'>
-								Загружено: {loadedPages} / {totalPages}
+								Загружено: {loadedPages} / {totalPages} страниц
 							</p>
 						) : null}
 					</div>

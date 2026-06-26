@@ -49,6 +49,9 @@ const ITEMS: FloatingFeedbackItem[] = [
 	}
 ];
 
+const canUseHover = () =>
+	typeof window !== 'undefined' && window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+
 export function FloatingFeedbackButton() {
 	const [isExpanded, setIsExpanded] = useState(false);
 	const [activeIndex, setActiveIndex] = useState(0);
@@ -103,8 +106,16 @@ export function FloatingFeedbackButton() {
 				<button
 					type='button'
 					aria-label={isExpanded ? 'Скрыть способы связи' : 'Открыть способы связи'}
-					onMouseEnter={() => setIsExpanded(prev => !prev)}
-					onMouseLeave={() => setIsExpanded(prev => !prev)}
+					onMouseEnter={() => {
+						if (canUseHover()) {
+							setIsExpanded(true);
+						}
+					}}
+					onMouseLeave={() => {
+						if (canUseHover()) {
+							setIsExpanded(false);
+						}
+					}}
 					onClick={() => setIsExpanded(prev => !prev)}
 					title={isExpanded ? 'Скрыть способы связи' : 'Открыть способы связи'}
 					className={cn(

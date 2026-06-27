@@ -1,6 +1,18 @@
 import { GraphQLClient } from 'graphql-request';
 
-const endpoint = '/api/graphql';
+function getEndpoint(): string {
+	if (typeof window === 'undefined') {
+		const internal = process.env.WORDPRESS_API_URL_INTERNAL;
+		if (!internal) {
+			throw new Error('WORDPRESS_API_URL_INTERNAL is required on the server');
+		}
+		return internal;
+	}
+
+	return '/api/graphql';
+}
+
+const endpoint = getEndpoint();
 
 export const client = new GraphQLClient(endpoint);
 

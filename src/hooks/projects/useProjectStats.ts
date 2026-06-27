@@ -33,6 +33,7 @@ export function useProjectStats() {
 
 	return {
 		stats: normalizedStats,
+		isReady: !isLoading && !error,
 		isLoading,
 		error
 	};

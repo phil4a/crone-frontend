@@ -33,8 +33,7 @@ const ProjectSortPopoverClient = dynamic(
 );
 
 export function ProjectsContent() {
-	// Custom Hooks
-	const { stats } = useProjectStats();
+	const { stats, isReady: isStatsReady } = useProjectStats();
 	const { page, setPage, tag, filters, sort, setSort, applyFilters, resetTag, setTagFilter } =
 		useProjectFilters(stats);
 	const { tags, getPageTitle } = useProjectTags();
@@ -48,7 +47,7 @@ export function ProjectsContent() {
 		fetchNextPage,
 		hasNextPage,
 		isFetchingNextPage
-	} = useInfiniteProjects(ITEMS_PER_PAGE, filters, sort);
+	} = useInfiniteProjects(ITEMS_PER_PAGE, filters, sort, isStatsReady);
 	const sidebarKey = JSON.stringify(filters);
 	const onPageChange = useCallback((nextPage: number) => setPage(nextPage), [setPage]);
 	const { sentinelRef, containerRef, handleLoadMore } = useInfinitePageLoader<HTMLUListElement>({

@@ -1,30 +1,21 @@
 import { GraphQLClient } from 'graphql-request';
-import { PHASE_PRODUCTION_BUILD } from 'next/constants';
 
-function getEndpoint(): string {
-	if (typeof window !== 'undefined') {
-		return '/api/graphql';
+function getGraphqlEndpoint(): string {
+	const endpoint = process.env.NEXT_PUBLIC_GRAPHQL_API_URL?.trim();
+	if (!endpoint) {
+		throw new Error('NEXT_PUBLIC_GRAPHQL_API_URL is required');
 	}
 
-	const isBuildTime = process.env.NEXT_PHASE === PHASE_PRODUCTION_BUILD;
-
-	if (isBuildTime) {
-		const publicEndpoint = process.env.WORDPRESS_API_URL_PUBLIC;
-		if (!publicEndpoint) {
-			throw new Error('WORDPRESS_API_URL_PUBLIC is required at build time');
-		}
-		return publicEndpoint;
+	try {
+		new URL(endpoint);
+	} catch {
+		throw new Error('NEXT_PUBLIC_GRAPHQL_API_URL must be a valid absolute URL');
 	}
 
-	const internal = process.env.WORDPRESS_API_URL_INTERNAL;
-	if (!internal) {
-		throw new Error('WORDPRESS_API_URL_INTERNAL is required at runtime');
-	}
-	return internal;
+	return endpoint;
 }
 
-const endpoint = getEndpoint();
-console.log(`Graphql endpoint:`, endpoint);
+const endpoint = getGraphqlEndpoint();
 
 export const client = new GraphQLClient(endpoint);
 

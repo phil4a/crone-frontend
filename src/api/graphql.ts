@@ -1,21 +1,6 @@
 import { GraphQLClient } from 'graphql-request';
 
-function getGraphqlEndpoint(): string {
-	const endpoint = process.env.NEXT_PUBLIC_GRAPHQL_API_URL?.trim();
-	if (!endpoint) {
-		throw new Error('NEXT_PUBLIC_GRAPHQL_API_URL is required');
-	}
-
-	try {
-		new URL(endpoint);
-	} catch {
-		throw new Error('NEXT_PUBLIC_GRAPHQL_API_URL must be a valid absolute URL');
-	}
-
-	return endpoint;
-}
-
-const endpoint = getGraphqlEndpoint();
+const endpoint = '/api/graphql';
 
 export const client = new GraphQLClient(endpoint);
 

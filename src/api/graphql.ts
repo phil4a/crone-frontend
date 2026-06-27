@@ -8,7 +8,7 @@ function getEndpoint(): string {
 	}
 
 	const phase = process.env.NEXT_PHASE;
-	const isBuildTime = phase === 'phase-production-build';
+	const isBuildTime = process.env.NEXT_PHASE === 'phase-production-build';
 	const internal = process.env.WORDPRESS_API_URL_INTERNAL;
 	const publicUrl = process.env.WORDPRESS_API_URL_PUBLIC;
 
@@ -30,13 +30,9 @@ function getEndpoint(): string {
 	return endpoint;
 }
 
-let cachedClient: GraphQLClient | null = null;
-function getClient(): GraphQLClient {
-	if (!cachedClient) {
-		cachedClient = new GraphQLClient(getEndpoint());
-	}
-	return cachedClient;
-}
+const endpoint = getEndpoint();
+
+export const client = new GraphQLClient(endpoint);
 
 export const fetcher = <TData, TVariables extends object = Record<string, never>>(
 	query: string,
@@ -45,7 +41,7 @@ export const fetcher = <TData, TVariables extends object = Record<string, never>
 ) => {
 	return async (): Promise<TData> => {
 		try {
-			const response = await getClient().rawRequest<TData, TVariables>(query, variables, headers);
+			const response = await client.rawRequest<TData, TVariables>(query, variables, headers);
 			return response.data;
 		} catch (err) {
 			console.error('[graphql.ts] request failed:', err);

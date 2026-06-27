@@ -1,3 +1,4 @@
+import { HydrationBoundary, QueryClient, dehydrate } from '@tanstack/react-query';
 import type { Metadata } from 'next';
 import { Suspense } from 'react';
 
@@ -6,9 +7,21 @@ import { ProjectsSkeleton } from '@/components/features/projects/ProjectsSkeleto
 
 import { PAGE } from '@/config/pages.config';
 import { PAGES_SEO } from '@/config/seo.config';
-import { SITE_URL } from '@/config/site.config';
+import { ITEMS_PER_PAGE, SITE_URL } from '@/config/site.config';
 
 import { TAG_SEO_TITLES } from '@/hooks/projects/useProjectTags';
+
+import { client } from '@/api/graphql';
+
+import {
+	GetProjectStatsDocument,
+	type GetProjectStatsQuery,
+	GetProjectsDocument,
+	useGetProjectStatsQuery,
+	useInfiniteGetProjectsQuery
+} from '@/graphql/generated';
+import { buildProjectsVariables } from '@/lib/projects/buildProjectsVariables';
+import { ProjectFiltersData } from '@/types/filters.types';
 
 export const revalidate = 100;
 export const dynamic = 'force-static';
@@ -60,15 +73,43 @@ export async function generateMetadata(props: PageProps): Promise<Metadata> {
 	};
 }
 
+function buildDefaultFiltersFromStats(
+	stats: GetProjectStatsQuery['projectStats']
+): ProjectFiltersData {
+	return {
+		tag: null,
+		area: { min: stats?.minArea ?? 0, max: stats?.maxArea ?? 1000 },
+		floor: null,
+		bedrooms: { min: stats?.minBedrooms ?? 0, max: stats?.maxBedrooms ?? 10 },
+		status: null
+	};
+}
+
 export default async function ProjectsPage(props: PageProps) {
 	const searchParams = await props.searchParams;
 	const tag = typeof searchParams.tag === 'string' ? searchParams.tag : undefined;
-
 	const title = tag && TAG_SEO_TITLES[tag] ? TAG_SEO_TITLES[tag] : 'Дома из клееного бруса';
 
+	const queryClient = new QueryClient();
+
+	const statsData = await client.request<GetProjectStatsQuery>(GetProjectStatsDocument);
+	queryClient.setQueryData(useGetProjectStatsQuery.getKey(), statsData);
+
+	const defaultFilters = buildDefaultFiltersFromStats(statsData.projectStats);
+	const variables = buildProjectsVariables(ITEMS_PER_PAGE, defaultFilters, 'default');
+
+	await queryClient.prefetchInfiniteQuery({
+		queryKey: useInfiniteGetProjectsQuery.getKey(variables),
+		queryFn: ({ pageParam }) =>
+			client.request(GetProjectsDocument, { ...variables, ...((pageParam as object) ?? {}) }),
+		initialPageParam: { offset: 0 }
+	});
+
 	return (
-		<Suspense fallback={<ProjectsSkeleton title={title} />}>
-			<ProjectsContent />
-		</Suspense>
+		<HydrationBoundary state={dehydrate(queryClient)}>
+			<Suspense fallback={<ProjectsSkeleton title={title} />}>
+				<ProjectsContent />
+			</Suspense>
+		</HydrationBoundary>
 	);
 }

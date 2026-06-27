@@ -1,23 +1,42 @@
 import { GraphQLClient } from 'graphql-request';
 
-function getGraphqlEndpoint(): string {
-	const endpoint = process.env.NEXT_PUBLIC_GRAPHQL_API_URL?.trim();
-	if (!endpoint) {
-		throw new Error('NEXT_PUBLIC_GRAPHQL_API_URL is required');
+const FALLBACK_PUBLIC_ENDPOINT = 'https://api.crone-group.ru/graphql';
+
+function getEndpoint(): string {
+	if (typeof window !== 'undefined') {
+		return '/api/graphql';
 	}
 
-	try {
-		new URL(endpoint);
-	} catch {
-		throw new Error('NEXT_PUBLIC_GRAPHQL_API_URL must be a valid absolute URL');
+	const phase = process.env.NEXT_PHASE;
+	const isBuildTime = phase === 'phase-production-build';
+	const internal = process.env.WORDPRESS_API_URL_INTERNAL;
+	const publicUrl = process.env.WORDPRESS_API_URL_PUBLIC;
+
+	console.log('[graphql.ts] server endpoint resolution:', {
+		phase,
+		isBuildTime,
+		hasInternal: Boolean(internal),
+		hasPublic: Boolean(publicUrl)
+	});
+
+	if (isBuildTime) {
+		const endpoint = publicUrl ?? FALLBACK_PUBLIC_ENDPOINT;
+		console.log('[graphql.ts] using build-time endpoint:', endpoint);
+		return endpoint;
 	}
 
+	const endpoint = internal ?? publicUrl ?? FALLBACK_PUBLIC_ENDPOINT;
+	console.log('[graphql.ts] using runtime endpoint:', endpoint);
 	return endpoint;
 }
 
-const endpoint = getGraphqlEndpoint();
-
-export const client = new GraphQLClient(endpoint);
+let cachedClient: GraphQLClient | null = null;
+function getClient(): GraphQLClient {
+	if (!cachedClient) {
+		cachedClient = new GraphQLClient(getEndpoint());
+	}
+	return cachedClient;
+}
 
 export const fetcher = <TData, TVariables extends object = Record<string, never>>(
 	query: string,
@@ -25,7 +44,12 @@ export const fetcher = <TData, TVariables extends object = Record<string, never>
 	headers?: HeadersInit
 ) => {
 	return async (): Promise<TData> => {
-		const response = await client.rawRequest<TData, TVariables>(query, variables, headers);
-		return response.data;
+		try {
+			const response = await getClient().rawRequest<TData, TVariables>(query, variables, headers);
+			return response.data;
+		} catch (err) {
+			console.error('[graphql.ts] request failed:', err);
+			throw err;
+		}
 	};
 };

@@ -4,11 +4,11 @@ const FALLBACK_PUBLIC_ENDPOINT = 'https://api.crone-group.ru/graphql';
 
 function getEndpoint(): string {
 	if (typeof window !== 'undefined') {
-		return '/api/graphql';
+		return `${window.location.origin}/api/graphql`;
 	}
 
 	const phase = process.env.NEXT_PHASE;
-	const isBuildTime = process.env.NEXT_PHASE === 'phase-production-build';
+	const isBuildTime = phase === 'phase-production-build';
 	const internal = process.env.WORDPRESS_API_URL_INTERNAL;
 	const publicUrl = process.env.WORDPRESS_API_URL_PUBLIC;
 

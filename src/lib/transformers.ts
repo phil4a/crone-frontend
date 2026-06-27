@@ -156,7 +156,9 @@ export function transformProject(post: WPProject): Project {
 }
 
 type GraphQLProjectNode = NonNullable<NonNullable<GetProjectsQuery['posts']>['nodes']>[0];
-type GraphQLRelatedProjectNode = NonNullable<NonNullable<GetRelatedProjectsQuery['posts']>['nodes']>[0];
+type GraphQLRelatedProjectNode = NonNullable<
+	NonNullable<GetRelatedProjectsQuery['posts']>['nodes']
+>[0];
 type GraphQLProjectBySlug = NonNullable<GetProjectBySlugQuery['post']>;
 type GraphQLVideoNode = {
 	mediaItemUrl?: string | null;

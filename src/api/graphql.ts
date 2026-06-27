@@ -24,6 +24,7 @@ function getEndpoint(): string {
 }
 
 const endpoint = getEndpoint();
+console.log(`Graphql endpoint:`, endpoint);
 
 export const client = new GraphQLClient(endpoint);
 

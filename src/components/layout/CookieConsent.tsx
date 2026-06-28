@@ -56,13 +56,13 @@ export function CookieConsent({
 	return (
 		<div
 			className={cn(
-				'fixed bottom-0 left-0 right-0 z-1 pointer-events-auto isolate',
+				'fixed bottom-2 left-[5%] right-0 z-1 pointer-events-auto isolate max-w-9/10 rounded-xl',
 				'bg-light-gray border-t border-light-beige',
-				'px-4 py-3 md:px-6 md:py-4',
+				'px-4 py-3 md:bottom-0 md:left-0 md:px-6 md:py-4 md:max-w-full md:rounded-none',
 				className
 			)}
 		>
-			<div className='flex flex-row md:items-center justify-center gap-3'>
+			<div className='flex flex-row items-start md:items-center justify-center gap-3'>
 				<div className='text-xs text-main md:max-w-[60%]'>
 					<p>
 						Мы используем файлы cookie для персонализации сервисов и измерения аудитории. Вы можете
@@ -83,7 +83,7 @@ export function CookieConsent({
 						variant='secondary'
 						size='sm'
 						type='button'
-						className='bg-green-700 text-white'
+						className='px-2 bg-green-700 text-white md:px-4'
 						onClick={() => {
 							acceptAll();
 							window.dispatchEvent(new Event('crone-cookie-consent'));

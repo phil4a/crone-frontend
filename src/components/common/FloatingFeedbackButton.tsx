@@ -69,7 +69,7 @@ export function FloatingFeedbackButton() {
 	const activeItem = ITEMS[activeIndex] ?? ITEMS[0];
 
 	return (
-		<div className='fixed bottom-5 right-4 z-2 md:bottom-8 md:right-6'>
+		<div className='fixed bottom-8 right-4 z-2 md:bottom-8 md:right-6'>
 			<div className='flex flex-col items-end gap-3'>
 				<div className='flex flex-col items-end gap-3'>
 					{ITEMS.map((item, index) => {

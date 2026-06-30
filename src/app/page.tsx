@@ -5,6 +5,7 @@ import { FeedbackForm } from '@/components/common/FeedbackForm';
 import { Advantages } from '@/components/features/home/Advantages';
 import { Hero } from '@/components/features/home/Hero';
 import { Projects } from '@/components/features/home/Projects';
+import { AClassSection } from '@/components/features/home/a-class-houses/AClassSection';
 import { LazyCreating } from '@/components/features/home/creating/LazyCreating';
 import { LazyFeatures } from '@/components/features/home/features/LazyFeatures';
 import { LazyGeography } from '@/components/features/home/geography/LazyGeography';
@@ -90,10 +91,14 @@ export default function HomePage() {
 		<main className='flex min-h-screen flex-col'>
 			<Hero />
 			<Advantages />
+			<ViewportLazy rootMargin='400px'>
+				<AClassSection />
+			</ViewportLazy>
 			<LazyFeatures />
 			<ViewportLazy rootMargin='700px'>
 				<LazyCreating />
 			</ViewportLazy>
+
 			<Projects />
 			<ViewportLazy rootMargin='800px'>
 				<LazyGeography />

@@ -90,3 +90,22 @@ body {
 .lg-sub-html {
 	color: var(--color-brown) !important;
 }
+
+.popover-content {
+	transform-origin: var(--transform-origin);
+	transition:
+		transform 160ms cubic-bezier(0.16, 1, 0.3, 1),
+		opacity 160ms ease-out;
+}
+
+.popover-content[data-starting-style],
+.popover-content[data-ending-style] {
+	opacity: 0;
+	transform: scale(0.96) translateY(4px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.popover-content {
+		transition: none;
+	}
+}

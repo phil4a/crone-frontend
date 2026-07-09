@@ -70,7 +70,30 @@ export function FloatingFeedbackButton() {
 
 	return (
 		<div className='fixed bottom-4 right-4 z-2 md:bottom-8 md:right-6'>
-			<div className='flex flex-col items-end gap-3'>
+			<div
+				className='flex flex-col items-end gap-3'
+				onMouseLeave={() => {
+					if (canUseHover()) {
+						setIsExpanded(false);
+					}
+				}}
+				onFocus={() => {
+					if (canUseHover()) {
+						setIsExpanded(true);
+					}
+				}}
+				onBlur={event => {
+					if (!canUseHover()) {
+						return;
+					}
+
+					if (event.currentTarget.contains(event.relatedTarget as Node | null)) {
+						return;
+					}
+
+					setIsExpanded(false);
+				}}
+			>
 				<div className='flex flex-col items-end gap-3'>
 					{ITEMS.map((item, index) => {
 						const Icon = item.Icon;
@@ -109,11 +132,6 @@ export function FloatingFeedbackButton() {
 					onMouseEnter={() => {
 						if (canUseHover()) {
 							setIsExpanded(true);
-						}
-					}}
-					onMouseLeave={() => {
-						if (canUseHover()) {
-							setIsExpanded(false);
 						}
 					}}
 					onClick={() => setIsExpanded(prev => !prev)}

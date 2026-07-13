@@ -7,6 +7,8 @@ import { Logo } from '@/components/ui/Logo';
 import { FOOTER_MENU } from '@/config/navigation.config';
 import { SITE_CONFIG } from '@/config/site.config';
 
+import { DphilSignature } from '../common/DphilSignature';
+
 import { projectService } from '@/services/project.service';
 
 export async function Footer() {
@@ -77,6 +79,9 @@ export async function Footer() {
 					<FooterInfo year={currentYear} />
 					<FooterLogos />
 				</div>
+				{/* <div className='flex xl:justify-end pt-15 pb-10'>
+					<DphilSignature />
+				</div> */}
 			</div>
 		</footer>
 	);
@@ -105,7 +110,7 @@ function FooterMenu({ title, items }: { title: string; items: { label: string; h
 function FooterContacts() {
 	return (
 		<div className='flex flex-col gap-6'>
-			<div className='flex flex-col gap-4 items-start'>
+			<div className='flex flex-col gap-4  items-start xl:items-end'>
 				<Link
 					href={SITE_CONFIG.contacts.socials.telegramGroup}
 					target='_blank'

@@ -9,3 +9,13 @@ yarn-error.log
 .env
 .env.*
 README.md
+*.md
+.vscode
+.idea
+coverage
+.turbo
+.eslintcache
+Dockerfile
+.dockerignore
+*.log
+.github

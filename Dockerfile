@@ -1,9 +1,9 @@
 FROM node:20-alpine AS deps
 WORKDIR /app
 COPY package.json package-lock.json ./
-RUN npm ci
+RUN --mount=type=cache,target=/root/.npm npm ci
 
-FROM node:20-alpine AS build
+FROM node:20-alpine AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
@@ -25,18 +25,23 @@ ENV NEXT_PUBLIC_LIGHT_GALLERY_LICENSE_KEY=$NEXT_PUBLIC_LIGHT_GALLERY_LICENSE_KEY
 ENV NEXT_PUBLIC_YANDEX_SMARTCAPTCHA_SITE_KEY=$NEXT_PUBLIC_YANDEX_SMARTCAPTCHA_SITE_KEY
 
 ENV NODE_ENV=production
-RUN npm run build
+RUN --mount=type=cache,target=/app/.next/cache npm run build
 
 FROM node:20-alpine AS runner
 WORKDIR /app
 ENV NODE_ENV=production
+# Держите это значение согласованным с реальным memory limit контейнера в Dokploy (~75-80% от него).
+ENV NODE_OPTIONS="--max-old-space-size=460"
+ENV HOSTNAME=0.0.0.0
+ENV PORT=3000
 
-COPY package.json package-lock.json ./
-RUN npm ci --omit=dev && npm cache clean --force
+RUN addgroup --system --gid 1001 nodejs && adduser --system --uid 1001 nextjs
 
-COPY --from=build /app/next.config.js ./next.config.js
-COPY --from=build /app/public ./public
-COPY --from=build /app/.next ./.next
+COPY --from=builder /app/public ./public
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+
+USER nextjs
 
 EXPOSE 3000
-CMD ["npm", "run", "start"]
+CMD ["node", "server.js"]

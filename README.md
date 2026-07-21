@@ -81,7 +81,14 @@ npm run codegen
 
 `/api/contact` пишет в stdout/stderr строки с префиксом `[contact]`: `validate_ok`,
 `validate_rejected` (с сырым ответом Яндекса), `validate_unreachable`, `server_key_missing`,
-`token_missing`, `cf7_rejected`. Персональные данные из формы в логи не попадают.
+`token_missing`, `cf7_rejected`, `cf7_bad_response`, `cf7_redirect`. Персональные данные из
+формы в логи не попадают.
+
+`NEXT_PUBLIC_API_URL` должна указывать на домен WordPress **без редиректа** (сейчас это
+`https://api.crone-group.ru/wp-json/wp/v2`). При обращении к `crone-group.ru/wp-json` отдаётся
+`308` на api-домен, а undici не умеет переотправлять `FormData` после редиректа — запрос
+уходит с пустым телом, и CF7 отвечает `wpcf7_unit_tag_not_found`. Такой случай теперь
+явно виден в логах как `cf7_redirect`.
 
 ## SEO
 

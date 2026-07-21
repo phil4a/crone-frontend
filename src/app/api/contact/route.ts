@@ -293,7 +293,8 @@ export async function POST(request: NextRequest) {
 				'User-Agent': USER_AGENT
 			},
 			body: formData,
-			cache: 'no-store'
+			cache: 'no-store',
+			redirect: 'manual'
 		});
 	} catch (error) {
 		logContact('error', 'cf7_unreachable', {
@@ -308,6 +309,18 @@ export async function POST(request: NextRequest) {
 
 	// CF7 отвечает HTTP 400 и на validation_failed, поэтому сначала разбираем тело,
 	// а уже потом смотрим на код ответа — иначе теряется причина отказа.
+	if (cf7Response.status >= 300 && cf7Response.status < 400) {
+		logContact('error', 'cf7_redirect', {
+			...cf7Meta,
+			httpStatus: cf7Response.status,
+			location: cf7Response.headers.get('location')
+		});
+		return NextResponse.json<ContactFormSubmitErrorResponse>(
+			{ ok: false, message: 'Не удалось отправить форму' },
+			{ status: 502 }
+		);
+	}
+
 	const cf7Raw = await cf7Response.text();
 	let cf7Json: Cf7FeedbackResponse | null = null;
 	try {

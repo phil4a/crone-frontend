@@ -266,34 +266,63 @@ export async function POST(request: NextRequest) {
 				? `Не задан unit tag для формы ${formId}`
 				: 'Не удалось подготовить данные для отправки формы';
 
+		logContact('error', 'cf7_payload_failed', { formId, endpoint: cf7Endpoint, message });
 		return NextResponse.json<ContactFormSubmitErrorResponse>(
 			{ ok: false, message },
 			{ status: 500 }
 		);
 	}
 
-	const cf7Response = await fetch(cf7Endpoint, {
-		method: 'POST',
-		headers: {
-			Accept: 'application/json',
-			Cookie: cookieHeader,
-			Origin: wpOrigin,
-			Referer: `${wpOrigin}/contacts/`,
-			'User-Agent': USER_AGENT
-		},
-		body: formData,
-		cache: 'no-store'
-	});
+	// Endpoint собирается из NEXT_PUBLIC_API_URL, а она вшивается в бандл на этапе сборки,
+	// поэтому пишем его в лог: в образе он может отличаться от env приложения.
+	const cf7Meta = {
+		formId,
+		endpoint: cf7Endpoint,
+		unitTag: formData.get('_wpcf7_unit_tag')
+	};
 
+	let cf7Response: Response;
+	try {
+		cf7Response = await fetch(cf7Endpoint, {
+			method: 'POST',
+			headers: {
+				Accept: 'application/json',
+				Cookie: cookieHeader,
+				Origin: wpOrigin,
+				Referer: `${wpOrigin}/contacts/`,
+				'User-Agent': USER_AGENT
+			},
+			body: formData,
+			cache: 'no-store'
+		});
+	} catch (error) {
+		logContact('error', 'cf7_unreachable', {
+			...cf7Meta,
+			error: error instanceof Error ? error.message : String(error)
+		});
+		return NextResponse.json<ContactFormSubmitErrorResponse>(
+			{ ok: false, message: 'Не удалось отправить форму' },
+			{ status: 502 }
+		);
+	}
+
+	// CF7 отвечает HTTP 400 и на validation_failed, поэтому сначала разбираем тело,
+	// а уже потом смотрим на код ответа — иначе теряется причина отказа.
+	const cf7Raw = await cf7Response.text();
 	let cf7Json: Cf7FeedbackResponse | null = null;
 	try {
-		cf7Json = (await cf7Response.json()) as Cf7FeedbackResponse;
+		cf7Json = JSON.parse(cf7Raw) as Cf7FeedbackResponse;
 	} catch {
 		cf7Json = null;
 	}
 
-	if (!cf7Response.ok || !cf7Json) {
-		logContact('error', 'cf7_unreachable', { formId, httpStatus: cf7Response.status });
+	if (!cf7Json || typeof cf7Json.status !== 'string') {
+		logContact('error', 'cf7_bad_response', {
+			...cf7Meta,
+			httpStatus: cf7Response.status,
+			contentType: cf7Response.headers.get('content-type'),
+			body: cf7Raw.slice(0, 500)
+		});
 		return NextResponse.json<ContactFormSubmitErrorResponse>(
 			{ ok: false, message: 'Не удалось отправить форму' },
 			{ status: 502 }
@@ -302,8 +331,10 @@ export async function POST(request: NextRequest) {
 
 	if (cf7Json.status !== 'mail_sent') {
 		logContact('error', 'cf7_rejected', {
-			formId,
+			...cf7Meta,
+			httpStatus: cf7Response.status,
 			status: cf7Json.status,
+			cf7Message: cf7Json.message,
 			invalidFields: cf7Json.invalid_fields?.map(field => field.field)
 		});
 		return NextResponse.json<ContactFormSubmitErrorResponse>(

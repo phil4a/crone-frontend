@@ -13,6 +13,17 @@ import {
 const USER_AGENT =
 	'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36';
 
+// Логи диагностики капчи. Персональные данные из формы (имя, телефон, email, сообщение)
+// сюда не попадают, токен и ключи пишутся только по префиксу и длине.
+function logContact(level: 'info' | 'error', event: string, payload: Record<string, unknown>) {
+	const line = `[contact] ${event} ${JSON.stringify(payload)}`;
+	if (level === 'error') {
+		console.error(line);
+		return;
+	}
+	console.info(line);
+}
+
 function getCf7UnitTagMap(): Record<number, string> {
 	const raw = process.env.CONTACT_FORM_7_UNIT_TAGS?.trim();
 	if (!raw) {
@@ -132,14 +143,18 @@ export async function POST(request: NextRequest) {
 	}
 
 	if (!captchaToken) {
+		logContact('error', 'token_missing', {});
 		return NextResponse.json<ContactFormSubmitErrorResponse>(
 			{ ok: false, message: 'Подтвердите, что вы не робот' },
 			{ status: 400 }
 		);
 	}
 
-	const secret = process.env.YANDEX_SMARTCAPTCHA_SERVER_KEY;
+	const secret = process.env.YANDEX_SMARTCAPTCHA_SERVER_KEY?.trim();
 	if (!secret) {
+		logContact('error', 'server_key_missing', {
+			rawIsSet: Boolean(process.env.YANDEX_SMARTCAPTCHA_SERVER_KEY)
+		});
 		return NextResponse.json<ContactFormSubmitErrorResponse>(
 			{ ok: false, message: 'Не настроен ключ SmartCaptcha на сервере' },
 			{ status: 500 }
@@ -147,35 +162,72 @@ export async function POST(request: NextRequest) {
 	}
 
 	const ip = getClientIp(request);
+	// Аварийный переключатель: Yandex сверяет переданный ip с тем, что решал капчу,
+	// и за обратным прокси адрес может не совпасть. Позволяет проверить это без пересборки.
+	const skipIp = process.env.YANDEX_SMARTCAPTCHA_SKIP_IP === '1';
 	const validateBody = new URLSearchParams();
 	validateBody.set('secret', secret);
 	validateBody.set('token', captchaToken);
-	if (ip) {
+	if (ip && !skipIp) {
 		validateBody.set('ip', ip);
 	}
 
-	const captchaResponse = await fetch('https://smartcaptcha.cloud.yandex.ru/validate', {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
-		},
-		body: validateBody.toString(),
-		cache: 'no-store'
-	});
+	const captchaMeta = {
+		ip,
+		skipIp,
+		forwardedFor: request.headers.get('x-forwarded-for'),
+		realIp: request.headers.get('x-real-ip'),
+		host: request.headers.get('host'),
+		origin: request.headers.get('origin'),
+		tokenPrefix: captchaToken.slice(0, 8),
+		tokenLength: captchaToken.length,
+		// Длина ловит невидимый \n или пробел, пришедший из secrets окружения.
+		secretPrefix: secret.slice(0, 5),
+		secretLength: secret.length
+	};
 
+	let captchaResponse: Response;
+	try {
+		captchaResponse = await fetch('https://smartcaptcha.cloud.yandex.ru/validate', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+			},
+			body: validateBody.toString(),
+			cache: 'no-store'
+		});
+	} catch (error) {
+		logContact('error', 'validate_unreachable', {
+			...captchaMeta,
+			error: error instanceof Error ? error.message : String(error)
+		});
+		return NextResponse.json<ContactFormSubmitErrorResponse>(
+			{ ok: false, message: 'Не удалось пройти проверку капчи' },
+			{ status: 502 }
+		);
+	}
+
+	const captchaRaw = await captchaResponse.text();
 	let captchaJson: SmartCaptchaValidateResponse | null = null;
 	try {
-		captchaJson = (await captchaResponse.json()) as SmartCaptchaValidateResponse;
+		captchaJson = JSON.parse(captchaRaw) as SmartCaptchaValidateResponse;
 	} catch {
 		captchaJson = null;
 	}
 
 	if (!captchaResponse.ok || !captchaJson || captchaJson.status !== 'ok') {
+		logContact('error', 'validate_rejected', {
+			...captchaMeta,
+			httpStatus: captchaResponse.status,
+			yandexResponse: captchaRaw.slice(0, 500)
+		});
 		return NextResponse.json<ContactFormSubmitErrorResponse>(
 			{ ok: false, message: 'Не удалось пройти проверку капчи' },
 			{ status: 400 }
 		);
 	}
+
+	logContact('info', 'validate_ok', { ip, skipIp });
 
 	const rawFormId = body?.formId;
 	const parsedFormId =
@@ -241,6 +293,7 @@ export async function POST(request: NextRequest) {
 	}
 
 	if (!cf7Response.ok || !cf7Json) {
+		logContact('error', 'cf7_unreachable', { formId, httpStatus: cf7Response.status });
 		return NextResponse.json<ContactFormSubmitErrorResponse>(
 			{ ok: false, message: 'Не удалось отправить форму' },
 			{ status: 502 }
@@ -248,6 +301,11 @@ export async function POST(request: NextRequest) {
 	}
 
 	if (cf7Json.status !== 'mail_sent') {
+		logContact('error', 'cf7_rejected', {
+			formId,
+			status: cf7Json.status,
+			invalidFields: cf7Json.invalid_fields?.map(field => field.field)
+		});
 		return NextResponse.json<ContactFormSubmitErrorResponse>(
 			{ ok: false, message: cf7Json.message || 'Форма заполнена некорректно', cf7: cf7Json },
 			{ status: 400 }

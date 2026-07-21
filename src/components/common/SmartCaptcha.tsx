@@ -5,6 +5,8 @@ import {
 	InvisibleSmartCaptcha as YandexInvisibleSmartCaptcha
 } from '@yandex/smart-captcha';
 
+import { usePublicConfig } from '@/hooks/usePublicConfig';
+
 import { cn } from '@/lib/utils';
 
 interface SmartCaptchaWrapperProps {
@@ -32,7 +34,8 @@ export function SmartCaptcha({
 	host,
 	theme
 }: SmartCaptchaWrapperProps) {
-	const siteKey = process.env.NEXT_PUBLIC_YANDEX_SMARTCAPTCHA_SITE_KEY;
+	const { data: publicConfig } = usePublicConfig();
+	const siteKey = publicConfig?.smartCaptchaSiteKey;
 
 	if (!siteKey) {
 		return null;

@@ -57,12 +57,31 @@ npm run codegen
 - `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` — ключ Google Maps (обязательно ограничить по HTTP referrer)
 - `NEXT_PUBLIC_GOOGLE_MAPS_ID` — Map ID
 - `NEXT_PUBLIC_LIGHT_GALLERY_LICENSE_KEY` — license key LightGallery (если используется)
-- `NEXT_PUBLIC_YANDEX_SMARTCAPTCHA_SITE_KEY` — site key SmartCaptcha
 - `NEXT_PUBLIC_YM_ID` — ID Яндекс.Метрики
+
+Значения `NEXT_PUBLIC_*` вшиваются в клиентский бандл на этапе `next build`. При сборке
+образа в CI они берутся из GitHub Secrets, а env приложения в Dokploy на них уже не влияет.
+
+### Рантайм-переменные (читаются на сервере при каждом запросе)
+
+- `YANDEX_SMARTCAPTCHA_SITE_KEY` — site key SmartCaptcha (`ysc1_...`), отдаётся клиенту через
+  `GET /api/public-config`. Задаётся в env приложения, а не при сборке, поэтому один образ
+  работает в любом окружении. Legacy-фолбэк на `NEXT_PUBLIC_YANDEX_SMARTCAPTCHA_SITE_KEY`
+  сохранён для совместимости.
 
 ### Серверные (не должны попадать в клиент)
 
 - `CONTACT_FORM_7_ID` — ID формы CF7 (используется на сервере/route handler)
+- `YANDEX_SMARTCAPTCHA_SERVER_KEY` — серверный ключ SmartCaptcha (`ysc2_...`), парный к
+  `YANDEX_SMARTCAPTCHA_SITE_KEY`; используется для валидации токена в `/api/contact`
+- `YANDEX_SMARTCAPTCHA_SKIP_IP` — диагностический флаг. `1` перестаёт передавать IP клиента
+  в `/validate`. Нужен, когда за обратным прокси IP не совпадает с тем, что решал капчу
+
+### Диагностика капчи
+
+`/api/contact` пишет в stdout/stderr строки с префиксом `[contact]`: `validate_ok`,
+`validate_rejected` (с сырым ответом Яндекса), `validate_unreachable`, `server_key_missing`,
+`token_missing`, `cf7_rejected`. Персональные данные из формы в логи не попадают.
 
 ## SEO
 

@@ -4,29 +4,18 @@ import { HeaderThemeObserver } from '@/components/layout/HeaderThemeObserver';
 import { Badge } from '@/components/ui/Badge';
 import { Title } from '@/components/ui/Title';
 
+import { AClassImageScroller } from './AClassImageScroller';
 import { HotspotsLayer } from './HotspotsLayer';
-import { hotspots as hotspotsDesktop, hotspotsMobile } from '@/data/a-class-houses-hotspots.data';
-
-const BREAKPOINT_MEDIA = '(min-width: 1024px)';
+import { hotspots } from '@/data/a-class-houses-hotspots.data';
 
 export function AClassSection() {
-	const {
-		props: { srcSet: desktopSrcSet }
-	} = getImageProps({
+	const { props: imgProps } = getImageProps({
 		src: '/images/home/aclass.jpg',
 		alt: 'Дома А-класса',
 		width: 1800,
 		height: 869,
-		sizes: '100vw',
-		priority: true
-	});
-
-	const { props: mobileImgProps } = getImageProps({
-		src: '/images/home/aclass-mobile.jpg',
-		alt: 'Дома А-класса',
-		width: 627,
-		height: 794,
-		sizes: '100vw',
+		// Ниже lg картинка едет в горизонтальном скролле: её ширина = 75dvh * 1800/869 ≈ 155vh
+		sizes: '(min-width: 1024px) 100vw, 155vh',
 		priority: true
 	});
 
@@ -63,29 +52,18 @@ export function AClassSection() {
 					</div>
 				</div>
 			</div>
-			<div className='relative w-full select-none aspect-627/794 lg:aspect-1800/869'>
+			<div className='relative w-full select-none'>
 				<HeaderThemeObserver theme='transparent' />
 
-				<picture>
-					<source
-						media={BREAKPOINT_MEDIA}
-						srcSet={desktopSrcSet}
-					/>
+				<AClassImageScroller>
 					<img
-						{...mobileImgProps}
+						{...imgProps}
 						alt='Дома А-класса'
 						className='absolute inset-0 h-full w-full object-cover'
 					/>
-				</picture>
 
-				<HotspotsLayer
-					hotspots={hotspotsDesktop}
-					className='hidden lg:block'
-				/>
-				<HotspotsLayer
-					hotspots={hotspotsMobile}
-					className='lg:hidden'
-				/>
+					<HotspotsLayer hotspots={hotspots} />
+				</AClassImageScroller>
 			</div>
 		</section>
 	);

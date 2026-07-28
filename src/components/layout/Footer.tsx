@@ -79,9 +79,9 @@ export async function Footer() {
 					<FooterInfo year={currentYear} />
 					<FooterLogos />
 				</div>
-				{/* <div className='flex xl:justify-end pt-15 pb-10'>
+				<div className='flex xl:justify-end pt-15 pb-10'>
 					<DphilSignature />
-				</div> */}
+				</div>
 			</div>
 		</footer>
 	);

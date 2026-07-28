@@ -2,7 +2,7 @@
 
 import { Popover } from '@base-ui/react/popover';
 import { X } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 type Hotspot = {
 	id: string;
@@ -20,10 +20,28 @@ export function HotspotsLayer({
 	hotspots: Hotspot[];
 	className?: string;
 }) {
+	const rootRef = useRef<HTMLDivElement>(null);
 	const [openId, setOpenId] = useState<string | null>(null);
 
+	// Если слой лежит внутри горизонтального скролла, попап не едет за маркером —
+	// закрываем его, как только пользователь начал листать картинку
+	useEffect(() => {
+		if (!openId) return;
+
+		const scroller = rootRef.current?.closest('[data-hotspot-scroll]');
+		if (!scroller) return;
+
+		const close = () => setOpenId(null);
+		scroller.addEventListener('scroll', close, { passive: true });
+
+		return () => scroller.removeEventListener('scroll', close);
+	}, [openId]);
+
 	return (
-		<div className={`absolute inset-0 ${className}`}>
+		<div
+			ref={rootRef}
+			className={`absolute inset-0 ${className}`}
+		>
 			{hotspots.map(h => (
 				<Popover.Root
 					key={h.id}

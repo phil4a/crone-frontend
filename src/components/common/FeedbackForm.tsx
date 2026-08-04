@@ -3,6 +3,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -74,6 +75,7 @@ export function FeedbackForm({
 	showMessageField = true,
 	onSuccess
 }: FeedbackFormProps) {
+	const pathname = usePathname();
 	const [captchaToken, setCaptchaToken] = useState<string | null>(null);
 	const [captchaVisible, setCaptchaVisible] = useState(false);
 	const [captchaKey, setCaptchaKey] = useState(0);
@@ -123,14 +125,22 @@ export function FeedbackForm({
 	};
 
 	const send = async (data: FormValues, token: string) => {
-		await submitFeedback({
+		const payload = {
 			name: data.name,
 			phone: data.phone,
 			email: data.email,
 			message: data.message,
 			captchaToken: token,
-			formId: resolvedFormId
-		});
+			formId: resolvedFormId,
+			pageUrl: pathname,
+			pageTitle: typeof document !== 'undefined' ? document.title : undefined
+		};
+
+		if (process.env.NODE_ENV !== 'production') {
+			console.log('[FeedbackForm] submit payload', payload);
+		}
+
+		await submitFeedback(payload);
 	};
 
 	const onCaptchaTokenChange = async (token: string | null) => {

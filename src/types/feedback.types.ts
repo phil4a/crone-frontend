@@ -3,6 +3,8 @@ export interface FeedbackFormValues {
 	phone: string;
 	email?: string;
 	message?: string;
+	pageUrl?: string;
+	pageTitle?: string;
 }
 
 export interface ContactFormSubmitRequest extends FeedbackFormValues {

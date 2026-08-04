@@ -104,12 +104,16 @@ function buildCf7Payload(data: ContactFormSubmitRequest, formId: number): FormDa
 	const phone = data.phone?.trim() ?? '';
 	const email = data.email?.trim() ?? '';
 	const message = data.message?.trim() ?? '';
+	const pageUrl = data.pageUrl?.trim() ?? '';
+	const pageTitle = data.pageTitle?.trim() ?? '';
 
 	const mappings: Array<[string, string]> = [
 		['your-name', name],
 		['your-phone', phone],
 		['your-email', email],
-		['your-text', message]
+		['your-text', message],
+		['your-page-url', pageUrl],
+		['your-page-title', pageTitle]
 	];
 
 	for (const [key, value] of mappings) {
@@ -256,7 +260,9 @@ export async function POST(request: NextRequest) {
 				phone,
 				email: body?.email,
 				message: body?.message,
-				captchaToken
+				captchaToken,
+				pageUrl: body?.pageUrl,
+				pageTitle: body?.pageTitle
 			},
 			formId
 		);

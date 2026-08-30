@@ -35,7 +35,7 @@ export function DphilSignature({
 	className,
 	style
 }: DphilSignatureProps) {
-	const href = `https://dphil.ru/`;
+	const href = `https://dphil.ru/ru`;
 
 	return (
 		<>

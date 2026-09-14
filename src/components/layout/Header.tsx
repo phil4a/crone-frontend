@@ -281,7 +281,10 @@ export function Header() {
 													height='16'
 													viewBox='0 0 16 16'
 													fill='none'
-													className={cn('transition-transform duration-300', isSubOpen && 'rotate-180')}
+													className={cn(
+														'transition-transform duration-300',
+														isSubOpen && 'rotate-180'
+													)}
 													aria-hidden='true'
 												>
 													<path
@@ -333,7 +336,7 @@ export function Header() {
 													: 'xl:invisible xl:translate-y-1 xl:opacity-0'
 											)}
 										>
-											<ul className='flex min-w-60 flex-col gap-1 rounded-lg bg-white p-2 shadow-[0px_12px_32px_0px_rgba(97,65,55,0.16)]'>
+											<ul className='flex min-w-70 flex-col gap-1 rounded-lg bg-white p-2 shadow-[0px_12px_32px_0px_rgba(97,65,55,0.16)]'>
 												{item.submenu?.map(sub => {
 													const isSubActive = pathname === sub.href;
 													return (

@@ -4,13 +4,18 @@ export interface IMenuItem {
 	label: string;
 	href: string;
 	// icon?: React.ComponentType;
-	// submenu?: IMenuItem[];
+	submenu?: IMenuItem[];
 }
 
 export const MAIN_MENU: IMenuItem[] = [
 	{
 		label: 'Услуги',
-		href: PAGE.SERVICES
+		href: PAGE.SERVICES,
+		submenu: [
+			{ label: 'Строительство под ключ', href: PAGE.SERVICES },
+			{ label: 'Проектирование', href: PAGE.SERVICES_DESIGN },
+			{ label: 'Строительство на Алтае', href: PAGE.SERVICES_ALTAY }
+		]
 	},
 	{
 		label: 'Объекты',

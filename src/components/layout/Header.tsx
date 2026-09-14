@@ -20,12 +20,17 @@ import { cn } from '@/lib/utils';
 export function Header() {
 	const [isScrolled, setIsScrolled] = useState(false);
 	const [menuPath, setMenuPath] = useState<string | null>(null);
+	const [openSubmenu, setOpenSubmenu] = useState<string | null>(null);
+	const [hoveredMenu, setHoveredMenu] = useState<string | null>(null);
 	const { pathname, isActivePath } = useActivePath();
 	const { theme } = useHeaderStore();
 	const openFeedbackModal = useFeedbackModalStore(state => state.open);
 
-	const HEADER_TRANSITION_DURATION = 600;
-	const closeMenu = () => setMenuPath(null);
+	const closeMenu = () => {
+		setMenuPath(null);
+		setOpenSubmenu(null);
+		setHoveredMenu(null);
+	};
 
 	useEffect(() => {
 		const handleScroll = () => {
@@ -57,7 +62,6 @@ export function Header() {
 
 	// Determine styles based on theme and state
 	const isLightTheme = theme === 'light';
-	const isDarkOrTransparent = theme === 'dark' || theme === 'transparent';
 
 	// Background logic
 	// 1. Menu Open -> White
@@ -211,22 +215,145 @@ export function Header() {
 						<ul className='flex flex-col gap-6 xl:flex-row xl:gap-8 justify-center'>
 							{MAIN_MENU.map(item => {
 								const isActive = isActivePath(item.href);
+								const hasSubmenu = Boolean(item.submenu?.length);
+								const linkClassName = cn(
+									'relative text-lg font-medium uppercase transition-colors after:absolute after:bottom-0 after:left-0 after:h-px after:w-0 after:bg-beige after:transition-[width] hover:after:w-full xl:text-base text-nowrap',
+									linkColorClass,
+									hoverColorClass,
+									isActive && 'after:w-full'
+								);
+
+								if (!hasSubmenu) {
+									return (
+										<li key={item.href}>
+											<Link
+												href={item.href}
+												onClick={closeMenu}
+												className={linkClassName}
+												aria-current={isActive ? 'page' : undefined}
+											>
+												{item.label}
+											</Link>
+										</li>
+									);
+								}
+
+								const isSubOpen = openSubmenu === item.href;
+								const isDesktopOpen = hoveredMenu === item.href;
 
 								return (
-									<li key={item.href}>
-										<Link
-											href={item.href}
-											onClick={closeMenu}
+									<li
+										key={item.href}
+										className='xl:relative'
+										onMouseEnter={() => setHoveredMenu(item.href)}
+										onMouseLeave={() => setHoveredMenu(null)}
+										onFocus={() => setHoveredMenu(item.href)}
+										onBlur={e => {
+											if (!e.currentTarget.contains(e.relatedTarget as Node)) {
+												setHoveredMenu(null);
+											}
+										}}
+									>
+										<div className='flex items-center justify-between gap-3 xl:justify-start'>
+											<Link
+												href={item.href}
+												onClick={closeMenu}
+												className={linkClassName}
+												aria-current={isActive ? 'page' : undefined}
+											>
+												{item.label}
+											</Link>
+											<button
+												type='button'
+												onClick={() =>
+													setOpenSubmenu(prev => (prev === item.href ? null : item.href))
+												}
+												className={cn(
+													'xl:hidden flex h-8 w-8 items-center justify-center transition-colors',
+													linkColorClass,
+													hoverColorClass
+												)}
+												aria-label={isSubOpen ? 'Свернуть подменю' : 'Развернуть подменю'}
+												aria-expanded={isSubOpen}
+											>
+												<svg
+													width='16'
+													height='16'
+													viewBox='0 0 16 16'
+													fill='none'
+													className={cn('transition-transform duration-300', isSubOpen && 'rotate-180')}
+													aria-hidden='true'
+												>
+													<path
+														d='M4 6l4 4 4-4'
+														stroke='currentColor'
+														strokeWidth='1.6'
+														strokeLinecap='round'
+														strokeLinejoin='round'
+													/>
+												</svg>
+											</button>
+										</div>
+
+										{/* Mobile accordion */}
+										<ul
 											className={cn(
-												'relative text-lg font-medium uppercase transition-colors after:absolute after:bottom-0 after:left-0 after:h-px after:w-0 after:bg-beige after:transition-[width] hover:after:w-full xl:text-base text-nowrap',
-												linkColorClass,
-												hoverColorClass,
-												isActive && 'after:w-full'
+												'xl:hidden flex-col gap-4 pl-4 pt-4 border-l border-light-beige mt-2',
+												isSubOpen ? 'flex' : 'hidden'
 											)}
-											aria-current={isActive ? 'page' : undefined}
 										>
-											{item.label}
-										</Link>
+											{item.submenu?.map(sub => {
+												const isSubActive = pathname === sub.href;
+												return (
+													<li key={sub.href}>
+														<Link
+															href={sub.href}
+															onClick={closeMenu}
+															className={cn(
+																'text-base font-medium transition-colors',
+																linkColorClass,
+																hoverColorClass,
+																isSubActive && 'text-beige'
+															)}
+															aria-current={isSubActive ? 'page' : undefined}
+														>
+															{sub.label}
+														</Link>
+													</li>
+												);
+											})}
+										</ul>
+
+										{/* Desktop dropdown */}
+										<div
+											className={cn(
+												'hidden xl:block xl:absolute xl:left-0 xl:top-full xl:pt-4 xl:transition-all xl:duration-300',
+												isDesktopOpen
+													? 'xl:visible xl:translate-y-0 xl:opacity-100'
+													: 'xl:invisible xl:translate-y-1 xl:opacity-0'
+											)}
+										>
+											<ul className='flex min-w-60 flex-col gap-1 rounded-lg bg-white p-2 shadow-[0px_12px_32px_0px_rgba(97,65,55,0.16)]'>
+												{item.submenu?.map(sub => {
+													const isSubActive = pathname === sub.href;
+													return (
+														<li key={sub.href}>
+															<Link
+																href={sub.href}
+																onClick={closeMenu}
+																className={cn(
+																	'block rounded-md px-4 py-2.5 text-base font-medium text-main transition-colors hover:bg-light-beige hover:text-brown',
+																	isSubActive && 'bg-light-beige text-brown'
+																)}
+																aria-current={isSubActive ? 'page' : undefined}
+															>
+																{sub.label}
+															</Link>
+														</li>
+													);
+												})}
+											</ul>
+										</div>
 									</li>
 								);
 							})}

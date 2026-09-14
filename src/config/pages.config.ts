@@ -1,6 +1,8 @@
 class Page {
 	HOME = '/';
 	SERVICES = '/services';
+	SERVICES_DESIGN = '/services/design';
+	SERVICES_ALTAY = '/services/altay';
 	ABOUT = '/about';
 
 	OBJECTS = '/projects';

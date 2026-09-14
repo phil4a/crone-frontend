@@ -1,32 +1,14 @@
 import { GraphQLClient } from 'graphql-request';
 
-const FALLBACK_PUBLIC_ENDPOINT = 'https://api.crone-group.ru/graphql';
+import { resolveWordpressGraphqlEndpoint } from './wordpress-endpoint';
 
 function getEndpoint(): string {
 	if (typeof window !== 'undefined') {
 		return `${window.location.origin}/api/graphql`;
 	}
 
-	const phase = process.env.NEXT_PHASE;
-	const isBuildTime = phase === 'phase-production-build';
-	const internal = process.env.WORDPRESS_API_URL_INTERNAL;
-	const publicUrl = process.env.WORDPRESS_API_URL_PUBLIC;
-
-	console.log('[graphql.ts] server endpoint resolution:', {
-		phase,
-		isBuildTime,
-		hasInternal: Boolean(internal),
-		hasPublic: Boolean(publicUrl)
-	});
-
-	if (isBuildTime) {
-		const endpoint = publicUrl ?? FALLBACK_PUBLIC_ENDPOINT;
-		console.log('[graphql.ts] using build-time endpoint:', endpoint);
-		return endpoint;
-	}
-
-	const endpoint = internal ?? publicUrl ?? FALLBACK_PUBLIC_ENDPOINT;
-	console.log('[graphql.ts] using runtime endpoint:', endpoint);
+	const { endpoint, source } = resolveWordpressGraphqlEndpoint();
+	console.log(`[graphql] server endpoint: ${endpoint} (source: ${source})`);
 	return endpoint;
 }
 
@@ -44,7 +26,7 @@ export const fetcher = <TData, TVariables extends object = Record<string, never>
 			const response = await client.rawRequest<TData, TVariables>(query, variables, headers);
 			return response.data;
 		} catch (err) {
-			console.error('[graphql.ts] request failed:', err);
+			console.error('[graphql] request failed:', err);
 			throw err;
 		}
 	};

@@ -52,7 +52,9 @@ npm run codegen
 ### Публичные (попадают в клиент, начинаются с NEXT_PUBLIC_)
 
 - `NEXT_PUBLIC_SITE_URL` — базовый URL сайта (нужен для canonical/OG/JSON-LD, sitemap/robots)
-- `NEXT_PUBLIC_GRAPHQL_API_URL` — endpoint GraphQL
+- `NEXT_PUBLIC_GRAPHQL_API_URL` — **deprecated**. В `src/` больше не читается: клиент ходит
+  в прокси `/api/graphql`, а сервер использует `WORDPRESS_API_URL_*` (см. ниже). Переменная
+  осталась только в `Dockerfile` и в обязательной проверке CI-workflow
 - `NEXT_PUBLIC_API_URL` — WP REST base
 - `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` — ключ Google Maps (обязательно ограничить по HTTP referrer)
 - `NEXT_PUBLIC_GOOGLE_MAPS_ID` — Map ID
@@ -71,11 +73,31 @@ npm run codegen
 
 ### Серверные (не должны попадать в клиент)
 
+- `WORDPRESS_API_URL_INTERNAL` — адрес GraphQL WordPress внутри docker-сети Dokploy.
+  Используется прокси-роутом `/api/graphql` и SSR. Задаётся в env приложения, не при сборке
+- `WORDPRESS_API_URL_PUBLIC` — публичный адрес того же endpoint. Нужен на этапе `next build`
+  (внутренней сети ещё нет) и для локальной разработки
 - `CONTACT_FORM_7_ID` — ID формы CF7 (используется на сервере/route handler)
 - `YANDEX_SMARTCAPTCHA_SERVER_KEY` — серверный ключ SmartCaptcha (`ysc2_...`), парный к
   `YANDEX_SMARTCAPTCHA_SITE_KEY`; используется для валидации токена в `/api/contact`
 - `YANDEX_SMARTCAPTCHA_SKIP_IP` — диагностический флаг. `1` перестаёт передавать IP клиента
   в `/validate`. Нужен, когда за обратным прокси IP не совпадает с тем, что решал капчу
+
+### Как резолвится GraphQL endpoint
+
+Браузер **никогда** не ходит в WordPress напрямую — только в собственный прокси
+`POST /api/graphql` (`src/app/api/graphql/route.ts`), чтобы внутренний адрес не утекал в клиент.
+Адрес апстрима выбирает `resolveWordpressGraphqlEndpoint()` (`src/api/wordpress-endpoint.ts`),
+её же использует SSR-клиент в `src/api/graphql.ts`:
+
+1. **build-time** (`NEXT_PHASE=phase-production-build`) → `WORDPRESS_API_URL_PUBLIC`
+2. **runtime** → `WORDPRESS_API_URL_INTERNAL` → `WORDPRESS_API_URL_PUBLIC`
+3. если не задано ничего → хардкод-фолбэк `https://api.crone-group.ru/graphql`
+
+Для локальной разработки достаточно `WORDPRESS_API_URL_PUBLIC` в `.env.local` —
+`WORDPRESS_API_URL_INTERNAL` остаётся прод-переменной Dokploy. Прокси пишет в лог
+`[graphql-proxy] upstream_unreachable` и отвечает `502` с GraphQL-совместимым телом
+`{ errors: [...] }`, если апстрим недоступен.
 
 ### Диагностика капчи
 

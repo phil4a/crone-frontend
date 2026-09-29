@@ -1,4 +1,4 @@
-import parse, { DOMNode, Element } from 'html-react-parser';
+import parse, { DOMNode, Element, attributesToProps, domToReact } from 'html-react-parser';
 
 import { ArticleGallery } from '@/components/features/articles/ArticleGallery';
 
@@ -64,6 +64,18 @@ interface ArticleContentParserProps {
 export function ArticleContentParser({ content }: ArticleContentParserProps) {
 	const options = {
 		replace: (domNode: DOMNode) => {
+			// Оборачиваем таблицы в скролл-контейнер, чтобы широкие таблицы не ломали
+			// вёрстку на узких экранах, а скроллились по горизонтали.
+			if (domNode instanceof Element && domNode.name === 'table') {
+				return (
+					<div className='article-table-scroll'>
+						<table {...attributesToProps(domNode.attribs)}>
+							{domToReact(domNode.children as DOMNode[], options)}
+						</table>
+					</div>
+				);
+			}
+
 			if (
 				domNode instanceof Element &&
 				domNode.attribs &&

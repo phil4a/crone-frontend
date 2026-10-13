@@ -185,6 +185,7 @@ function FooterInfo({ year }: { year: number }) {
 					Проектирование и строительство деревянных домов из клееного бруса под ключ в Новосибирске
 				</p>
 				<p>© {year} ООО «Крона Групп»</p>
+				<p className='text-sm'>ИНН: 5406580344</p>
 			</div>
 			<Link
 				href='/privacy-policy'

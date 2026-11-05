@@ -26,5 +26,12 @@ export function resolveWordpressGraphqlEndpoint(): ResolvedEndpoint {
 		return { endpoint: publicUrl, source: 'public' };
 	}
 
+	// NEXT_PUBLIC_GRAPHQL_API_URL передаётся в Docker build-arg (WORDPRESS_API_URL_PUBLIC — нет),
+	// поэтому на этапе `next build` в CI адрес берётся отсюда.
+	const buildArgUrl = process.env.NEXT_PUBLIC_GRAPHQL_API_URL;
+	if (buildArgUrl) {
+		return { endpoint: buildArgUrl, source: 'public' };
+	}
+
 	return { endpoint: FALLBACK_PUBLIC_ENDPOINT, source: 'fallback' };
 }

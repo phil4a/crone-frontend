@@ -43,6 +43,10 @@ COPY --from=builder /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
+# .next/cache/images монтируется как том; без этого Docker создаёт родительскую папку от root
+# и Next не может записывать .next/cache/fetch-cache.
+RUN mkdir -p .next/cache && chown nextjs:nodejs .next/cache
+
 USER nextjs
 
 EXPOSE 3000

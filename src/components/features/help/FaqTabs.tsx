@@ -196,7 +196,7 @@ export function FaqTabs({ categories, initialActiveId, className }: FaqTabsProps
 											>
 												<div
 													itemProp='text'
-													className='text-main leading-relaxed space-y-3 [&_em]:text-brown'
+													className='text-main leading-relaxed space-y-3 [&_em]:text-brown [&_a]:text-brown [&_a]:underline [&_a]:underline-offset-4 [&_a:hover]:decoration-2 [&_a:focus-visible]:outline-2 [&_a:focus-visible]:outline-offset-2'
 												>
 													{item.blocks.map((block, index) => {
 														if (block.type === 'paragraph') {

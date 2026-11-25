@@ -18,6 +18,7 @@
 - [О компании](/about)
 - [Контакты](/contacts)
 - [Статьи](/articles)
+- [Зимний уход за кровлей: когда убирать снег](/articles/kak-ubirat-sneg-s-kryshi)
 - [FAQ](/faq)
 - [HTML-карта сайта](/karta-sajta)
 

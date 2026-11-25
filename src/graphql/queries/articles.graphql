@@ -25,7 +25,7 @@ fragment ArticleFields on Post {
 }
 
 query GetArticles($first: Int, $after: String, $categoryName: String, $offset: Int) {
-	posts(first: $first, after: $after, where: { categoryName: $categoryName, offset: $offset }) {
+	posts(first: $first, after: $after, where: { categoryName: $categoryName, offset: $offset, sort: "sticky_articles" }) {
 		pageInfo {
 			hasNextPage
 			endCursor

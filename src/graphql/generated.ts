@@ -11996,7 +11996,7 @@ export const GetArticlesDocument = `
   posts(
     first: $first
     after: $after
-    where: {categoryName: $categoryName, offset: $offset}
+    where: {categoryName: $categoryName, offset: $offset, sort: "sticky_articles"}
   ) {
     pageInfo {
       hasNextPage
